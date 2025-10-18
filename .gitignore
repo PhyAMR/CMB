@@ -7,3 +7,16 @@ hlpTT_lowT_Ok/
 s2wav/
 
 
+
+# LaTeX auxiliary files
+*.aux
+*.bbl
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.synctex.gz
+*.toc
+*.run.xml
+*-blx.bib
+

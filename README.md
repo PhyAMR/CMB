@@ -31,16 +31,16 @@ The analysis pipeline is implemented in the Jupyter notebooks and Python scripts
 -   **`files/`**: A directory for storing intermediate and final results, such as:
     -   `matrix/`: Pre-calculated `Tmn` matrices used for the analytical computation of the `S12` statistic.
     -   `pickel/`: Pickled Python objects, including results from MCMC chain processing and Monte Carlo simulations.
--   **`functions/`**: A Python package containing the modularized functions for the analysis:
-    -   `data.py`: A `Data_loader` class to load and process Planck power spectrum data.
-    -   `correlation_function.py`: Functions to compute the two-point correlation function and its error.
-    -   `xiv.py`: Functions for calculating the `xivar` statistic.
-    -   `s12.py`: Functions for calculating the `S12` statistic.
-    -   `cosmology.py`: Interfaces with `camb` and `getdist` to handle theoretical models and MCMC chains.
-    -   `simulation.py`: Code for running Monte Carlo simulations.
-    -   `plots.py`: A suite of functions for visualizing the results, including power spectra, correlation functions, and histogram comparisons.
-    -   `maps.py`: Utilities for handling HEALPix maps.
-    -   `tools.py`: General-purpose helper functions.
+-   **[`functions/`](functions/README.md)**: A Python package containing the modularized functions for the analysis. See the [detailed documentation](functions/README.md) for more information on each module.
+    -   [`correlation_function.py`](functions/README.md#correlation_functionpy): Functions to compute the two-point correlation function and its error.
+    -   [`cosmology.py`](functions/README.md#cosmologypy): Interfaces with `camb` and `getdist` to handle theoretical models and MCMC chains.
+    -   [`data.py`](functions/README.md#datapy): A `Data_loader` class to load and process Planck power spectrum data.
+    -   [`maps.py`](functions/README.md#mapspy): Utilities for handling HEALPix maps.
+    -   [`plots.py`](functions/README.md#plotspy): A suite of functions for visualizing the results.
+    -   [`s12.py`](functions/README.md#s12py): Functions for calculating the `S12` statistic.
+    -   [`simulation.py`](functions/README.md#simulationpy): Code for running Monte Carlo simulations.
+    -   [`tools.py`](functions/README.md#toolspy): General-purpose helper functions.
+    -   [`xiv.py`](functions/README.md#xivpy): Functions for calculating the `xivar` statistic.
 
 ## Usage
 
