@@ -1,0 +1,276 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage{witharrows}
+\usepackage{hyperref}
+\usepackage{listings} 
+\usepackage{xcolor}
+\usepackage{amsmath}
+\usepackage{csquotes}% Recommended
+\usepackage[minnames=1,maxnames=2,maxbibnames = 3, style=authoryear, bibstyle = authoryear, backend=bibtex, giveninits=true, block = none, isbn = false, url = false, doi = false, eprint = false]{biblatex}
+
+\addbibresource{refs.bib} %Imports bibliography file
+
+\usepackage{float}
+% Define custom colors to match your screenshot
+\definecolor{kwcolor}{RGB}{197,134,192}    % pinkish for keywords
+\definecolor{comcolor}{RGB}{106,153,85}    % green for comments
+\definecolor{strcolor}{RGB}{206,145,120}   % salmon for strings
+\definecolor{typecolor}{RGB}{86,156,214}   % light blue for types/modules
+\definecolor{funccolor}{RGB}{220,220,170}  % yellowish for function calls
+\definecolor{varcolor}{RGB}{156,220,254}   % cyan for imported variables
+\definecolor{numcolor}{RGB}{181,206,168}   % soft green for numbers
+\renewcommand{\lstlistingname}{Code}% Listing -> Algorithm
+%\captionsetup[listing]{labelformat=parens}
+% Configure listings for Python
+\lstset{
+  language=Python,
+  frame=tb,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle=\ttfamily,
+  keywordstyle=\color{kwcolor}\bfseries,
+  commentstyle=\color{comcolor}\itshape,
+  stringstyle=\color{strcolor},
+  numberstyle=\tiny\color{gray},
+  numbers=none,
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=4,
+  emphstyle=\color{typecolor},
+  alsoletter={.}, % allows highlighting dot-access
+  literate=%
+    *{=}{{=}}1
+     {+}{{+}}1
+     {-}{{-}}1
+     {*}{{*}}1
+     {>}{{>}}1
+     {<}{{<}}1
+}
+\title{Study of the correlation function}
+\author{by Álvaro Méndez R.T.}
+\date{June 2025}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+
+\begin{abstract}
+In this article we show that the correlation function may indicate some new tensions with the standard model $\Lambda$CDM, especialy with a flat geometry. 
+\end{abstract}
+\section{Introduction}
+
+\section{Methodology}
+In this section we will discuss all the steps to reproduce these calculations. 
+
+\subsection{Functions and statistics}
+The correlation function is defined like
+\begin{DispWithArrows}[format=c, displaystyle]
+    C(\theta)=\sum_l\frac{2l+1}{2l(l+1)}D_lP_l(\cos(\theta))
+\end{DispWithArrows}
+where $D_l=$
+
+\begin{lstlisting}[language=Python, caption=Code to calculate the correlation function,  label=lst:foo]
+
+def correlation_func(D_ell,xvals):
+    # It uses (l+2) instead of l, since the first 2 multipoles are not available
+    fac2= [(2*(l+2)+1)/(2*(l+2)*((l+2)+1))*c for l,c in enumerate(D_ell)]
+    cor = 0
+    for l,f in enumerate(fac2):
+        
+        cor+=f*P(l+2,xvals) # P(l+2,xvals) is the Legendre polynomial of degree l+2 evaluated at xvals
+
+    return cor
+\end{lstlisting}
+Once the correlation function is calculated 
+
+\begin{DispWithArrows}[format=ll, displaystyle, subequations]
+    \bar{\langle\xi\rangle}_a^b & =\frac{\int_a^b C(\theta)d\cos(\theta)}{b-a} \\ 
+    & =\int_a^b \frac{1}{b-a}\sum_l \frac{2l+1}{2l(l+1)}D_lP_l(\cos(\theta)) d\cos(\theta)\\
+    & =\sum_l \frac{2l+1}{2l(l+1)}D_l \int_a^b \frac{1}{b-a}P_l(\cos(\theta)) d\cos(\theta)\\ 
+    & =\sum_l \frac{2l+1}{2l(l+1)}D_l\frac{1}{b-a}\left[ \frac{P_{l+1}(\cos(\theta))-P_{l-1}(\cos(\theta))}{2l+1}\right]^b_a \\
+    & = \sum_l \frac{D_l}{2l(l+1)}\frac{1}{b-a}\left[P_{l+1}(\cos(\theta))-P_{l-1}(\cos(\theta))\right]^b_a
+\end{DispWithArrows}
+\begin{lstlisting}[language=Python, caption=Code to calculate the new statistic,  label=lst:foo]
+
+def xivar(D_ell, a,b):
+    s=0
+    for i,d in enumerate(D_ell):
+        l=i+2
+        fac= d / (2*l*(l+1)) 
+        term = Decimal(legendre(l + 1, b) - legendre(l - 1, b)-legendre(l + 1, a) + legendre(l - 1, a))
+        s+=fac*float(term)
+        
+    return s/(b-a)
+
+\end{lstlisting}
+
+The $C_{180}$ is the value of the two points correlation function when they are separated $180^\circ$, this statistic has the intention of avoiding the discussion of the mask used to smooth the data and clean the noise.
+\begin{DispWithArrows}[format=c, displaystyle]
+    C_{180}=C(180)
+\end{DispWithArrows}
+
+\begin{DispWithArrows}[format=ll, displaystyle, subequations]
+    S_a^b & =\int_a^b C(\theta)^2\sin(\theta)d\theta =\int_a^b \left[\sum_l \frac{2l+1}{2l(l+1)}D_lP_l(\cos(\theta))\right]^2 d\cos(\theta) \\
+    & = \sum_n\sum_m \frac{2n+1}{2n(n+1)}D_n \frac{2m+1}{2m(m+1)}D_m\underbrace{\int_a^b P_n(\cos(\theta))P_m(\cos(\theta)) d\cos(\theta)}_{T_{nm}} \notag \\
+    ~~&~~
+\end{DispWithArrows}
+\begin{lstlisting}[language=Python, caption=Code to calculate the old statistic,  label=lst:foo]
+def S12(D_ell,M):
+    # Set the precision high enough to handle large calculations
+    # M is the T_mn matrix 
+    getcontext().prec = 1000
+    s=Decimal(0)
+    for i,xn in enumerate(D_ell):
+        n=i+2
+        fac1=(((2*n+1)*xn)/(2*n*(n+1)))
+        for j,xm in enumerate(D_ell):
+            m=j+2
+            fac2=(((2*m+1)*xm)/(2*m*(m+1)))
+        
+            integral=M[i,j]
+    
+            s += Decimal(fac1)*Decimal(fac2)*Decimal(integral)
+        
+    return float(s)
+\end{lstlisting}
+Where the matrix elements of $T_{nm}$ can be obtained with the following expression:
+\begin{DispWithArrows}[format=ll, displaystyle]
+          T_{mn} = & \int_a^b P_n(\cos(\theta))P_m(\cos(\theta)) d\cos(\theta)\\
+          = &\frac{A_r \cdot A_{m - r} \cdot A_{n - r}}{A_{m + n - r}(2m + 2n - 2r + 1)}  \left[ \left( P_{m+n-2r+1}(b) - P_{m+n-2r-1}(b) \right) - \left( P_{m+n-2r+1}(a) - P_{m+n-2r-1}(a) \right) \right] \notag
+        \end{DispWithArrows}
+        with $A_{r}=\frac{1\cdot3\cdot5\cdots(r-1)}{r!}$
+\begin{lstlisting}[language=Python, caption=Code to calculate the matrix elements,  label=lst:foo]
+def A_r(r):
+    """Compute A_r using Decimal for high precision."""
+    numerator = Decimal(1)
+    for i in range(1, r+1):
+        numerator *= Decimal(2*i-1)
+    denominator = factorial(r)
+    return numerator / denominator
+
+
+def Tmn(l,l1,l2,a=-1,b=1/2):
+    # Set the precision high enough to handle large calculations
+    getcontext().prec = 1000
+    
+    matrix = np.zeros((l, l), dtype=float)
+    for i in range(l):
+        n=i+2
+        
+        for j in range(l):
+            m=j+2
+            
+            for r in range(min(m,n)+1):
+                integral=A_r(r)*A_r(m-r)*A_r(n-r)/A_r(m+n-r) /(2*m+2*n-2*r+1) * Decimal((legendre(m+n-2*r + 1, b) - legendre(m+n-2*r - 1, b))-(legendre(m+n-2*r + 1, a) - legendre(m+n-2*r - 1, a)))
+                matrix[i,j]+=np.float64(integral)       
+        
+    np.save(f"Tmn_{l1}_{l2}.npy", matrix)
+\end{lstlisting}
+
+\subsection{Experimental values}
+The experimental values were gathered from the Planck's data official site\footnote{That can be found here \autocite{planck_legacy_archive}}. The data used are the observed multipoles of the CMB that were measured according to \autocite{cosmoplanck_2020} assuming that the errors are given with a significance of 1$\sigma$. The treatment of the Planck's mission data is not for us to discuss.
+
+\subsection{Simulations}
+
+The simulations were made using the \textit{''Code for Anisotropies in the Microwave Background''} \autocite{CAMB_GitHub} with the following parameters for each simulation:
+\begin{itemize}
+  \item \texttt{ombh2}: physical baryon density (\(\Omega_b h^2\))
+  \item \texttt{omch2}: physical cold dark matter density (\(\Omega_c h^2\))
+  \item \texttt{H0}: Hubble constant today (\(H_0\)), in km·s\(^{-1}\)·Mpc\(^{-1}\)
+  \item \texttt{omk}: curvature density parameter (\(\Omega_k\))
+  \item \texttt{YHe}: helium mass fraction (\(Y_\mathrm{He}\))
+  \item \texttt{nnu}: effective number of neutrino species (\(N_{\rm eff}\))
+  \item \texttt{nrun}: running of the scalar spectral index (\(dn_s/d\ln k\))
+  \item \texttt{Alens}: phenomenological lensing amplitude (A\(_\mathrm{lens}\))
+  \item \texttt{ns}: scalar spectral index (\(n_s\))
+  \item \texttt{As}: amplitude of the primordial curvature perturbations (\(A_s\)), here expressed as \(\exp(\text{logA})\times10^{-10}\)
+  \item \texttt{w}: dark energy equation of state parameter \(w=-1\)\footnote{This is the only fixed parameter, the other values where obtained as the results of the MCMC simulations done by Planck's team}
+  \item \texttt{wa}: evolution of dark energy equation of state (\(w_a\))
+  \item \texttt{mnu}: sum of neutrino masses (\(\sum m_\nu\)), in eV
+  \item \texttt{tau}: optical depth to reionization (\(\tau\))
+\end{itemize}
+In order to simulate the correlation function the following steps were made:
+
+\begin{enumerate}
+    \item We get the last thousand values if the MCMC chain in order to get a representative sample that yet is close enough to the convergence value of the different parameters stated previously.
+    \item We create a simulated universe with each one of the thousand set of parameters gathered from \autocite{planck_legacy_archive}
+    \item We then compute the temperature power spectrum and the correlation function using the specialized functions offered by CAMB in each one of those universes.
+    \item Then the mean and the standard deviation of the simulated power spectrum and correlation function are computed in order to calculate the statistic (using the mean) and compare the errors (using the standard deviation)
+    \item The final step is to compute the statistics using the expressions defined previously and the errors in the appendix.
+\end{enumerate}
+\appendix 
+\section{Error propagation}
+The error propagation assumes that the multipoles are independent of each other and have a Gaussian distribution. Also, it is assumed that the angle has no error at all.
+\subsection{Error of the correlation function}
+The error of the correlation function can be calculated according to this derivation 
+\begin{DispWithArrows}[format=ll,displaystyle,subequations]
+\Delta^2 C(\theta) 
+&= \Bigl(\frac{\partial C(\theta)}{\partial D_l}\,\Delta D_l\Bigr)^2 \\
+&= \Bigl(\sum_l \Delta D_l\frac{2l+1}{2l(l+1)} P_l(\cos(\theta))\Bigr)^2\\
+\Delta C(\theta) &=\sqrt{\Bigl(\sum_l \Delta D_l\frac{2l+1}{2l(l+1)} P_l(\cos(\theta))\Bigr)^2}
+\end{DispWithArrows}
+with this function
+\begin{lstlisting}[language=Python, caption=Code to calculate the error of the correlation function,  label=lst:foo]
+def correlation_func_err(error,xvals):
+    cor_err=0
+
+    fac_err= [(2*(l+2)+1)/(2*(l+2)*((l+2)+1))*c for l,c in enumerate(error)]
+    for l,f in enumerate(fac_err):
+        cor_err+=(f*P(l+2,xvals))**2
+    return cor_err**0.5
+\end{lstlisting}
+\subsection{Error of $S_{1/2}$}
+\begin{DispWithArrows}[format=ll,displaystyle,subequations]
+\Delta^2 S_a^b 
+&= \Bigl(\frac{\partial S_a^b}{\partial D_n}\,\Delta D_n\Bigr)^2  + \Bigl(\frac{\partial S_a^b}{\partial D_m}\,\Delta D_m\Bigr)^2\\
+&= \Bigl(\sum_n\sum_m \frac{2n+1}{2n(n+1)} \frac{2m+1}{2m(m+1)}D_m T_{nm}\,\Delta D_n\Bigr)^2\\
+&\quad + \Bigl(\sum_n\sum_m \frac{2n+1}{2n(n+1)}D_n \frac{2m+1}{2m(m+1)} T_{nm}\,\Delta D_m\Bigr)^2 \notag\\
+&= \sum_n\sum_m \Bigl(\frac{2n+1}{2n(n+1)} \frac{2m+1}{2m(m+1)}T_{nm}\Bigr)^2 
+\Bigl(D_m^2 \Delta D_n^2 + D_n^2 \Delta D_m^2\Bigr) \\
+\Delta S_a^b &=\sqrt{\sum_n\sum_m \Bigl(\frac{2n+1}{2n(n+1)} \frac{2m+1}{2m(m+1)}T_{nm}\Bigr)^2 
+\Bigl(D_m^2 \Delta D_n^2 + D_n^2 \Delta D_m^2\Bigr)}
+\end{DispWithArrows}
+with this function
+\begin{lstlisting}[language=Python, caption=Code to calculate the error of the old statistic,  label=lst:foo]
+def S12_err(D_ell,D_ell_err,M):
+    # Set the precision high enough to handle large calculations
+    getcontext().prec = 1000
+    s=Decimal(0)
+    for i,xn in enumerate(D_ell_err):
+        n=i+2
+        fac1=(((2*n+1))/(2*n*(n+1))) 
+        for j,xm in enumerate(D_ell):
+            m=j+2
+            fac2=(((2*m+1))/(2*m*(m+1))) 
+            Amn=fac1*fac2
+            integral=M[i,j]
+
+            s += Decimal(Amn**2)*Decimal(integral**2)*Decimal(D_ell[i]**2*xm**2 + D_ell[j]**2*xn**2)
+        
+    return float(s)**0.5
+\end{lstlisting}
+\subsection{Error of $\langle\xi\rangle_a^b$}
+The error of new statistic defined in this paper can be computed using the following function:
+
+\begin{lstlisting}[language=Python, caption=Code to calculate the error of the new statistic,  label=lst:foo]
+def xivar_err(D_ell_err, a,b):
+    s=0
+    for i,d in enumerate(D_ell_err):
+        l=i+2
+        fac=d/(2*l*(l+1))
+        
+        
+        integral = Decimal(legendre(l + 1, b) - legendre(l - 1, b)-legendre(l + 1, a) + legendre(l - 1, a))
+    
+        s+=(fac*float(integral)/(b-a))**2
+    
+    return (s)**0.5
+\end{lstlisting}
+
+\printbibliography
+
+\end{document}
+

@@ -1,0 +1,1580 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.32">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Libraries</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="CleanPlanck_files/libs/clipboard/clipboard.min.js"></script>
+<script src="CleanPlanck_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="CleanPlanck_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="CleanPlanck_files/libs/quarto-html/popper.min.js"></script>
+<script src="CleanPlanck_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="CleanPlanck_files/libs/quarto-html/anchor.min.js"></script>
+<link href="CleanPlanck_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="CleanPlanck_files/libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="CleanPlanck_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="CleanPlanck_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="CleanPlanck_files/libs/bootstrap/bootstrap-807a461f842328d674ea098bdeff73d7.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="fullcontent quarto-light">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Libraries</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div id="054d9a90" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Math</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> math <span class="im">import</span> factorial</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> decimal <span class="im">import</span> getcontext, Decimal</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Cosmology</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> astropy.io <span class="im">import</span> fits</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> healpy <span class="im">as</span> hp</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> camb</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> camb.correlations</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> getdist <span class="im">import</span> loadMCSamples</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Plotting</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.colors <span class="im">as</span> colors</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="co"># import scienceplots </span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="co">#plt.style.use(['science','ieee'])</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>plt.rcParams.update({</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>    <span class="st">'font.family'</span>: <span class="st">'DejaVu Sans'</span>,</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    <span class="st">'font.size'</span>: <span class="dv">12</span>,</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    <span class="st">'text.usetex'</span>: <span class="va">False</span>  <span class="co"># Set True if LaTeX installed</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> mpl_toolkits.axes_grid1.inset_locator <span class="im">import</span> inset_axes</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> mpl_toolkits.axes_grid1.inset_locator <span class="im">import</span> mark_inset</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib.patches <span class="im">import</span> Rectangle</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>matplotlib inline</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="co"># System</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pickle</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="functions" class="level1">
+<h1>Functions</h1>
+<section id="legendre-polynomials" class="level2">
+<h2 class="anchored" data-anchor-id="legendre-polynomials">Legendre polynomials</h2>
+<div id="98ce98cb" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> legendre(lmax, x):</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> lmax <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="fl">1.0</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> lmax <span class="op">==</span> <span class="dv">1</span>:</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> x</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> lmax <span class="op">==</span> <span class="op">-</span><span class="dv">1</span>:</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="dv">0</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>        p0 <span class="op">=</span> <span class="fl">1.0</span>  <span class="co"># P_0</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>        p1 <span class="op">=</span> x    <span class="co"># P_1</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> l <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">2</span>, lmax <span class="op">+</span> <span class="dv">1</span>):</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>            p_next <span class="op">=</span> ((<span class="dv">2</span> <span class="op">*</span> l <span class="op">-</span> <span class="dv">1</span>) <span class="op">/</span> l) <span class="op">*</span> x <span class="op">*</span> p1 <span class="op">-</span> ((l <span class="op">-</span> <span class="dv">1</span>) <span class="op">/</span> l) <span class="op">*</span> p0</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>            p0, p1 <span class="op">=</span> p1, p_next</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> p1</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>P<span class="op">=</span>np.vectorize(legendre)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="correlation-function" class="level2">
+<h2 class="anchored" data-anchor-id="correlation-function">Correlation Function</h2>
+<div id="ea4448fd" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> correlation_func(D_ell,xvals):</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    fac2<span class="op">=</span> [(<span class="dv">2</span><span class="op">*</span>(l<span class="op">+</span><span class="dv">2</span>)<span class="op">+</span><span class="dv">1</span>)<span class="op">/</span>(<span class="dv">2</span><span class="op">*</span>(l<span class="op">+</span><span class="dv">2</span>)<span class="op">*</span>((l<span class="op">+</span><span class="dv">2</span>)<span class="op">+</span><span class="dv">1</span>))<span class="op">*</span>c <span class="cf">for</span> l,c <span class="kw">in</span> <span class="bu">enumerate</span>(D_ell)]</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    cor <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> l,f <span class="kw">in</span> <span class="bu">enumerate</span>(fac2):</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>        cor<span class="op">+=</span>f<span class="op">*</span>P(l<span class="op">+</span><span class="dv">2</span>,xvals) <span class="co"># P(l+2,xvals) is the Legendre polynomial of degree l+2 evaluated at xvals</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> cor</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> correlation_func_err(error,xvals):</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    cor_err<span class="op">=</span><span class="dv">0</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    fac_err<span class="op">=</span> [(<span class="dv">2</span><span class="op">*</span>(l<span class="op">+</span><span class="dv">2</span>)<span class="op">+</span><span class="dv">1</span>)<span class="op">/</span>(<span class="dv">2</span><span class="op">*</span>(l<span class="op">+</span><span class="dv">2</span>)<span class="op">*</span>((l<span class="op">+</span><span class="dv">2</span>)<span class="op">+</span><span class="dv">1</span>))<span class="op">*</span>c <span class="cf">for</span> l,c <span class="kw">in</span> <span class="bu">enumerate</span>(error)]</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> l,f <span class="kw">in</span> <span class="bu">enumerate</span>(fac_err):</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>        cor_err<span class="op">+=</span>(f<span class="op">*</span>P(l<span class="op">+</span><span class="dv">2</span>,xvals))<span class="op">**</span><span class="dv">2</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> cor_err<span class="op">**</span><span class="fl">0.5</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> correlation_func_err2(error,xvals):</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    cor_err<span class="op">=</span><span class="dv">0</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>    fac_err<span class="op">=</span> [(<span class="dv">2</span><span class="op">*</span>(l<span class="op">+</span><span class="dv">2</span>)<span class="op">+</span><span class="dv">1</span>)<span class="op">/</span>(<span class="dv">2</span><span class="op">*</span>(l<span class="op">+</span><span class="dv">2</span>)<span class="op">*</span>((l<span class="op">+</span><span class="dv">2</span>)<span class="op">+</span><span class="dv">1</span>))<span class="op">*</span>c <span class="cf">for</span> l,c <span class="kw">in</span> <span class="bu">enumerate</span>(error)]</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> l,f <span class="kw">in</span> <span class="bu">enumerate</span>(fac_err):</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>        cor_err<span class="op">+=</span>(f<span class="op">*</span>P(l<span class="op">+</span><span class="dv">2</span>,xvals))</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (cor_err<span class="op">**</span><span class="dv">2</span>)<span class="op">**</span><span class="fl">0.5</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="estimators" class="level2">
+<h2 class="anchored" data-anchor-id="estimators">Estimators</h2>
+<section id="barlanglexirangle_ab" class="level3">
+<h3 class="anchored" data-anchor-id="barlanglexirangle_ab"><span class="math inline">\(\bar{\langle\xi\rangle}_a^b\)</span></h3>
+<p><span class="math display">\[\bar{\langle\xi\rangle}_a^b=\frac{\int_a^b C(\theta)\sin(\theta)d\theta}{\cos(b)-\cos(a)} =\int_a^b \sum_l \frac{2l+1}{2l(l+1)}D_lP_l(\cos(\theta)) d\cos(\theta)=\sum_l \frac{2l+1}{2l(l+1)}D_l \int_a^b P_l(\cos(\theta)) d\cos(\theta)=\sum_l \frac{2l+1}{2l(l+1)}D_l\left[ \frac{P_{l+1}(\cos(\theta))-P_{l-1}(\cos(\theta))}{2l+1}\right]^b_a=\]</span></p>
+<p><span class="math display">\[=\sum_l \frac{D_l}{2l(l+1)}\left[P_{l+1}(\cos(\theta))-P_{l-1}(\cos(\theta))\right]^b_a=\sum_l \frac{D_l}{2l(l+1)}\left[P_{l+1}(b)-P_{l-1}(b)-P_{l+1}(a)+P_{l-1}(a)\right]\]</span></p>
+<p><span class="math display">\[\Delta^2\bar{\langle\xi\rangle}_a^b=\left(\frac{\partial \bar{\langle\xi\rangle}_a^b}{\partial D_l}\Delta D_l\right)^2\]</span></p>
+<div id="b754e5e6" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> xivar(D_ell, a,b):</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    s<span class="op">=</span><span class="dv">0</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i,d <span class="kw">in</span> <span class="bu">enumerate</span>(D_ell):</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>        l<span class="op">=</span>i<span class="op">+</span><span class="dv">2</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>        fac<span class="op">=</span> d <span class="op">/</span> (<span class="dv">2</span><span class="op">*</span>l<span class="op">*</span>(l<span class="op">+</span><span class="dv">1</span>)) </span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>        term <span class="op">=</span> Decimal(legendre(l <span class="op">+</span> <span class="dv">1</span>, b) <span class="op">-</span> legendre(l <span class="op">-</span> <span class="dv">1</span>, b)<span class="op">-</span>legendre(l <span class="op">+</span> <span class="dv">1</span>, a) <span class="op">+</span> legendre(l <span class="op">-</span> <span class="dv">1</span>, a))</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>        s<span class="op">+=</span>fac<span class="op">*</span><span class="bu">float</span>(term)</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> s<span class="op">/</span>(b<span class="op">-</span>a)</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> xivar_err(D_ell_err, a,b):</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    s<span class="op">=</span><span class="dv">0</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i,d <span class="kw">in</span> <span class="bu">enumerate</span>(D_ell_err):</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>        l<span class="op">=</span>i<span class="op">+</span><span class="dv">2</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>        fac<span class="op">=</span>d<span class="op">/</span>(<span class="dv">2</span><span class="op">*</span>l<span class="op">*</span>(l<span class="op">+</span><span class="dv">1</span>))</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>        integral <span class="op">=</span> Decimal(legendre(l <span class="op">+</span> <span class="dv">1</span>, b) <span class="op">-</span> legendre(l <span class="op">-</span> <span class="dv">1</span>, b)<span class="op">-</span>legendre(l <span class="op">+</span> <span class="dv">1</span>, a) <span class="op">+</span> legendre(l <span class="op">-</span> <span class="dv">1</span>, a))</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>        s<span class="op">+=</span>(fac<span class="op">*</span><span class="bu">float</span>(integral)<span class="op">/</span>(b<span class="op">-</span>a))<span class="op">**</span><span class="dv">2</span></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (s)<span class="op">**</span><span class="fl">0.5</span></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> xivar_err2(D_ell_err, a,b):</span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>    s<span class="op">=</span><span class="dv">0</span></span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i,d <span class="kw">in</span> <span class="bu">enumerate</span>(D_ell_err):</span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>        l<span class="op">=</span>i<span class="op">+</span><span class="dv">2</span></span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>        fac<span class="op">=</span>d<span class="op">/</span>(<span class="dv">2</span><span class="op">*</span>l<span class="op">*</span>(l<span class="op">+</span><span class="dv">1</span>))</span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>        integral <span class="op">=</span> Decimal(legendre(l <span class="op">+</span> <span class="dv">1</span>, b) <span class="op">-</span> legendre(l <span class="op">-</span> <span class="dv">1</span>, b)<span class="op">-</span>legendre(l <span class="op">+</span> <span class="dv">1</span>, a) <span class="op">+</span> legendre(l <span class="op">-</span> <span class="dv">1</span>, a))</span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>        s<span class="op">+=</span>(fac<span class="op">*</span><span class="bu">float</span>(integral)<span class="op">/</span>(b<span class="op">-</span>a))</span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (s<span class="op">**</span><span class="dv">2</span>)<span class="op">**</span><span class="fl">0.5</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="s_ab" class="level3">
+<h3 class="anchored" data-anchor-id="s_ab"><span class="math inline">\(S_a^b\)</span></h3>
+<p><span class="math display">\[S_a^b=\int_a^b C(\theta)^2\sin(\theta)d\theta =\int_a^b \left[\sum_l \frac{2l+1}{2l(l+1)}D_lP_l(\cos(\theta))\right]^2 d\cos(\theta)= \sum_n\sum_m \frac{2n+1}{2n(n+1)}D_n \frac{2m+1}{2m(m+1)}D_m\underbrace{\int_a^b P_n(\cos(\theta))P_m(\cos(\theta)) d\cos(\theta)}_{T_{nm}}\]</span></p>
+<p><span class="math display">\[\Delta^2 S_a^b=\left(\frac{\partial S_a^b}{\partial D_n}\Delta D_n\right)^2+\left(\frac{\partial S_a^b}{\partial D_m}\Delta D_m\right)^2=\]</span></p>
+<p><span class="math display">\[=\left(\sum_n\sum_m \frac{2n+1}{2n(n+1)} \frac{2m+1}{2m(m+1)}D_m T_{nm}\Delta D_n\right)^2+\left(\sum_n\sum_m \frac{2n+1}{2n(n+1)}D_n \frac{2m+1}{2m(m+1)} T_{nm}\Delta D_m\right)^2=\]</span> <span class="math display">\[=\sum_n\sum_m\left( \frac{2n+1}{2n(n+1)} \frac{2m+1}{2m(m+1)}D_m T_{nm}\Delta D_n\right)^2+\left( \frac{2n+1}{2n(n+1)}D_n \frac{2m+1}{2m(m+1)} T_{nm}\Delta D_m\right)^2\]</span></p>
+<p><span class="math display">\[=\sum_n\sum_m\left( \frac{2n+1}{2n(n+1)} \frac{2m+1}{2m(m+1)}T_{nm}\right)^2 \left(D_m^2 \Delta D_n^2+D_n^2 \Delta D_m^2\right)\]</span></p>
+<div id="3d17a10b" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> A_r(r):</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Compute A_r using Decimal for high precision."""</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    numerator <span class="op">=</span> Decimal(<span class="dv">1</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, r<span class="op">+</span><span class="dv">1</span>):</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>        numerator <span class="op">*=</span> Decimal(<span class="dv">2</span><span class="op">*</span>i<span class="op">-</span><span class="dv">1</span>)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    denominator <span class="op">=</span> factorial(r)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> numerator <span class="op">/</span> denominator</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> Tmn(l,l1,l2,a<span class="op">=-</span><span class="dv">1</span>,b<span class="op">=</span><span class="dv">1</span><span class="op">/</span><span class="dv">2</span>):</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Set the precision high enough to handle large calculations</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    getcontext().prec <span class="op">=</span> <span class="dv">1000</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    matrix <span class="op">=</span> np.zeros((l, l), dtype<span class="op">=</span><span class="bu">float</span>)</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(l):</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>        n<span class="op">=</span>i<span class="op">+</span><span class="dv">2</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(l):</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>            m<span class="op">=</span>j<span class="op">+</span><span class="dv">2</span></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>            </span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> r <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">min</span>(m,n)<span class="op">+</span><span class="dv">1</span>):</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>                integral<span class="op">=</span>A_r(r)<span class="op">*</span>A_r(m<span class="op">-</span>r)<span class="op">*</span>A_r(n<span class="op">-</span>r)<span class="op">/</span>A_r(m<span class="op">+</span>n<span class="op">-</span>r) <span class="op">/</span>(<span class="dv">2</span><span class="op">*</span>m<span class="op">+</span><span class="dv">2</span><span class="op">*</span>n<span class="op">-</span><span class="dv">2</span><span class="op">*</span>r<span class="op">+</span><span class="dv">1</span>) <span class="op">*</span> Decimal((legendre(m<span class="op">+</span>n<span class="op">-</span><span class="dv">2</span><span class="op">*</span>r <span class="op">+</span> <span class="dv">1</span>, b) <span class="op">-</span> legendre(m<span class="op">+</span>n<span class="op">-</span><span class="dv">2</span><span class="op">*</span>r <span class="op">-</span> <span class="dv">1</span>, b))<span class="op">-</span>(legendre(m<span class="op">+</span>n<span class="op">-</span><span class="dv">2</span><span class="op">*</span>r <span class="op">+</span> <span class="dv">1</span>, a) <span class="op">-</span> legendre(m<span class="op">+</span>n<span class="op">-</span><span class="dv">2</span><span class="op">*</span>r <span class="op">-</span> <span class="dv">1</span>, a)))</span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>                matrix[i,j]<span class="op">+=</span>np.float64(integral)       </span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>    np.save(<span class="ss">f"Tmn_</span><span class="sc">{</span>l1<span class="sc">}</span><span class="ss">_</span><span class="sc">{</span>l2<span class="sc">}</span><span class="ss">.npy"</span>, matrix)</span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> S12(D_ell,M):</span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Set the precision high enough to handle large calculations</span></span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>    getcontext().prec <span class="op">=</span> <span class="dv">1000</span></span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>    s<span class="op">=</span>Decimal(<span class="dv">0</span>)</span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i,xn <span class="kw">in</span> <span class="bu">enumerate</span>(D_ell):</span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>        n<span class="op">=</span>i<span class="op">+</span><span class="dv">2</span></span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>        fac1<span class="op">=</span>(((<span class="dv">2</span><span class="op">*</span>n<span class="op">+</span><span class="dv">1</span>)<span class="op">*</span>xn)<span class="op">/</span>(<span class="dv">2</span><span class="op">*</span>n<span class="op">*</span>(n<span class="op">+</span><span class="dv">1</span>)))</span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> j,xm <span class="kw">in</span> <span class="bu">enumerate</span>(D_ell):</span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>            m<span class="op">=</span>j<span class="op">+</span><span class="dv">2</span></span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>            fac2<span class="op">=</span>(((<span class="dv">2</span><span class="op">*</span>m<span class="op">+</span><span class="dv">1</span>)<span class="op">*</span>xm)<span class="op">/</span>(<span class="dv">2</span><span class="op">*</span>m<span class="op">*</span>(m<span class="op">+</span><span class="dv">1</span>)))</span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a>            integral<span class="op">=</span>M[i,j]</span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a>            s <span class="op">+=</span> Decimal(fac1)<span class="op">*</span>Decimal(fac2)<span class="op">*</span>Decimal(integral)</span>
+<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">float</span>(s)</span>
+<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> S12_vec(D_ell, M):</span>
+<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a>    getcontext().prec <span class="op">=</span> <span class="dv">1000</span></span>
+<span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a>    D_ell <span class="op">=</span> np.array(D_ell, dtype<span class="op">=</span><span class="bu">float</span>)</span>
+<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a>    M <span class="op">=</span> np.array(M, dtype<span class="op">=</span><span class="bu">float</span>)</span>
+<span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a>    n <span class="op">=</span> np.arange(<span class="dv">2</span>, <span class="bu">len</span>(D_ell) <span class="op">+</span> <span class="dv">2</span>)</span>
+<span id="cb5-50"><a href="#cb5-50" aria-hidden="true" tabindex="-1"></a>    f <span class="op">=</span> ((<span class="dv">2</span> <span class="op">*</span> n <span class="op">+</span> <span class="dv">1</span>) <span class="op">*</span> D_ell) <span class="op">/</span> (<span class="dv">2</span> <span class="op">*</span> n <span class="op">*</span> (n <span class="op">+</span> <span class="dv">1</span>))</span>
+<span id="cb5-51"><a href="#cb5-51" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">float</span>(f <span class="op">@</span> M <span class="op">@</span> f)</span>
+<span id="cb5-52"><a href="#cb5-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-53"><a href="#cb5-53" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> S12_err(D_ell,D_ell_err,M):</span>
+<span id="cb5-54"><a href="#cb5-54" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Set the precision high enough to handle large calculations</span></span>
+<span id="cb5-55"><a href="#cb5-55" aria-hidden="true" tabindex="-1"></a>    getcontext().prec <span class="op">=</span> <span class="dv">1000</span></span>
+<span id="cb5-56"><a href="#cb5-56" aria-hidden="true" tabindex="-1"></a>    s<span class="op">=</span>Decimal(<span class="dv">0</span>)</span>
+<span id="cb5-57"><a href="#cb5-57" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i,xn <span class="kw">in</span> <span class="bu">enumerate</span>(D_ell_err):</span>
+<span id="cb5-58"><a href="#cb5-58" aria-hidden="true" tabindex="-1"></a>        n<span class="op">=</span>i<span class="op">+</span><span class="dv">2</span></span>
+<span id="cb5-59"><a href="#cb5-59" aria-hidden="true" tabindex="-1"></a>        fac1<span class="op">=</span>(((<span class="dv">2</span><span class="op">*</span>n<span class="op">+</span><span class="dv">1</span>))<span class="op">/</span>(<span class="dv">2</span><span class="op">*</span>n<span class="op">*</span>(n<span class="op">+</span><span class="dv">1</span>))) </span>
+<span id="cb5-60"><a href="#cb5-60" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> j,xm <span class="kw">in</span> <span class="bu">enumerate</span>(D_ell):</span>
+<span id="cb5-61"><a href="#cb5-61" aria-hidden="true" tabindex="-1"></a>            m<span class="op">=</span>j<span class="op">+</span><span class="dv">2</span></span>
+<span id="cb5-62"><a href="#cb5-62" aria-hidden="true" tabindex="-1"></a>            fac2<span class="op">=</span>(((<span class="dv">2</span><span class="op">*</span>m<span class="op">+</span><span class="dv">1</span>))<span class="op">/</span>(<span class="dv">2</span><span class="op">*</span>m<span class="op">*</span>(m<span class="op">+</span><span class="dv">1</span>))) </span>
+<span id="cb5-63"><a href="#cb5-63" aria-hidden="true" tabindex="-1"></a>            Amn<span class="op">=</span>fac1<span class="op">*</span>fac2</span>
+<span id="cb5-64"><a href="#cb5-64" aria-hidden="true" tabindex="-1"></a>            integral<span class="op">=</span>M[i,j]</span>
+<span id="cb5-65"><a href="#cb5-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-66"><a href="#cb5-66" aria-hidden="true" tabindex="-1"></a>            s <span class="op">+=</span> Decimal(Amn<span class="op">**</span><span class="dv">2</span>)<span class="op">*</span>Decimal(integral<span class="op">**</span><span class="dv">2</span>)<span class="op">*</span>Decimal(D_ell[i]<span class="op">**</span><span class="dv">2</span><span class="op">*</span>xm<span class="op">**</span><span class="dv">2</span> <span class="op">+</span> D_ell[j]<span class="op">**</span><span class="dv">2</span><span class="op">*</span>xn<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb5-67"><a href="#cb5-67" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb5-68"><a href="#cb5-68" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">float</span>(s)<span class="op">**</span><span class="fl">0.5</span></span>
+<span id="cb5-69"><a href="#cb5-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-70"><a href="#cb5-70" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> S12_err2(D_ell,D_ell_err,M):</span>
+<span id="cb5-71"><a href="#cb5-71" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Set the precision high enough to handle large calculations</span></span>
+<span id="cb5-72"><a href="#cb5-72" aria-hidden="true" tabindex="-1"></a>    getcontext().prec <span class="op">=</span> <span class="dv">1000</span></span>
+<span id="cb5-73"><a href="#cb5-73" aria-hidden="true" tabindex="-1"></a>    s1<span class="op">=</span>Decimal(<span class="dv">0</span>)</span>
+<span id="cb5-74"><a href="#cb5-74" aria-hidden="true" tabindex="-1"></a>    s2<span class="op">=</span>Decimal(<span class="dv">0</span>)</span>
+<span id="cb5-75"><a href="#cb5-75" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i,xn <span class="kw">in</span> <span class="bu">enumerate</span>(D_ell_err):</span>
+<span id="cb5-76"><a href="#cb5-76" aria-hidden="true" tabindex="-1"></a>        n<span class="op">=</span>i<span class="op">+</span><span class="dv">2</span></span>
+<span id="cb5-77"><a href="#cb5-77" aria-hidden="true" tabindex="-1"></a>        fac1<span class="op">=</span>(((<span class="dv">2</span><span class="op">*</span>n<span class="op">+</span><span class="dv">1</span>))<span class="op">/</span>(<span class="dv">2</span><span class="op">*</span>n<span class="op">*</span>(n<span class="op">+</span><span class="dv">1</span>))) </span>
+<span id="cb5-78"><a href="#cb5-78" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> j,xm <span class="kw">in</span> <span class="bu">enumerate</span>(D_ell):</span>
+<span id="cb5-79"><a href="#cb5-79" aria-hidden="true" tabindex="-1"></a>            m<span class="op">=</span>j<span class="op">+</span><span class="dv">2</span></span>
+<span id="cb5-80"><a href="#cb5-80" aria-hidden="true" tabindex="-1"></a>            fac2<span class="op">=</span>(((<span class="dv">2</span><span class="op">*</span>m<span class="op">+</span><span class="dv">1</span>))<span class="op">/</span>(<span class="dv">2</span><span class="op">*</span>m<span class="op">*</span>(m<span class="op">+</span><span class="dv">1</span>))) </span>
+<span id="cb5-81"><a href="#cb5-81" aria-hidden="true" tabindex="-1"></a>            Amn<span class="op">=</span>fac1<span class="op">*</span>fac2</span>
+<span id="cb5-82"><a href="#cb5-82" aria-hidden="true" tabindex="-1"></a>            integral<span class="op">=</span>M[i,j]</span>
+<span id="cb5-83"><a href="#cb5-83" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-84"><a href="#cb5-84" aria-hidden="true" tabindex="-1"></a>            s1 <span class="op">+=</span> Decimal(Amn)<span class="op">*</span>Decimal(integral)<span class="op">*</span>Decimal(D_ell[i]<span class="op">*</span>xm)</span>
+<span id="cb5-85"><a href="#cb5-85" aria-hidden="true" tabindex="-1"></a>            s2 <span class="op">+=</span> Decimal(Amn)<span class="op">*</span>Decimal(integral)<span class="op">*</span>Decimal(D_ell[j]<span class="op">*</span>xn)</span>
+<span id="cb5-86"><a href="#cb5-86" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb5-87"><a href="#cb5-87" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">float</span>(s1<span class="op">**</span><span class="dv">2</span><span class="op">+</span>s2<span class="op">**</span><span class="dv">2</span>)<span class="op">**</span><span class="fl">0.5</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="map-functions" class="level2">
+<h2 class="anchored" data-anchor-id="map-functions">Map Functions</h2>
+<div id="b9ee1048" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> map_rot_refl(<span class="bu">map</span>):</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    opposite_map <span class="op">=</span> np.zeros_like(<span class="bu">map</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    nside <span class="op">=</span> hp.get_nside(<span class="bu">map</span>)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    l, b <span class="op">=</span> hp.pix2ang(nside,np.arange(<span class="bu">len</span>(<span class="bu">map</span>)),lonlat<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    b_opposite <span class="op">=</span> <span class="op">-</span>b</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    l_opposite <span class="op">=</span> l <span class="op">+</span> <span class="dv">180</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    opposite_index <span class="op">=</span> hp.ang2pix(nside,l_opposite, b_opposite,lonlat<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    opposite_map <span class="op">=</span> <span class="bu">map</span>[opposite_index]</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> opposite_map</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> estimate_coef(x, y):</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>    <span class="co"># number of observations/points</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>    n <span class="op">=</span> np.size(x)</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>    <span class="co"># mean of x and y vector</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>    m_x <span class="op">=</span> np.mean(x)</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>    m_y <span class="op">=</span> np.mean(y)</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>    <span class="co"># calculating cross-deviation and deviation about x</span></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>    SS_xy <span class="op">=</span> np.<span class="bu">sum</span>(y<span class="op">*</span>x) <span class="op">-</span> n<span class="op">*</span>m_y<span class="op">*</span>m_x</span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>    SS_xx <span class="op">=</span> np.<span class="bu">sum</span>(x<span class="op">*</span>x) <span class="op">-</span> n<span class="op">*</span>m_x<span class="op">*</span>m_x</span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>    <span class="co"># calculating regression coefficients</span></span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>    b_1 <span class="op">=</span> SS_xy <span class="op">/</span> SS_xx</span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>    b_0 <span class="op">=</span> m_y <span class="op">-</span> b_1<span class="op">*</span>m_x</span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (b_0, b_1)</span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot180(<span class="bu">map</span>,opposite_map,map_name,filename,lower<span class="op">=</span><span class="va">False</span>):</span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>    plt.style.use(<span class="st">'seaborn-v0_8-paper'</span>)</span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a>    plt.rcParams.update({</span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>        <span class="st">'font.family'</span>: <span class="st">'serif'</span>,</span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a>        <span class="st">'font.size'</span>: <span class="dv">12</span>,</span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a>        <span class="st">'text.usetex'</span>: <span class="va">False</span>  <span class="co"># Set True if LaTeX installed</span></span>
+<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a>    })</span>
+<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> lower:</span>
+<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a>        low_nside <span class="op">=</span> hp.get_nside(<span class="bu">map</span>)<span class="op">//</span><span class="dv">2</span></span>
+<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a>        <span class="bu">map</span><span class="op">=</span>hp.ud_grade(<span class="bu">map</span>,low_nside)</span>
+<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a>    mult <span class="op">=</span> <span class="bu">map</span><span class="op">*</span>opposite_map</span>
+<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a>    a,b<span class="op">=</span> estimate_coef(x<span class="op">=</span><span class="bu">map</span>,y<span class="op">=</span>opposite_map)</span>
+<span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a>    fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">6</span>))</span>
+<span id="cb6-46"><a href="#cb6-46" aria-hidden="true" tabindex="-1"></a>    ax.scatter(<span class="bu">map</span>,opposite_map,marker<span class="op">=</span><span class="st">'o'</span>,c<span class="op">=</span><span class="st">'blue'</span>, label<span class="op">=</span> <span class="vs">rf'Impainting </span><span class="sc">{</span>map_name<span class="sc">}</span><span class="vs"> </span><span class="dv">$</span><span class="vs">C</span><span class="kw">(</span><span class="vs">180</span><span class="kw">)</span><span class="vs">=</span><span class="sc">{</span>np<span class="sc">.</span>mean(mult)<span class="sc">:3f}</span><span class="dv">$</span><span class="vs">'</span>, s<span class="op">=</span><span class="dv">2</span>, alpha<span class="op">=</span><span class="fl">0.05</span>) <span class="co">#map, cmap='viridis'</span></span>
+<span id="cb6-47"><a href="#cb6-47" aria-hidden="true" tabindex="-1"></a>    ax.plot(<span class="bu">map</span>,b<span class="op">*</span><span class="bu">map</span><span class="op">+</span>a,color<span class="op">=</span><span class="st">'red'</span>, label<span class="op">=</span><span class="vs">rf"</span><span class="dv">$</span><span class="vs">y=</span><span class="sc">{</span>b<span class="sc">:3f}</span><span class="vs">x </span><span class="sc">{</span>a<span class="sc">:3f}</span><span class="dv">$</span><span class="vs">"</span>)</span>
+<span id="cb6-48"><a href="#cb6-48" aria-hidden="true" tabindex="-1"></a>    ax.set_xlabel(<span class="vs">r'T </span><span class="pp">[$K_{CMB}$]</span><span class="vs">'</span>)</span>
+<span id="cb6-49"><a href="#cb6-49" aria-hidden="true" tabindex="-1"></a>    ax.set_ylabel(<span class="vs">r'Inverted map T </span><span class="pp">[$K_{CMB}$]</span><span class="vs">'</span>)</span>
+<span id="cb6-50"><a href="#cb6-50" aria-hidden="true" tabindex="-1"></a>    <span class="co">#ax.set_xscale('log')</span></span>
+<span id="cb6-51"><a href="#cb6-51" aria-hidden="true" tabindex="-1"></a>    ax.grid(<span class="va">True</span>, which<span class="op">=</span><span class="st">'both'</span>, ls<span class="op">=</span><span class="st">'--'</span>, alpha<span class="op">=</span><span class="fl">0.6</span>)</span>
+<span id="cb6-52"><a href="#cb6-52" aria-hidden="true" tabindex="-1"></a>    ax.legend(frameon<span class="op">=</span><span class="va">True</span>, loc<span class="op">=</span><span class="st">'best'</span>)</span>
+<span id="cb6-53"><a href="#cb6-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-54"><a href="#cb6-54" aria-hidden="true" tabindex="-1"></a>    plt.tight_layout()</span>
+<span id="cb6-55"><a href="#cb6-55" aria-hidden="true" tabindex="-1"></a>    plt.savefig(<span class="ss">f'</span><span class="sc">{</span>filename<span class="sc">}</span><span class="ss">.png'</span>, dpi<span class="op">=</span><span class="dv">300</span>, bbox_inches<span class="op">=</span><span class="st">'tight'</span>)</span>
+<span id="cb6-56"><a href="#cb6-56" aria-hidden="true" tabindex="-1"></a>    plt.close() </span>
+<span id="cb6-57"><a href="#cb6-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-58"><a href="#cb6-58" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> map_contours(<span class="bu">map</span>,opposite_map,filename):</span>
+<span id="cb6-59"><a href="#cb6-59" aria-hidden="true" tabindex="-1"></a>    fig<span class="op">=</span> plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>,<span class="dv">8</span>))</span>
+<span id="cb6-60"><a href="#cb6-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-61"><a href="#cb6-61" aria-hidden="true" tabindex="-1"></a>    h,xx,yy,_<span class="op">=</span>plt.hist2d(<span class="bu">map</span>, opposite_map,bins<span class="op">=</span>np.linspace(<span class="op">-</span><span class="dv">200</span>,<span class="dv">200</span>,<span class="dv">100</span>))</span>
+<span id="cb6-62"><a href="#cb6-62" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> (xx[<span class="dv">1</span>:]<span class="op">+</span>xx[:<span class="op">-</span><span class="dv">1</span>])<span class="op">/</span><span class="dv">2</span></span>
+<span id="cb6-63"><a href="#cb6-63" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> (yy[<span class="dv">1</span>:]<span class="op">+</span>yy[:<span class="op">-</span><span class="dv">1</span>])<span class="op">/</span><span class="dv">2</span></span>
+<span id="cb6-64"><a href="#cb6-64" aria-hidden="true" tabindex="-1"></a>    plt.colorbar()</span>
+<span id="cb6-65"><a href="#cb6-65" aria-hidden="true" tabindex="-1"></a>    plt.grid(<span class="va">True</span>, which<span class="op">=</span><span class="st">'both'</span>, ls<span class="op">=</span><span class="st">'--'</span>, alpha<span class="op">=</span><span class="fl">0.6</span>, color<span class="op">=</span><span class="st">'red'</span>)</span>
+<span id="cb6-66"><a href="#cb6-66" aria-hidden="true" tabindex="-1"></a>    plt.axis(<span class="st">'equal'</span>)</span>
+<span id="cb6-67"><a href="#cb6-67" aria-hidden="true" tabindex="-1"></a>    plt.contour(x,y,h, levels<span class="op">=</span>[<span class="dv">4000</span>,<span class="dv">6000</span>,<span class="dv">10000</span>],colors<span class="op">=</span><span class="st">'k'</span>)</span>
+<span id="cb6-68"><a href="#cb6-68" aria-hidden="true" tabindex="-1"></a>    plt.contour(x,<span class="op">-</span>y,h, levels<span class="op">=</span>[<span class="dv">4000</span>,<span class="dv">6000</span>,<span class="dv">10000</span>],colors<span class="op">=</span><span class="st">'w'</span>)</span>
+<span id="cb6-69"><a href="#cb6-69" aria-hidden="true" tabindex="-1"></a>    plt.savefig(<span class="ss">f'</span><span class="sc">{</span>filename<span class="sc">}</span><span class="ss">.png'</span>, dpi<span class="op">=</span><span class="dv">300</span>, bbox_inches<span class="op">=</span><span class="st">'tight'</span>)</span>
+<span id="cb6-70"><a href="#cb6-70" aria-hidden="true" tabindex="-1"></a>    plt.close() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="chains-and-camb-calculations" class="level2">
+<h2 class="anchored" data-anchor-id="chains-and-camb-calculations">Chains and CAMB calculations</h2>
+<div id="400ed6b8" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> compute_cl_cor_pl(parss,lmax,xvals):</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>        pars <span class="op">=</span> camb.set_params(ombh2<span class="op">=</span>parss[<span class="st">'omegabh2'</span>], omch2<span class="op">=</span>parss[<span class="st">'omegach2'</span>], H0 <span class="op">=</span> parss[<span class="st">'H0'</span>],omk<span class="op">=</span>parss[<span class="st">'omegak'</span>],</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>                                    YHe<span class="op">=</span>parss[<span class="st">'yheused'</span>], nnu<span class="op">=</span>parss[<span class="st">'nnu'</span>], nrun<span class="op">=</span>parss[<span class="st">'nrun'</span>], Alens<span class="op">=</span>parss[<span class="st">'Alens'</span>], ns<span class="op">=</span>parss[<span class="st">'ns'</span>], As<span class="op">=</span>np.exp(parss[<span class="st">'logA'</span>])<span class="op">*</span><span class="fl">1e-10</span>,w<span class="op">=-</span><span class="dv">1</span>,wa<span class="op">=</span>parss[<span class="st">'wa'</span>], mnu<span class="op">=</span>parss[<span class="st">'mnu'</span>], tau<span class="op">=</span>parss[<span class="st">'tau'</span>])</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>        resu <span class="op">=</span> camb.get_results(pars)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>        cls <span class="op">=</span> resu.get_cmb_power_spectra(pars, CMB_unit<span class="op">=</span><span class="st">'muK'</span>,lmax<span class="op">=</span>lmax)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>        totCL<span class="op">=</span>cls[<span class="st">'total'</span>]</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>        TTCl<span class="op">=</span>totCL[<span class="dv">2</span>:,<span class="dv">0</span>]</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>        totCorr<span class="op">=</span> camb.correlations.cl2corr(totCL,xvals,lmax)</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>        TTcor<span class="op">=</span>totCorr[:,<span class="dv">0</span>]</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> TTCl,  TTcor, TTcor[<span class="op">-</span><span class="dv">1</span>]</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> compute_cl_cor_dv(parss,lmax,xvals):</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>        pars <span class="op">=</span> camb.set_params(ombh2<span class="op">=</span>parss[<span class="st">'ombh2'</span>], omch2<span class="op">=</span>parss[<span class="st">'omch2'</span>], H0 <span class="op">=</span> parss[<span class="st">'H0'</span>],omk<span class="op">=</span><span class="dv">0</span>,</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>                                    YHe<span class="op">=</span>parss[<span class="st">'YHe'</span>], ns<span class="op">=</span>parss[<span class="st">'ns'</span>], As<span class="op">=</span>np.exp(parss[<span class="st">'logA'</span>])<span class="op">*</span><span class="fl">1e-10</span>,w<span class="op">=</span>parss[<span class="st">'w'</span>], mnu<span class="op">=</span>parss[<span class="st">'mnu'</span>], tau<span class="op">=</span>parss[<span class="st">'tau'</span>])</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>        resu <span class="op">=</span> camb.get_results(pars)</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>        cls <span class="op">=</span> resu.get_cmb_power_spectra(pars, CMB_unit<span class="op">=</span><span class="st">'muK'</span>,lmax<span class="op">=</span>lmax)</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>        totCL<span class="op">=</span>cls[<span class="st">'total'</span>]</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>        TTCl<span class="op">=</span>totCL[<span class="dv">2</span>:,<span class="dv">0</span>]</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>        totCorr<span class="op">=</span> camb.correlations.cl2corr(totCL,xvals,lmax)</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>        TTcor<span class="op">=</span>totCorr[:,<span class="dv">0</span>]</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> TTCl,  TTcor, TTcor[<span class="op">-</span><span class="dv">1</span>]</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> expand_dict_values(dict1, dict2):</span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Get the length of arrays in the first dictionary</span></span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>    first_key <span class="op">=</span> <span class="bu">next</span>(<span class="bu">iter</span>(dict1))  <span class="co"># Get any key from dict1</span></span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>    target_length <span class="op">=</span> <span class="bu">len</span>(dict1[first_key])  <span class="co"># Get the array length</span></span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Expand the values in dict2 to match the target length</span></span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>    expanded_dict2 <span class="op">=</span> {key: [value] <span class="op">*</span> target_length <span class="cf">for</span> key, value <span class="kw">in</span> dict2.items()}</span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>    z <span class="op">=</span> dict1 <span class="op">|</span> expanded_dict2</span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> z</span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> chain_calculations(parss,lmax,xvals,intervals,c):</span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> c<span class="op">&lt;=</span><span class="dv">4</span>:</span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a>        TTCl,  TTcor, C180 <span class="op">=</span> compute_cl_cor_pl(parss,lmax,xvals)</span>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a>        TTCl,  TTcor, C180 <span class="op">=</span> compute_cl_cor_dv(parss,lmax,xvals)</span>
+<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a>    th_values<span class="op">=</span> []</span>
+<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> a, b <span class="kw">in</span> intervals:</span>
+<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a>        M <span class="op">=</span> np.load(<span class="ss">f"Tmn__</span><span class="sc">{</span><span class="bu">round</span>(np.arccos(a)<span class="op">*</span><span class="dv">180</span><span class="op">/</span>np.pi)<span class="sc">}</span><span class="ss">__</span><span class="sc">{</span><span class="bu">round</span>(np.arccos(b)<span class="op">*</span><span class="dv">180</span><span class="op">/</span>np.pi)<span class="sc">}</span><span class="ss">.npy"</span>)</span>
+<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a>        s12 <span class="op">=</span> S12(TTCl,M)</span>
+<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a>        th_values.append(s12)</span>
+<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a>        xiv <span class="op">=</span> xivar(TTCl, a, b)</span>
+<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a>        th_values.append(xiv)</span>
+<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (TTCl, TTcor, C180, <span class="op">*</span>th_values)</span>
+<span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-49"><a href="#cb7-49" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> chain_results(intervals,xvals, roots,name,n<span class="op">=</span><span class="dv">1000</span>):</span>
+<span id="cb7-50"><a href="#cb7-50" aria-hidden="true" tabindex="-1"></a>    chain_cols <span class="op">=</span> []</span>
+<span id="cb7-51"><a href="#cb7-51" aria-hidden="true" tabindex="-1"></a>    chain_cols <span class="op">+=</span> [<span class="st">'D_ell'</span>, <span class="st">'Cor'</span>]</span>
+<span id="cb7-52"><a href="#cb7-52" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> a, b <span class="kw">in</span> intervals:</span>
+<span id="cb7-53"><a href="#cb7-53" aria-hidden="true" tabindex="-1"></a>        chain_cols <span class="op">+=</span> [<span class="ss">f's12_</span><span class="sc">{</span><span class="bu">round</span>(np.arccos(a)<span class="op">*</span><span class="dv">180</span><span class="op">/</span>np.pi)<span class="sc">}</span><span class="ss">_</span><span class="sc">{</span><span class="bu">round</span>(np.arccos(b)<span class="op">*</span><span class="dv">180</span><span class="op">/</span>np.pi)<span class="sc">}</span><span class="ss">'</span>,</span>
+<span id="cb7-54"><a href="#cb7-54" aria-hidden="true" tabindex="-1"></a>                       <span class="ss">f'xiv_</span><span class="sc">{</span><span class="bu">round</span>(np.arccos(a)<span class="op">*</span><span class="dv">180</span><span class="op">/</span>np.pi)<span class="sc">}</span><span class="ss">_</span><span class="sc">{</span><span class="bu">round</span>(np.arccos(b)<span class="op">*</span><span class="dv">180</span><span class="op">/</span>np.pi)<span class="sc">}</span><span class="ss">'</span>]</span>
+<span id="cb7-55"><a href="#cb7-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-56"><a href="#cb7-56" aria-hidden="true" tabindex="-1"></a>    chain_cols <span class="op">+=</span> [<span class="st">'C180'</span>]</span>
+<span id="cb7-57"><a href="#cb7-57" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-58"><a href="#cb7-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-59"><a href="#cb7-59" aria-hidden="true" tabindex="-1"></a>    data_dict <span class="op">=</span> {}</span>
+<span id="cb7-60"><a href="#cb7-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-61"><a href="#cb7-61" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i,root <span class="kw">in</span> <span class="bu">enumerate</span>(roots):</span>
+<span id="cb7-62"><a href="#cb7-62" aria-hidden="true" tabindex="-1"></a>        <span class="cf">try</span>:</span>
+<span id="cb7-63"><a href="#cb7-63" aria-hidden="true" tabindex="-1"></a>            samples <span class="op">=</span> loadMCSamples(file_root<span class="op">=</span>root)</span>
+<span id="cb7-64"><a href="#cb7-64" aria-hidden="true" tabindex="-1"></a>            <span class="bu">print</span>(<span class="ss">f'Procesando: </span><span class="sc">{</span>root<span class="sc">}</span><span class="ss">'</span>)</span>
+<span id="cb7-65"><a href="#cb7-65" aria-hidden="true" tabindex="-1"></a>            <span class="bu">print</span>(<span class="st">'_'</span> <span class="op">*</span> <span class="dv">40</span>)</span>
+<span id="cb7-66"><a href="#cb7-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-67"><a href="#cb7-67" aria-hidden="true" tabindex="-1"></a>            params <span class="op">=</span> samples.getParams()</span>
+<span id="cb7-68"><a href="#cb7-68" aria-hidden="true" tabindex="-1"></a>            fixed <span class="op">=</span> samples.ranges.fixedValueDict()</span>
+<span id="cb7-69"><a href="#cb7-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-70"><a href="#cb7-70" aria-hidden="true" tabindex="-1"></a>            chain_data <span class="op">=</span> {name.name: <span class="bu">getattr</span>(params, name.name, np.nan) <span class="cf">for</span> name <span class="kw">in</span> samples.paramNames.names}</span>
+<span id="cb7-71"><a href="#cb7-71" aria-hidden="true" tabindex="-1"></a>            data <span class="op">=</span> expand_dict_values(chain_data,fixed)</span>
+<span id="cb7-72"><a href="#cb7-72" aria-hidden="true" tabindex="-1"></a>            df <span class="op">=</span> pd.DataFrame.from_dict(data).tail(n)</span>
+<span id="cb7-73"><a href="#cb7-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-74"><a href="#cb7-74" aria-hidden="true" tabindex="-1"></a>            chain_result <span class="op">=</span> df.<span class="bu">apply</span>(chain_calculations, axis<span class="op">=</span><span class="dv">1</span>, args<span class="op">=</span>(<span class="dv">200</span>, xvals, intervals, i))</span>
+<span id="cb7-75"><a href="#cb7-75" aria-hidden="true" tabindex="-1"></a>            df_chain <span class="op">=</span> pd.DataFrame(chain_result.tolist(), columns<span class="op">=</span>chain_cols, index<span class="op">=</span>df.index)</span>
+<span id="cb7-76"><a href="#cb7-76" aria-hidden="true" tabindex="-1"></a>            df <span class="op">=</span> pd.concat([df, df_chain], axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb7-77"><a href="#cb7-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-78"><a href="#cb7-78" aria-hidden="true" tabindex="-1"></a>            stacked_Cl <span class="op">=</span> np.vstack(df[<span class="st">'D_ell'</span>].values)</span>
+<span id="cb7-79"><a href="#cb7-79" aria-hidden="true" tabindex="-1"></a>            stacked_Cor <span class="op">=</span> np.vstack(df[<span class="st">'Cor'</span>].values)</span>
+<span id="cb7-80"><a href="#cb7-80" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-81"><a href="#cb7-81" aria-hidden="true" tabindex="-1"></a>            mean_Cl <span class="op">=</span> stacked_Cl.mean(axis<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb7-82"><a href="#cb7-82" aria-hidden="true" tabindex="-1"></a>            std_Cl <span class="op">=</span> stacked_Cl.std(axis<span class="op">=</span><span class="dv">0</span>,ddof<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb7-83"><a href="#cb7-83" aria-hidden="true" tabindex="-1"></a>            mean_Cor <span class="op">=</span> stacked_Cor.mean(axis<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb7-84"><a href="#cb7-84" aria-hidden="true" tabindex="-1"></a>            std_Cor <span class="op">=</span> stacked_Cor.std(axis<span class="op">=</span><span class="dv">0</span>,ddof<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb7-85"><a href="#cb7-85" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-86"><a href="#cb7-86" aria-hidden="true" tabindex="-1"></a>            short_name <span class="op">=</span> root.strip().split(<span class="st">'/'</span>)[<span class="op">-</span><span class="dv">1</span>]</span>
+<span id="cb7-87"><a href="#cb7-87" aria-hidden="true" tabindex="-1"></a>            data_dict[short_name] <span class="op">=</span> (df[chain_cols], mean_Cl, std_Cl, mean_Cor, std_Cor)</span>
+<span id="cb7-88"><a href="#cb7-88" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-89"><a href="#cb7-89" aria-hidden="true" tabindex="-1"></a>        <span class="cf">except</span> <span class="pp">Exception</span> <span class="im">as</span> e:</span>
+<span id="cb7-90"><a href="#cb7-90" aria-hidden="true" tabindex="-1"></a>            <span class="bu">print</span>(<span class="ss">f'Error en </span><span class="sc">{</span>root<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span>e<span class="sc">}</span><span class="ss">'</span>)</span>
+<span id="cb7-91"><a href="#cb7-91" aria-hidden="true" tabindex="-1"></a>            <span class="cf">continue</span></span>
+<span id="cb7-92"><a href="#cb7-92" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-93"><a href="#cb7-93" aria-hidden="true" tabindex="-1"></a>        <span class="cf">finally</span>:</span>
+<span id="cb7-94"><a href="#cb7-94" aria-hidden="true" tabindex="-1"></a>            </span>
+<span id="cb7-95"><a href="#cb7-95" aria-hidden="true" tabindex="-1"></a>            <span class="co"># Guardar todo el diccionario completo en un solo archivo</span></span>
+<span id="cb7-96"><a href="#cb7-96" aria-hidden="true" tabindex="-1"></a>            <span class="cf">with</span> <span class="bu">open</span>(<span class="ss">f'</span><span class="sc">{</span>name<span class="sc">}</span><span class="ss">.pkl'</span>, <span class="st">'wb'</span>) <span class="im">as</span> f:</span>
+<span id="cb7-97"><a href="#cb7-97" aria-hidden="true" tabindex="-1"></a>                pickle.dump(data_dict, f)</span>
+<span id="cb7-98"><a href="#cb7-98" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-99"><a href="#cb7-99" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="plot-functions" class="level2">
+<h2 class="anchored" data-anchor-id="plot-functions">Plot functions</h2>
+<section id="barlanglexirangle_ab-plots" class="level3">
+<h3 class="anchored" data-anchor-id="barlanglexirangle_ab-plots"><span class="math inline">\(\bar{\langle\xi\rangle}_a^b\)</span> plots</h3>
+<div id="06711218" class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot_corr_with_xivar(xvals, unbin_cl,corr_th, est_df, intervals,name):</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Grafica la correlación experimental y teórica, junto con las integrales</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co">    y medias por intervalos, y bandas de error usando fill_between.</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co">    Parámetros:</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co">    - xvals: valores de x (eje horizontal)</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co">    - unbin_cl: diccionario con 'D_ell' y 'Error'</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co">    - D_ell_th: no se usa en esta versión pero puedes añadirlo si quieres comparar con teoría</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co">    - intervals: lista de tuplas con los intervalos [(a1, b1), (a2, b2), ...]</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>    corr <span class="op">=</span> correlation_func(unbin_cl[<span class="st">'D_ell'</span>][:<span class="dv">200</span>], xvals)</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>    plt.figure(figsize<span class="op">=</span>(<span class="dv">15</span>, <span class="dv">8</span>))</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>    ax <span class="op">=</span> plt.gca()</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Plot datos experimentales con banda de error</span></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>    ax.scatter(np.arccos(xvals)<span class="op">*</span><span class="dv">180</span><span class="op">/</span>np.pi, corr, s<span class="op">=</span><span class="dv">2</span>,marker<span class="op">=</span><span class="st">'o'</span>,c<span class="op">=</span><span class="st">'r'</span>, label<span class="op">=</span><span class="st">'Correlation function data'</span>)</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>    ax.scatter(np.arccos(xvals)<span class="op">*</span><span class="dv">180</span><span class="op">/</span>np.pi, corr_th, s<span class="op">=</span><span class="dv">2</span>,marker<span class="op">=</span><span class="st">'o'</span>,c<span class="op">=</span><span class="st">'b'</span>, label<span class="op">=</span><span class="st">'Correlation function model'</span>)</span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Para cada intervalo, calcular media y error y dibujar con fill_between</span></span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (a, b), i <span class="kw">in</span> <span class="bu">zip</span>(intervals,est_df.columns):</span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>        mean_sq <span class="op">=</span> xivar(unbin_cl[<span class="st">'D_ell'</span>][:<span class="dv">200</span>], a, b)</span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>        mean_sq_err <span class="op">=</span> xivar_err2(unbin_cl[<span class="st">'Error'</span>][:<span class="dv">200</span>], a, b)</span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>        ax.fill_between([np.arccos(a)<span class="op">*</span><span class="dv">180</span><span class="op">/</span>np.pi, np.arccos(b)<span class="op">*</span><span class="dv">180</span><span class="op">/</span>np.pi],</span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>                        [mean_sq <span class="op">-</span> mean_sq_err] ,</span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>                        [mean_sq <span class="op">+</span> mean_sq_err] , alpha<span class="op">=</span><span class="fl">0.4</span>,color<span class="op">=</span><span class="st">'r'</span>)</span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>        ax.plot([np.arccos(a)<span class="op">*</span><span class="dv">180</span><span class="op">/</span>np.pi, np.arccos(b)<span class="op">*</span><span class="dv">180</span><span class="op">/</span>np.pi],</span>
+<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a>                        [mean_sq,mean_sq] ,ls<span class="op">=</span><span class="st">'-.'</span>, alpha<span class="op">=</span><span class="fl">0.8</span>,color<span class="op">=</span><span class="st">'r'</span>,</span>
+<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a>                        label<span class="op">=</span><span class="vs">rf'</span><span class="dv">$</span><span class="er">\</span><span class="vs">xi_</span><span class="ch">{{</span><span class="sc">{</span><span class="bu">round</span>(np.arccos(a)<span class="op">*</span><span class="dv">180</span><span class="op">/</span>np.pi)<span class="sc">}</span><span class="ch">}}</span><span class="dv">^</span><span class="ch">{{</span><span class="sc">{</span><span class="bu">round</span>(np.arccos(b)<span class="op">*</span><span class="dv">180</span><span class="op">/</span>np.pi)<span class="sc">}</span><span class="ch">}}</span><span class="dv">$</span><span class="vs">: </span><span class="sc">{</span>mean_sq<span class="sc">:.2f}</span><span class="vs"> ± </span><span class="sc">{</span>mean_sq_err<span class="sc">:.2f}</span><span class="vs">'</span>)</span>
+<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a>        ax.fill_between([np.arccos(a)<span class="op">*</span><span class="dv">180</span><span class="op">/</span>np.pi, np.arccos(b)<span class="op">*</span><span class="dv">180</span><span class="op">/</span>np.pi],</span>
+<span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a>                        [np.mean(est_df[i]) <span class="op">-</span> np.std(est_df[i])] ,</span>
+<span id="cb8-39"><a href="#cb8-39" aria-hidden="true" tabindex="-1"></a>                        [np.mean(est_df[i]) <span class="op">+</span> np.std(est_df[i])] , alpha<span class="op">=</span><span class="fl">0.4</span>,color<span class="op">=</span><span class="st">'b'</span>)</span>
+<span id="cb8-40"><a href="#cb8-40" aria-hidden="true" tabindex="-1"></a>        ax.plot([np.arccos(a)<span class="op">*</span><span class="dv">180</span><span class="op">/</span>np.pi, np.arccos(b)<span class="op">*</span><span class="dv">180</span><span class="op">/</span>np.pi],</span>
+<span id="cb8-41"><a href="#cb8-41" aria-hidden="true" tabindex="-1"></a>                        [np.mean(est_df[i]) , np.mean(est_df[i]) ] ,ls<span class="op">=</span><span class="st">'-.'</span>, alpha<span class="op">=</span><span class="fl">0.8</span>,color<span class="op">=</span><span class="st">'b'</span>,</span>
+<span id="cb8-42"><a href="#cb8-42" aria-hidden="true" tabindex="-1"></a>                        label<span class="op">=</span><span class="ss">f'</span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span>np<span class="sc">.</span>mean(est_df[i])<span class="sc">:.2f}</span><span class="ss"> ± </span><span class="sc">{</span>np<span class="sc">.</span>std(est_df[i])<span class="sc">:.2f}</span><span class="ss">'</span>)</span>
+<span id="cb8-43"><a href="#cb8-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-44"><a href="#cb8-44" aria-hidden="true" tabindex="-1"></a>    <span class="co">#plt.yscale('log')</span></span>
+<span id="cb8-45"><a href="#cb8-45" aria-hidden="true" tabindex="-1"></a>    plt.ylim(<span class="op">-</span><span class="dv">400</span>,<span class="dv">400</span>)</span>
+<span id="cb8-46"><a href="#cb8-46" aria-hidden="true" tabindex="-1"></a>    plt.xlabel(<span class="vs">r"</span><span class="dv">$</span><span class="ch">\t</span><span class="vs">heta</span><span class="dv">$</span><span class="vs"> </span><span class="pp">[º]</span><span class="vs">"</span>)</span>
+<span id="cb8-47"><a href="#cb8-47" aria-hidden="true" tabindex="-1"></a>    plt.ylabel(<span class="vs">r"</span><span class="dv">$</span><span class="vs">C</span><span class="kw">(</span><span class="ch">\t</span><span class="vs">heta</span><span class="kw">)</span><span class="dv">$</span><span class="vs">"</span>)</span>
+<span id="cb8-48"><a href="#cb8-48" aria-hidden="true" tabindex="-1"></a>    plt.title(<span class="vs">r"</span><span class="dv">$</span><span class="er">\</span><span class="vs">xi_a</span><span class="dv">^</span><span class="vs">b</span><span class="dv">$</span><span class="vs"> analysis for "</span><span class="op">+</span> <span class="bu">str</span>(name))</span>
+<span id="cb8-49"><a href="#cb8-49" aria-hidden="true" tabindex="-1"></a>    plt.legend(fontsize<span class="op">=</span><span class="dv">7</span>)</span>
+<span id="cb8-50"><a href="#cb8-50" aria-hidden="true" tabindex="-1"></a>    plt.grid(<span class="va">True</span>)</span>
+<span id="cb8-51"><a href="#cb8-51" aria-hidden="true" tabindex="-1"></a>    plt.tight_layout()</span>
+<span id="cb8-52"><a href="#cb8-52" aria-hidden="true" tabindex="-1"></a>    plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="s_ab-plots" class="level3">
+<h3 class="anchored" data-anchor-id="s_ab-plots"><span class="math inline">\(S_a^b\)</span> plots</h3>
+<div id="08867181" class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot_corr_with_S12(xvals, unbin_cl, cor_th,est_df, intervals,name):</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Grafica la correlación experimental y teórica, junto con las integrales</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co">    y medias por intervalos, y bandas de error usando fill_between.</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="co">    Parámetros:</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co">    - xvals: valores de x (eje horizontal)</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="co">    - unbin_cl: diccionario con 'D_ell' y 'Error'</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="co">    - D_ell_th: no se usa en esta versión pero puedes añadirlo si quieres comparar con teoría</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="co">    - intervals: lista de tuplas con los intervalos [(a1, b1), (a2, b2), ...]</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>    corr <span class="op">=</span> correlation_func(unbin_cl[<span class="st">'D_ell'</span>][:<span class="dv">200</span>], xvals)</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>    plt.figure(figsize<span class="op">=</span>(<span class="dv">15</span>, <span class="dv">8</span>))</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>    ax <span class="op">=</span> plt.gca()</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Plot datos experimentales con banda de error</span></span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>    ax.scatter(np.arccos(xvals)<span class="op">*</span><span class="dv">180</span><span class="op">/</span>np.pi, corr<span class="op">**</span><span class="dv">2</span>, s<span class="op">=</span><span class="dv">2</span>,marker<span class="op">=</span><span class="st">'o'</span>,c<span class="op">=</span><span class="st">'r'</span>, label<span class="op">=</span><span class="st">'Correlation function data'</span>)</span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>    ax.scatter(np.arccos(xvals)<span class="op">*</span><span class="dv">180</span><span class="op">/</span>np.pi, cor_th<span class="op">**</span><span class="dv">2</span>, s<span class="op">=</span><span class="dv">2</span>,marker<span class="op">=</span><span class="st">'o'</span>,c<span class="op">=</span><span class="st">'b'</span>, label<span class="op">=</span><span class="st">'Correlation function model'</span>)</span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Para cada intervalo, calcular media y error y dibujar con fill_between</span></span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (a, b), i <span class="kw">in</span> <span class="bu">zip</span>(intervals,est_df.columns):</span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>        M <span class="op">=</span> np.load(<span class="ss">f"Tmn__</span><span class="sc">{</span><span class="bu">round</span>(np.arccos(a)<span class="op">*</span><span class="dv">180</span><span class="op">/</span>np.pi)<span class="sc">}</span><span class="ss">__</span><span class="sc">{</span><span class="bu">round</span>(np.arccos(b)<span class="op">*</span><span class="dv">180</span><span class="op">/</span>np.pi)<span class="sc">}</span><span class="ss">.npy"</span>)</span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>        mean_sq <span class="op">=</span> S12(unbin_cl[<span class="st">'D_ell'</span>][:<span class="dv">200</span>],M)</span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a>        mean_sq_err <span class="op">=</span> S12_err2(unbin_cl[<span class="st">'D_ell'</span>][:<span class="dv">200</span>],unbin_cl[<span class="st">'Error'</span>][:<span class="dv">200</span>], M)</span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a>        ax.fill_between([np.arccos(a)<span class="op">*</span><span class="dv">180</span><span class="op">/</span>np.pi, np.arccos(b)<span class="op">*</span><span class="dv">180</span><span class="op">/</span>np.pi],</span>
+<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a>                        [mean_sq <span class="op">-</span> mean_sq_err] ,</span>
+<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a>                        [mean_sq <span class="op">+</span> mean_sq_err] , alpha<span class="op">=</span><span class="fl">0.4</span>,color<span class="op">=</span><span class="st">'r'</span>)</span>
+<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a>        ax.plot([np.arccos(a)<span class="op">*</span><span class="dv">180</span><span class="op">/</span>np.pi, np.arccos(b)<span class="op">*</span><span class="dv">180</span><span class="op">/</span>np.pi],</span>
+<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a>                        [mean_sq,mean_sq] ,ls<span class="op">=</span><span class="st">'-.'</span>, alpha<span class="op">=</span><span class="fl">0.8</span>,color<span class="op">=</span><span class="st">'r'</span>,</span>
+<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a>                        label<span class="op">=</span><span class="vs">rf'</span><span class="dv">$</span><span class="vs">S_</span><span class="ch">{{</span><span class="sc">{</span><span class="bu">round</span>(np.arccos(a)<span class="op">*</span><span class="dv">180</span><span class="op">/</span>np.pi)<span class="sc">}</span><span class="ch">}}</span><span class="dv">^</span><span class="ch">{{</span><span class="sc">{</span><span class="bu">round</span>(np.arccos(b)<span class="op">*</span><span class="dv">180</span><span class="op">/</span>np.pi)<span class="sc">}</span><span class="ch">}}</span><span class="dv">$</span><span class="vs">: </span><span class="sc">{</span>mean_sq<span class="sc">:.2f}</span><span class="vs"> ± </span><span class="sc">{</span>mean_sq_err<span class="sc">:.2f}</span><span class="vs">'</span>)</span>
+<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a>        ax.fill_between([np.arccos(a)<span class="op">*</span><span class="dv">180</span><span class="op">/</span>np.pi, np.arccos(b)<span class="op">*</span><span class="dv">180</span><span class="op">/</span>np.pi],</span>
+<span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a>                        [np.mean(est_df[i]) <span class="op">-</span> np.std(est_df[i])] ,</span>
+<span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a>                        [np.mean(est_df[i]) <span class="op">+</span> np.std(est_df[i])] , alpha<span class="op">=</span><span class="fl">0.4</span>,color<span class="op">=</span><span class="st">'b'</span>)</span>
+<span id="cb9-40"><a href="#cb9-40" aria-hidden="true" tabindex="-1"></a>        ax.plot([np.arccos(a)<span class="op">*</span><span class="dv">180</span><span class="op">/</span>np.pi, np.arccos(b)<span class="op">*</span><span class="dv">180</span><span class="op">/</span>np.pi],</span>
+<span id="cb9-41"><a href="#cb9-41" aria-hidden="true" tabindex="-1"></a>                        [np.mean(est_df[i]) , np.mean(est_df[i]) ] ,ls<span class="op">=</span><span class="st">'-.'</span>, alpha<span class="op">=</span><span class="fl">0.4</span>,color<span class="op">=</span><span class="st">'b'</span>,</span>
+<span id="cb9-42"><a href="#cb9-42" aria-hidden="true" tabindex="-1"></a>                        label<span class="op">=</span><span class="ss">f'</span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span>np<span class="sc">.</span>mean(est_df[i])<span class="sc">:.2f}</span><span class="ss"> ± </span><span class="sc">{</span>np<span class="sc">.</span>std(est_df[i])<span class="sc">:.2f}</span><span class="ss">'</span>)</span>
+<span id="cb9-43"><a href="#cb9-43" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb9-44"><a href="#cb9-44" aria-hidden="true" tabindex="-1"></a>    plt.yscale(<span class="st">'symlog'</span>, linthresh<span class="op">=</span><span class="dv">10</span>)<span class="co">#plt.yscale('log')</span></span>
+<span id="cb9-45"><a href="#cb9-45" aria-hidden="true" tabindex="-1"></a>    <span class="co">#plt.ylim(0,3e4)</span></span>
+<span id="cb9-46"><a href="#cb9-46" aria-hidden="true" tabindex="-1"></a>    plt.xlabel(<span class="vs">r"</span><span class="dv">$</span><span class="ch">\t</span><span class="vs">heta</span><span class="dv">$</span><span class="vs"> </span><span class="pp">[º]</span><span class="vs">"</span>)</span>
+<span id="cb9-47"><a href="#cb9-47" aria-hidden="true" tabindex="-1"></a>    plt.ylabel(<span class="vs">r"</span><span class="dv">$</span><span class="vs">C</span><span class="kw">(</span><span class="ch">\t</span><span class="vs">heta</span><span class="kw">)</span><span class="dv">^</span><span class="vs">2</span><span class="dv">$</span><span class="vs">"</span>)</span>
+<span id="cb9-48"><a href="#cb9-48" aria-hidden="true" tabindex="-1"></a>    plt.title(<span class="vs">r"</span><span class="dv">$</span><span class="vs">S_a</span><span class="dv">^</span><span class="vs">b</span><span class="dv">$</span><span class="vs"> analysis for "</span><span class="op">+</span> <span class="bu">str</span>(name))</span>
+<span id="cb9-49"><a href="#cb9-49" aria-hidden="true" tabindex="-1"></a>    plt.legend(fontsize<span class="op">=</span><span class="dv">7</span>)</span>
+<span id="cb9-50"><a href="#cb9-50" aria-hidden="true" tabindex="-1"></a>    plt.grid(<span class="va">True</span>)</span>
+<span id="cb9-51"><a href="#cb9-51" aria-hidden="true" tabindex="-1"></a>    plt.tight_layout()</span>
+<span id="cb9-52"><a href="#cb9-52" aria-hidden="true" tabindex="-1"></a>    plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="general-plots" class="level3">
+<h3 class="anchored" data-anchor-id="general-plots">General plots</h3>
+<div id="2effe4d7" class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> create_histogram_grid(df, labels, exp_vals,title, figsize<span class="op">=</span>(<span class="dv">15</span>, <span class="dv">15</span>), bins<span class="op">=</span><span class="st">'auto'</span>):</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Creates a grid of histograms from DataFrame columns, overlaying experimental value ± error.</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co">    Parameters:</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="co">    - df: Pandas DataFrame with numerical columns.</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co">    - labels: List of strings for subplot titles (must match df.columns).</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="co">    - exp_vals: List [val1, err1, val2, err2, ...] (length = 2 * len(labels)).</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="co">    - figsize: Size of the full figure.</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="co">    - bins: Bin specification for histograms.</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>    n_cols <span class="op">=</span> <span class="bu">len</span>(df.columns)</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">len</span>(labels) <span class="op">!=</span> n_cols <span class="kw">or</span> <span class="bu">len</span>(exp_vals) <span class="op">!=</span> <span class="dv">2</span> <span class="op">*</span> n_cols:</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">"Mismatch in number of columns, labels, or experimental values."</span>)</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>    n_rows <span class="op">=</span> <span class="bu">round</span>(np.ceil(n_cols <span class="op">/</span> <span class="dv">2</span>))</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>    fig, axes <span class="op">=</span> plt.subplots(n_rows, <span class="dv">2</span>, figsize<span class="op">=</span>figsize)</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>    axes <span class="op">=</span> axes.flatten()</span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>    fig.suptitle(title, fontsize<span class="op">=</span><span class="dv">16</span>)</span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i, (col, label) <span class="kw">in</span> <span class="bu">enumerate</span>(<span class="bu">zip</span>(df.columns, labels)):</span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>        ax <span class="op">=</span> axes[i]</span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>        data <span class="op">=</span> df[col].dropna()</span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="bu">len</span>(data) <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>            <span class="cf">continue</span></span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>        exp_value <span class="op">=</span> exp_vals[<span class="dv">2</span><span class="op">*</span>i]</span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a>        exp_err <span class="op">=</span> exp_vals[<span class="dv">2</span><span class="op">*</span>i <span class="op">+</span> <span class="dv">1</span>]</span>
+<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a>        mean_val <span class="op">=</span> np.mean(data)</span>
+<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a>        std_val <span class="op">=</span> np.std(data)</span>
+<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a>        sigmas <span class="op">=</span> np.sqrt((exp_value <span class="op">-</span> mean_val)<span class="op">**</span><span class="dv">2</span> <span class="op">/</span> (exp_err<span class="op">**</span><span class="dv">2</span> <span class="op">+</span> std_val<span class="op">**</span><span class="dv">2</span>))</span>
+<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Histograma</span></span>
+<span id="cb10-35"><a href="#cb10-35" aria-hidden="true" tabindex="-1"></a>        n, bins_hist, _ <span class="op">=</span> ax.hist(data, bins<span class="op">=</span>bins, edgecolor<span class="op">=</span><span class="st">'b'</span>, alpha<span class="op">=</span><span class="fl">0.7</span>)</span>
+<span id="cb10-36"><a href="#cb10-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-37"><a href="#cb10-37" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Experimental error</span></span>
+<span id="cb10-38"><a href="#cb10-38" aria-hidden="true" tabindex="-1"></a>        rect <span class="op">=</span> Rectangle((exp_value <span class="op">-</span> exp_err , <span class="dv">0</span>),</span>
+<span id="cb10-39"><a href="#cb10-39" aria-hidden="true" tabindex="-1"></a>                         <span class="dv">2</span><span class="op">*</span>exp_err,</span>
+<span id="cb10-40"><a href="#cb10-40" aria-hidden="true" tabindex="-1"></a>                         np.<span class="bu">max</span>(n),</span>
+<span id="cb10-41"><a href="#cb10-41" aria-hidden="true" tabindex="-1"></a>                         color<span class="op">=</span><span class="st">'r'</span>, alpha<span class="op">=</span><span class="fl">0.3</span>, label<span class="op">=</span><span class="ss">f'± </span><span class="sc">{</span>exp_err<span class="sc">:2f}</span><span class="ss">'</span>)</span>
+<span id="cb10-42"><a href="#cb10-42" aria-hidden="true" tabindex="-1"></a>        ax.add_patch(rect)</span>
+<span id="cb10-43"><a href="#cb10-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-44"><a href="#cb10-44" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Experimental value</span></span>
+<span id="cb10-45"><a href="#cb10-45" aria-hidden="true" tabindex="-1"></a>        ax.axvline(exp_value, color<span class="op">=</span><span class="st">'r'</span>, linestyle<span class="op">=</span><span class="st">'--'</span>, label<span class="op">=</span><span class="ss">f'</span><span class="sc">{</span>exp_value<span class="sc">:2f}</span><span class="ss">'</span>)</span>
+<span id="cb10-46"><a href="#cb10-46" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Theoretical value and deviation</span></span>
+<span id="cb10-47"><a href="#cb10-47" aria-hidden="true" tabindex="-1"></a>        rect2 <span class="op">=</span> Rectangle((mean_val <span class="op">-</span> std_val , <span class="dv">0</span>),</span>
+<span id="cb10-48"><a href="#cb10-48" aria-hidden="true" tabindex="-1"></a>                         <span class="dv">2</span><span class="op">*</span>std_val,</span>
+<span id="cb10-49"><a href="#cb10-49" aria-hidden="true" tabindex="-1"></a>                         np.<span class="bu">max</span>(n),</span>
+<span id="cb10-50"><a href="#cb10-50" aria-hidden="true" tabindex="-1"></a>                         color<span class="op">=</span><span class="st">'b'</span>, alpha<span class="op">=</span><span class="fl">0.3</span>, label<span class="op">=</span><span class="ss">f'± </span><span class="sc">{</span>std_val<span class="sc">:2f}</span><span class="ss">'</span>)</span>
+<span id="cb10-51"><a href="#cb10-51" aria-hidden="true" tabindex="-1"></a>        ax.add_patch(rect2)</span>
+<span id="cb10-52"><a href="#cb10-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-53"><a href="#cb10-53" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Mean of the theoretical model</span></span>
+<span id="cb10-54"><a href="#cb10-54" aria-hidden="true" tabindex="-1"></a>        ax.axvline(mean_val, color<span class="op">=</span><span class="st">'b'</span>, linestyle<span class="op">=</span><span class="st">'--'</span>, label<span class="op">=</span><span class="ss">f'</span><span class="sc">{</span>mean_val<span class="sc">:2f}</span><span class="ss">'</span>)</span>
+<span id="cb10-55"><a href="#cb10-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-56"><a href="#cb10-56" aria-hidden="true" tabindex="-1"></a>        ax.set_title(<span class="ss">f"</span><span class="sc">{</span>label<span class="sc">}</span><span class="ch">\n</span><span class="ss">Δ = </span><span class="sc">{</span>sigmas<span class="sc">:.2f}</span><span class="ss"> σ"</span>, fontsize<span class="op">=</span><span class="dv">10</span>)</span>
+<span id="cb10-57"><a href="#cb10-57" aria-hidden="true" tabindex="-1"></a>        ax.grid(<span class="va">True</span>, linestyle<span class="op">=</span><span class="st">'--'</span>, alpha<span class="op">=</span><span class="fl">0.5</span>)</span>
+<span id="cb10-58"><a href="#cb10-58" aria-hidden="true" tabindex="-1"></a>        ax.legend(fontsize<span class="op">=</span><span class="dv">8</span>)</span>
+<span id="cb10-59"><a href="#cb10-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-60"><a href="#cb10-60" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(n_cols, <span class="bu">len</span>(axes)):</span>
+<span id="cb10-61"><a href="#cb10-61" aria-hidden="true" tabindex="-1"></a>        fig.delaxes(axes[j])</span>
+<span id="cb10-62"><a href="#cb10-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-63"><a href="#cb10-63" aria-hidden="true" tabindex="-1"></a>    plt.tight_layout()</span>
+<span id="cb10-64"><a href="#cb10-64" aria-hidden="true" tabindex="-1"></a>    plt.show()</span>
+<span id="cb10-65"><a href="#cb10-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-66"><a href="#cb10-66" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot_power_and_correlation(unbin_cl, mean_Cl, std_Cl,</span>
+<span id="cb10-67"><a href="#cb10-67" aria-hidden="true" tabindex="-1"></a>                                xvals, mean_Cor, std_Cor,</span>
+<span id="cb10-68"><a href="#cb10-68" aria-hidden="true" tabindex="-1"></a>                                root<span class="op">=</span><span class="st">"Title"</span>, figsize<span class="op">=</span>(<span class="dv">18</span>, <span class="dv">7</span>)):</span>
+<span id="cb10-69"><a href="#cb10-69" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb10-70"><a href="#cb10-70" aria-hidden="true" tabindex="-1"></a><span class="co">    Plots power spectrum and correlation function side-by-side with uncertainty bands and error bars.</span></span>
+<span id="cb10-71"><a href="#cb10-71" aria-hidden="true" tabindex="-1"></a><span class="co">    </span></span>
+<span id="cb10-72"><a href="#cb10-72" aria-hidden="true" tabindex="-1"></a><span class="co">    Parameters:</span></span>
+<span id="cb10-73"><a href="#cb10-73" aria-hidden="true" tabindex="-1"></a><span class="co">    - ell, D_ell, unbin_cl: Data for power spectrum</span></span>
+<span id="cb10-74"><a href="#cb10-74" aria-hidden="true" tabindex="-1"></a><span class="co">    - mean_Cl, std_Cl: Mean and std for Cl</span></span>
+<span id="cb10-75"><a href="#cb10-75" aria-hidden="true" tabindex="-1"></a><span class="co">    - theta, corr, corr_err: Data for correlation function</span></span>
+<span id="cb10-76"><a href="#cb10-76" aria-hidden="true" tabindex="-1"></a><span class="co">    - mean_Cor, std_Cor: Mean and std for correlation</span></span>
+<span id="cb10-77"><a href="#cb10-77" aria-hidden="true" tabindex="-1"></a><span class="co">    - root: Title string</span></span>
+<span id="cb10-78"><a href="#cb10-78" aria-hidden="true" tabindex="-1"></a><span class="co">    - figsize: Size of the full figure (tuple)</span></span>
+<span id="cb10-79"><a href="#cb10-79" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb10-80"><a href="#cb10-80" aria-hidden="true" tabindex="-1"></a>    theta<span class="op">=</span> np.arccos(xvals) <span class="op">*</span> <span class="dv">180</span> <span class="op">/</span> np.pi  <span class="co"># Convert xvals to degrees</span></span>
+<span id="cb10-81"><a href="#cb10-81" aria-hidden="true" tabindex="-1"></a>    corr <span class="op">=</span> correlation_func(unbin_cl[<span class="st">'D_ell'</span>][:<span class="dv">200</span>], xvals)</span>
+<span id="cb10-82"><a href="#cb10-82" aria-hidden="true" tabindex="-1"></a>    corr_err <span class="op">=</span> correlation_func_err2(unbin_cl[<span class="st">'Error'</span>][:<span class="dv">200</span>], xvals)</span>
+<span id="cb10-83"><a href="#cb10-83" aria-hidden="true" tabindex="-1"></a>    fig, (ax1, ax2) <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>figsize)</span>
+<span id="cb10-84"><a href="#cb10-84" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-85"><a href="#cb10-85" aria-hidden="true" tabindex="-1"></a>    <span class="co"># ----------- Power Spectrum ------------</span></span>
+<span id="cb10-86"><a href="#cb10-86" aria-hidden="true" tabindex="-1"></a>    ax1.set_title(<span class="ss">f"</span><span class="sc">{</span>root<span class="sc">}</span><span class="ss"> - Power Spectrum"</span>)</span>
+<span id="cb10-87"><a href="#cb10-87" aria-hidden="true" tabindex="-1"></a>    ax1.errorbar(</span>
+<span id="cb10-88"><a href="#cb10-88" aria-hidden="true" tabindex="-1"></a>        unbin_cl[<span class="st">'ell'</span>][:<span class="dv">200</span>], unbin_cl[<span class="st">'D_ell'</span>][:<span class="dv">200</span>],</span>
+<span id="cb10-89"><a href="#cb10-89" aria-hidden="true" tabindex="-1"></a>        yerr<span class="op">=</span>(unbin_cl[<span class="st">'-dD_ell'</span>][:<span class="dv">200</span>], unbin_cl[<span class="st">'+dD_ell'</span>][:<span class="dv">200</span>]),</span>
+<span id="cb10-90"><a href="#cb10-90" aria-hidden="true" tabindex="-1"></a>        fmt<span class="op">=</span><span class="st">'o'</span>, color<span class="op">=</span><span class="st">'red'</span>,</span>
+<span id="cb10-91"><a href="#cb10-91" aria-hidden="true" tabindex="-1"></a>        ecolor<span class="op">=</span>colors.to_rgba(<span class="st">'blue'</span>, <span class="fl">0.2</span>),</span>
+<span id="cb10-92"><a href="#cb10-92" aria-hidden="true" tabindex="-1"></a>        elinewidth<span class="op">=</span><span class="dv">1</span>, capsize<span class="op">=</span><span class="dv">2</span>, markersize<span class="op">=</span><span class="dv">2</span>,</span>
+<span id="cb10-93"><a href="#cb10-93" aria-hidden="true" tabindex="-1"></a>        label<span class="op">=</span><span class="st">"Power spectrum data"</span></span>
+<span id="cb10-94"><a href="#cb10-94" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb10-95"><a href="#cb10-95" aria-hidden="true" tabindex="-1"></a>    ax1.plot(unbin_cl[<span class="st">'ell'</span>][:<span class="dv">200</span>], mean_Cl, label<span class="op">=</span><span class="st">"Power spectrum mean"</span>, color<span class="op">=</span><span class="st">'k'</span>)</span>
+<span id="cb10-96"><a href="#cb10-96" aria-hidden="true" tabindex="-1"></a>    ax1.fill_between(unbin_cl[<span class="st">'ell'</span>][:<span class="dv">200</span>], mean_Cl <span class="op">-</span> <span class="dv">5</span><span class="op">*</span>std_Cl, mean_Cl <span class="op">+</span> <span class="dv">5</span><span class="op">*</span>std_Cl,</span>
+<span id="cb10-97"><a href="#cb10-97" aria-hidden="true" tabindex="-1"></a>                     color<span class="op">=</span><span class="st">'k'</span>, alpha<span class="op">=</span><span class="fl">0.2</span>, label<span class="op">=</span><span class="vs">r'</span><span class="dv">$</span><span class="vs">5</span><span class="dv">\s</span><span class="vs">igma</span><span class="dv">$</span><span class="vs">'</span>)</span>
+<span id="cb10-98"><a href="#cb10-98" aria-hidden="true" tabindex="-1"></a>    ax1.fill_between(unbin_cl[<span class="st">'ell'</span>][:<span class="dv">200</span>], mean_Cl <span class="op">-</span> std_Cl, mean_Cl <span class="op">+</span> std_Cl,</span>
+<span id="cb10-99"><a href="#cb10-99" aria-hidden="true" tabindex="-1"></a>                     color<span class="op">=</span><span class="st">'k'</span>, alpha<span class="op">=</span><span class="fl">0.4</span>, label<span class="op">=</span><span class="vs">r'</span><span class="dv">$</span><span class="vs">1</span><span class="dv">\s</span><span class="vs">igma</span><span class="dv">$</span><span class="vs">'</span>)</span>
+<span id="cb10-100"><a href="#cb10-100" aria-hidden="true" tabindex="-1"></a>    ax1.legend()</span>
+<span id="cb10-101"><a href="#cb10-101" aria-hidden="true" tabindex="-1"></a>    ax1.grid(<span class="va">True</span>)</span>
+<span id="cb10-102"><a href="#cb10-102" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-103"><a href="#cb10-103" aria-hidden="true" tabindex="-1"></a>    <span class="co"># ----------- Correlation Function ------------</span></span>
+<span id="cb10-104"><a href="#cb10-104" aria-hidden="true" tabindex="-1"></a>    ax2.set_title(<span class="ss">f"</span><span class="sc">{</span>root<span class="sc">}</span><span class="ss"> - Correlation Function"</span>)</span>
+<span id="cb10-105"><a href="#cb10-105" aria-hidden="true" tabindex="-1"></a>    ax2.errorbar(</span>
+<span id="cb10-106"><a href="#cb10-106" aria-hidden="true" tabindex="-1"></a>        theta, corr, yerr<span class="op">=</span><span class="bu">abs</span>(corr_err),</span>
+<span id="cb10-107"><a href="#cb10-107" aria-hidden="true" tabindex="-1"></a>        fmt<span class="op">=</span><span class="st">'o'</span>, color<span class="op">=</span><span class="st">'red'</span>,</span>
+<span id="cb10-108"><a href="#cb10-108" aria-hidden="true" tabindex="-1"></a>        ecolor<span class="op">=</span>colors.to_rgba(<span class="st">'blue'</span>, <span class="fl">0.2</span>),</span>
+<span id="cb10-109"><a href="#cb10-109" aria-hidden="true" tabindex="-1"></a>        elinewidth<span class="op">=</span><span class="dv">1</span>, capsize<span class="op">=</span><span class="dv">2</span>, markersize<span class="op">=</span><span class="dv">2</span>,</span>
+<span id="cb10-110"><a href="#cb10-110" aria-hidden="true" tabindex="-1"></a>        label<span class="op">=</span><span class="st">'Correlation function data'</span></span>
+<span id="cb10-111"><a href="#cb10-111" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb10-112"><a href="#cb10-112" aria-hidden="true" tabindex="-1"></a>    ax2.plot(theta, mean_Cor, label<span class="op">=</span><span class="st">"Correlation function mean"</span>, color<span class="op">=</span><span class="st">'k'</span>)</span>
+<span id="cb10-113"><a href="#cb10-113" aria-hidden="true" tabindex="-1"></a>    ax2.fill_between(theta, mean_Cor <span class="op">-</span> <span class="dv">5</span><span class="op">*</span>std_Cor, mean_Cor <span class="op">+</span> <span class="dv">5</span><span class="op">*</span>std_Cor,</span>
+<span id="cb10-114"><a href="#cb10-114" aria-hidden="true" tabindex="-1"></a>                     color<span class="op">=</span><span class="st">'k'</span>, alpha<span class="op">=</span><span class="fl">0.2</span>, label<span class="op">=</span><span class="vs">r'</span><span class="dv">$</span><span class="vs">5</span><span class="dv">\s</span><span class="vs">igma</span><span class="dv">$</span><span class="vs">'</span>)</span>
+<span id="cb10-115"><a href="#cb10-115" aria-hidden="true" tabindex="-1"></a>    ax2.fill_between(theta, mean_Cor <span class="op">-</span> std_Cor, mean_Cor <span class="op">+</span> std_Cor,</span>
+<span id="cb10-116"><a href="#cb10-116" aria-hidden="true" tabindex="-1"></a>                     color<span class="op">=</span><span class="st">'k'</span>, alpha<span class="op">=</span><span class="fl">0.4</span>, label<span class="op">=</span><span class="vs">r'</span><span class="dv">$</span><span class="vs">1</span><span class="dv">\s</span><span class="vs">igma</span><span class="dv">$</span><span class="vs">'</span>)</span>
+<span id="cb10-117"><a href="#cb10-117" aria-hidden="true" tabindex="-1"></a>    ax2.axhline(<span class="dv">0</span>, color<span class="op">=</span><span class="st">'k'</span>)</span>
+<span id="cb10-118"><a href="#cb10-118" aria-hidden="true" tabindex="-1"></a>    ax2.legend()</span>
+<span id="cb10-119"><a href="#cb10-119" aria-hidden="true" tabindex="-1"></a>    ax2.grid(<span class="va">True</span>)</span>
+<span id="cb10-120"><a href="#cb10-120" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-121"><a href="#cb10-121" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Inset plot</span></span>
+<span id="cb10-122"><a href="#cb10-122" aria-hidden="true" tabindex="-1"></a>    axins <span class="op">=</span> inset_axes(ax2, width<span class="op">=</span><span class="st">"30%"</span>, height<span class="op">=</span><span class="st">"30%"</span>, loc<span class="op">=</span><span class="st">'center'</span>, borderpad<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb10-123"><a href="#cb10-123" aria-hidden="true" tabindex="-1"></a>    axins.plot(theta, mean_Cor, color<span class="op">=</span><span class="st">'k'</span>)</span>
+<span id="cb10-124"><a href="#cb10-124" aria-hidden="true" tabindex="-1"></a>    axins.errorbar(theta, corr, yerr<span class="op">=</span>corr_err, fmt<span class="op">=</span><span class="st">'o'</span>, color<span class="op">=</span><span class="st">'red'</span>,</span>
+<span id="cb10-125"><a href="#cb10-125" aria-hidden="true" tabindex="-1"></a>                   ecolor<span class="op">=</span>colors.to_rgba(<span class="st">'blue'</span>, <span class="fl">0.2</span>),</span>
+<span id="cb10-126"><a href="#cb10-126" aria-hidden="true" tabindex="-1"></a>                   elinewidth<span class="op">=</span><span class="dv">1</span>, capsize<span class="op">=</span><span class="dv">2</span>, markersize<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb10-127"><a href="#cb10-127" aria-hidden="true" tabindex="-1"></a>    axins.fill_between(theta, mean_Cor <span class="op">-</span> <span class="dv">5</span><span class="op">*</span>std_Cor, mean_Cor <span class="op">+</span> <span class="dv">5</span><span class="op">*</span>std_Cor, color<span class="op">=</span><span class="st">'k'</span>, alpha<span class="op">=</span><span class="fl">0.2</span>)</span>
+<span id="cb10-128"><a href="#cb10-128" aria-hidden="true" tabindex="-1"></a>    axins.fill_between(theta, mean_Cor <span class="op">-</span> std_Cor, mean_Cor <span class="op">+</span> std_Cor, color<span class="op">=</span><span class="st">'k'</span>, alpha<span class="op">=</span><span class="fl">0.4</span>)</span>
+<span id="cb10-129"><a href="#cb10-129" aria-hidden="true" tabindex="-1"></a>    axins.set_ylim(<span class="op">-</span><span class="dv">600</span>, <span class="dv">500</span>)</span>
+<span id="cb10-130"><a href="#cb10-130" aria-hidden="true" tabindex="-1"></a>    axins.set_xlim(<span class="dv">20</span>, <span class="dv">180</span>)</span>
+<span id="cb10-131"><a href="#cb10-131" aria-hidden="true" tabindex="-1"></a>    axins.grid(<span class="va">True</span>)</span>
+<span id="cb10-132"><a href="#cb10-132" aria-hidden="true" tabindex="-1"></a>    mark_inset(ax2, axins, loc1<span class="op">=</span><span class="dv">2</span>, loc2<span class="op">=</span><span class="dv">4</span>, fc<span class="op">=</span><span class="st">"none"</span>, ec<span class="op">=</span><span class="st">"k"</span>, lw<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb10-133"><a href="#cb10-133" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-134"><a href="#cb10-134" aria-hidden="true" tabindex="-1"></a>    plt.tight_layout()</span>
+<span id="cb10-135"><a href="#cb10-135" aria-hidden="true" tabindex="-1"></a>    plt.show()</span>
+<span id="cb10-136"><a href="#cb10-136" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-137"><a href="#cb10-137" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> create_histogram_grid2(df, labels, exp_df, title, figsize<span class="op">=</span>(<span class="dv">15</span>, <span class="dv">15</span>), bins<span class="op">=</span><span class="st">'auto'</span>):</span>
+<span id="cb10-138"><a href="#cb10-138" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb10-139"><a href="#cb10-139" aria-hidden="true" tabindex="-1"></a><span class="co">    Creates a grid of histograms from DataFrame columns, overlaying experimental value ± error.</span></span>
+<span id="cb10-140"><a href="#cb10-140" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-141"><a href="#cb10-141" aria-hidden="true" tabindex="-1"></a><span class="co">    Parameters:</span></span>
+<span id="cb10-142"><a href="#cb10-142" aria-hidden="true" tabindex="-1"></a><span class="co">    - df: Pandas DataFrame with numerical columns.</span></span>
+<span id="cb10-143"><a href="#cb10-143" aria-hidden="true" tabindex="-1"></a><span class="co">    - labels: List of strings for subplot titles (must match df.columns).</span></span>
+<span id="cb10-144"><a href="#cb10-144" aria-hidden="true" tabindex="-1"></a><span class="co">    - exp_df: Pandas DataFrame with 2 rows: first row = experimental values, second row = errors.</span></span>
+<span id="cb10-145"><a href="#cb10-145" aria-hidden="true" tabindex="-1"></a><span class="co">              Columns must match df.columns in name and order.</span></span>
+<span id="cb10-146"><a href="#cb10-146" aria-hidden="true" tabindex="-1"></a><span class="co">    - title: Title of the whole figure.</span></span>
+<span id="cb10-147"><a href="#cb10-147" aria-hidden="true" tabindex="-1"></a><span class="co">    - figsize: Size of the full figure.</span></span>
+<span id="cb10-148"><a href="#cb10-148" aria-hidden="true" tabindex="-1"></a><span class="co">    - bins: Bin specification for histograms.</span></span>
+<span id="cb10-149"><a href="#cb10-149" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb10-150"><a href="#cb10-150" aria-hidden="true" tabindex="-1"></a>    n_cols <span class="op">=</span> <span class="bu">len</span>(df.columns)</span>
+<span id="cb10-151"><a href="#cb10-151" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb10-152"><a href="#cb10-152" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">len</span>(labels) <span class="op">!=</span> n_cols <span class="kw">or</span> <span class="bu">list</span>(exp_df.columns) <span class="op">!=</span> <span class="bu">list</span>(df.columns):</span>
+<span id="cb10-153"><a href="#cb10-153" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">"Mismatch in number of columns, labels, or experimental DataFrame format."</span>)</span>
+<span id="cb10-154"><a href="#cb10-154" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb10-155"><a href="#cb10-155" aria-hidden="true" tabindex="-1"></a>    n_rows <span class="op">=</span> <span class="bu">round</span>(np.ceil(n_cols <span class="op">/</span> <span class="dv">2</span>))</span>
+<span id="cb10-156"><a href="#cb10-156" aria-hidden="true" tabindex="-1"></a>    fig, axes <span class="op">=</span> plt.subplots(n_rows, <span class="dv">2</span>, figsize<span class="op">=</span>figsize)</span>
+<span id="cb10-157"><a href="#cb10-157" aria-hidden="true" tabindex="-1"></a>    axes <span class="op">=</span> axes.flatten()</span>
+<span id="cb10-158"><a href="#cb10-158" aria-hidden="true" tabindex="-1"></a>    fig.suptitle(title, fontsize<span class="op">=</span><span class="dv">16</span>)</span>
+<span id="cb10-159"><a href="#cb10-159" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-160"><a href="#cb10-160" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i, (col, label) <span class="kw">in</span> <span class="bu">enumerate</span>(<span class="bu">zip</span>(df.columns, labels)):</span>
+<span id="cb10-161"><a href="#cb10-161" aria-hidden="true" tabindex="-1"></a>        ax <span class="op">=</span> axes[i]</span>
+<span id="cb10-162"><a href="#cb10-162" aria-hidden="true" tabindex="-1"></a>        data <span class="op">=</span> df[col].dropna()</span>
+<span id="cb10-163"><a href="#cb10-163" aria-hidden="true" tabindex="-1"></a>        data_exp<span class="op">=</span> exp_df[col].dropna()</span>
+<span id="cb10-164"><a href="#cb10-164" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="bu">len</span>(data) <span class="op">==</span> <span class="dv">0</span> <span class="kw">or</span> <span class="bu">len</span>(data_exp) <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb10-165"><a href="#cb10-165" aria-hidden="true" tabindex="-1"></a>            <span class="bu">print</span>(<span class="ss">f"Warning: No data for column '</span><span class="sc">{</span>col<span class="sc">}</span><span class="ss">'. Skipping."</span>)</span>
+<span id="cb10-166"><a href="#cb10-166" aria-hidden="true" tabindex="-1"></a>            <span class="cf">continue</span></span>
+<span id="cb10-167"><a href="#cb10-167" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-168"><a href="#cb10-168" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb10-169"><a href="#cb10-169" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-170"><a href="#cb10-170" aria-hidden="true" tabindex="-1"></a>        mean_val <span class="op">=</span> np.mean(data)</span>
+<span id="cb10-171"><a href="#cb10-171" aria-hidden="true" tabindex="-1"></a>        std_val <span class="op">=</span> np.std(data)</span>
+<span id="cb10-172"><a href="#cb10-172" aria-hidden="true" tabindex="-1"></a>        exp_value <span class="op">=</span> np.mean(data_exp)</span>
+<span id="cb10-173"><a href="#cb10-173" aria-hidden="true" tabindex="-1"></a>        exp_err <span class="op">=</span> np.std(data_exp)</span>
+<span id="cb10-174"><a href="#cb10-174" aria-hidden="true" tabindex="-1"></a>        sigmas <span class="op">=</span> np.sqrt((exp_value <span class="op">-</span> mean_val)<span class="op">**</span><span class="dv">2</span> <span class="op">/</span> (exp_err<span class="op">**</span><span class="dv">2</span> <span class="op">+</span> std_val<span class="op">**</span><span class="dv">2</span>))</span>
+<span id="cb10-175"><a href="#cb10-175" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-176"><a href="#cb10-176" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Histograma</span></span>
+<span id="cb10-177"><a href="#cb10-177" aria-hidden="true" tabindex="-1"></a>        n, bins_hist, _ <span class="op">=</span> ax.hist(data, bins<span class="op">=</span>bins, edgecolor<span class="op">=</span><span class="st">'b'</span>, alpha<span class="op">=</span><span class="fl">0.7</span>)</span>
+<span id="cb10-178"><a href="#cb10-178" aria-hidden="true" tabindex="-1"></a>        n2, bins_hist, _ <span class="op">=</span> ax.hist(data_exp, bins<span class="op">=</span>bins, edgecolor<span class="op">=</span><span class="st">'r'</span>, alpha<span class="op">=</span><span class="fl">0.7</span>)</span>
+<span id="cb10-179"><a href="#cb10-179" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-180"><a href="#cb10-180" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Experimental error</span></span>
+<span id="cb10-181"><a href="#cb10-181" aria-hidden="true" tabindex="-1"></a>        rect <span class="op">=</span> Rectangle((exp_value <span class="op">-</span> exp_err, <span class="dv">0</span>),</span>
+<span id="cb10-182"><a href="#cb10-182" aria-hidden="true" tabindex="-1"></a>                         <span class="dv">2</span> <span class="op">*</span> exp_err,</span>
+<span id="cb10-183"><a href="#cb10-183" aria-hidden="true" tabindex="-1"></a>                         np.<span class="bu">max</span>(n2),</span>
+<span id="cb10-184"><a href="#cb10-184" aria-hidden="true" tabindex="-1"></a>                         color<span class="op">=</span><span class="st">'r'</span>, alpha<span class="op">=</span><span class="fl">0.3</span>, label<span class="op">=</span><span class="ss">f'± </span><span class="sc">{</span>exp_err<span class="sc">:.2f}</span><span class="ss">'</span>)</span>
+<span id="cb10-185"><a href="#cb10-185" aria-hidden="true" tabindex="-1"></a>        ax.add_patch(rect)</span>
+<span id="cb10-186"><a href="#cb10-186" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-187"><a href="#cb10-187" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Línea valor experimental</span></span>
+<span id="cb10-188"><a href="#cb10-188" aria-hidden="true" tabindex="-1"></a>        ax.axvline(exp_value, color<span class="op">=</span><span class="st">'r'</span>, linestyle<span class="op">=</span><span class="st">'--'</span>, label<span class="op">=</span><span class="ss">f'</span><span class="sc">{</span>exp_value<span class="sc">:.2f}</span><span class="ss">'</span>)</span>
+<span id="cb10-189"><a href="#cb10-189" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-190"><a href="#cb10-190" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Rango del modelo teórico</span></span>
+<span id="cb10-191"><a href="#cb10-191" aria-hidden="true" tabindex="-1"></a>        rect2 <span class="op">=</span> Rectangle((mean_val <span class="op">-</span> std_val, <span class="dv">0</span>),</span>
+<span id="cb10-192"><a href="#cb10-192" aria-hidden="true" tabindex="-1"></a>                         <span class="dv">2</span> <span class="op">*</span> std_val,</span>
+<span id="cb10-193"><a href="#cb10-193" aria-hidden="true" tabindex="-1"></a>                         np.<span class="bu">max</span>(n),</span>
+<span id="cb10-194"><a href="#cb10-194" aria-hidden="true" tabindex="-1"></a>                         color<span class="op">=</span><span class="st">'b'</span>, alpha<span class="op">=</span><span class="fl">0.3</span>, label<span class="op">=</span><span class="ss">f'± </span><span class="sc">{</span>std_val<span class="sc">:.2f}</span><span class="ss">'</span>)</span>
+<span id="cb10-195"><a href="#cb10-195" aria-hidden="true" tabindex="-1"></a>        ax.add_patch(rect2)</span>
+<span id="cb10-196"><a href="#cb10-196" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-197"><a href="#cb10-197" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Línea media modelo</span></span>
+<span id="cb10-198"><a href="#cb10-198" aria-hidden="true" tabindex="-1"></a>        ax.axvline(mean_val, color<span class="op">=</span><span class="st">'b'</span>, linestyle<span class="op">=</span><span class="st">'--'</span>, label<span class="op">=</span><span class="ss">f'</span><span class="sc">{</span>mean_val<span class="sc">:.2f}</span><span class="ss">'</span>)</span>
+<span id="cb10-199"><a href="#cb10-199" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-200"><a href="#cb10-200" aria-hidden="true" tabindex="-1"></a>        ax.set_title(<span class="ss">f"</span><span class="sc">{</span>label<span class="sc">}</span><span class="ch">\n</span><span class="ss">Δ = </span><span class="sc">{</span>sigmas<span class="sc">:.2f}</span><span class="ss"> σ"</span>, fontsize<span class="op">=</span><span class="dv">10</span>)</span>
+<span id="cb10-201"><a href="#cb10-201" aria-hidden="true" tabindex="-1"></a>        ax.grid(<span class="va">True</span>, linestyle<span class="op">=</span><span class="st">'--'</span>, alpha<span class="op">=</span><span class="fl">0.5</span>)</span>
+<span id="cb10-202"><a href="#cb10-202" aria-hidden="true" tabindex="-1"></a>        ax.legend(fontsize<span class="op">=</span><span class="dv">8</span>)</span>
+<span id="cb10-203"><a href="#cb10-203" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-204"><a href="#cb10-204" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(n_cols, <span class="bu">len</span>(axes)):</span>
+<span id="cb10-205"><a href="#cb10-205" aria-hidden="true" tabindex="-1"></a>        fig.delaxes(axes[j])</span>
+<span id="cb10-206"><a href="#cb10-206" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-207"><a href="#cb10-207" aria-hidden="true" tabindex="-1"></a>    plt.tight_layout(rect<span class="op">=</span>[<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="fl">0.96</span>])</span>
+<span id="cb10-208"><a href="#cb10-208" aria-hidden="true" tabindex="-1"></a>    plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="data-and-variables" class="level2">
+<h2 class="anchored" data-anchor-id="data-and-variables">Data and variables</h2>
+<section id="plancks-data" class="level3">
+<h3 class="anchored" data-anchor-id="plancks-data">Plancks Data</h3>
+<div id="b96ff2fd" class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>unbin_cl <span class="op">=</span> pd.read_csv(<span class="st">'maps/COM_PowerSpect_CMB-TT-full_R3.01.txt'</span>, sep<span class="op">=</span><span class="st">','</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>unbin_cl.head()</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>unbin_cl.columns <span class="op">=</span> [<span class="st">'ell'</span>, <span class="st">'D_ell'</span>, <span class="st">'-dD_ell'</span>, <span class="st">'+dD_ell'</span>]</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>ell <span class="op">=</span> unbin_cl[<span class="st">'ell'</span>]</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>D_ell <span class="op">=</span> unbin_cl[<span class="st">'D_ell'</span>]</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>errors <span class="op">=</span> (unbin_cl[<span class="st">'-dD_ell'</span>],unbin_cl[<span class="st">'+dD_ell'</span>])</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>unbin_cl[<span class="st">'Error'</span>]<span class="op">=</span> (errors[<span class="dv">0</span>]<span class="op">+</span>errors[<span class="dv">1</span>])<span class="op">/</span><span class="dv">2</span></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>xvals <span class="op">=</span> np.linspace(<span class="fl">0.9999999999999999</span>,<span class="op">-</span><span class="fl">0.9999999999999999</span>,<span class="dv">1800</span>) <span class="co"># For easy camb comparations </span></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>theta<span class="op">=</span> np.arccos(xvals)<span class="op">*</span><span class="dv">180</span><span class="op">/</span>np.pi</span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>intervals <span class="op">=</span> [(<span class="op">-</span><span class="fl">0.9999999999999999</span>, <span class="fl">0.5</span>), (<span class="fl">0.866</span>, <span class="fl">0.9999999999999999</span>), (<span class="fl">0.5</span>, <span class="fl">0.866</span>), (<span class="dv">0</span>, <span class="fl">0.5</span>), (<span class="op">-</span><span class="fl">0.5</span>, <span class="dv">0</span>), (<span class="op">-</span><span class="fl">0.866</span>, <span class="op">-</span><span class="fl">0.5</span>), (<span class="op">-</span><span class="fl">0.9999999999999999</span>, <span class="op">-</span><span class="fl">0.866</span>)]</span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>roots_planck <span class="op">=</span> [<span class="st">'COM_CosmoParams_fullGrid_R3.01/base_omegak/CamSpecHM_TT_lowl_lowE/base_omegak_CamSpecHM_TT_lowl_lowE'</span>,</span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>        <span class="st">'COM_CosmoParams_fullGrid_R3.01/base_omegak/plikHM_TTTEEE_lowl_lowE/base_omegak_plikHM_TTTEEE_lowl_lowE'</span>,</span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>         <span class="st">'COM_CosmoParams_fullGrid_R3.01/base/CamSpecHM_TT_lowl_lowE/base_CamSpecHM_TT_lowl_lowE'</span>,</span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>         <span class="st">'COM_CosmoParams_fullGrid_R3.01/base/plikHM_TT_lowl_lowE/base_plikHM_TT_lowl_lowE'</span>]</span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Ejecutar solo 1 vez para crear los archivos Tmn</p>
+<p>for i,j in intervals: Tmn(200,f”_{round(np.arccos(i)*180/np.pi)}“,f”_{round(np.arccos(j)*180/np.pi)}“,i,j)</p>
+</section>
+<section id="drived-and-estimators-for-plancks-data" class="level3">
+<h3 class="anchored" data-anchor-id="drived-and-estimators-for-plancks-data">Drived and estimators for plancks data</h3>
+<section id="derived" class="level4">
+<h4 class="anchored" data-anchor-id="derived">Derived</h4>
+<div id="e057ab75" class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>corr<span class="op">=</span>correlation_func(D_ell[:<span class="dv">200</span>],xvals)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>corr_err<span class="op">=</span>correlation_func_err2(unbin_cl[<span class="st">'Error'</span>][:<span class="dv">200</span>],xvals)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="estimators-1" class="level4">
+<h4 class="anchored" data-anchor-id="estimators-1">Estimators</h4>
+<div id="d2d8a01e" class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>exp_values<span class="op">=</span>[corr[<span class="op">-</span><span class="dv">1</span>],corr_err[<span class="op">-</span><span class="dv">1</span>]]</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> a, b <span class="kw">in</span> intervals:</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    M <span class="op">=</span> np.load(<span class="ss">f"Tmn__</span><span class="sc">{</span><span class="bu">round</span>(np.arccos(a)<span class="op">*</span><span class="dv">180</span><span class="op">/</span>np.pi)<span class="sc">}</span><span class="ss">__</span><span class="sc">{</span><span class="bu">round</span>(np.arccos(b)<span class="op">*</span><span class="dv">180</span><span class="op">/</span>np.pi)<span class="sc">}</span><span class="ss">.npy"</span>) <span class="co"># Load the matrix</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    s12 <span class="op">=</span> S12(unbin_cl[<span class="st">'D_ell'</span>][:<span class="dv">200</span>],M) <span class="co"># Compute S12</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    s12_err <span class="op">=</span> S12_err2(unbin_cl[<span class="st">'D_ell'</span>][:<span class="dv">200</span>],unbin_cl[<span class="st">'Error'</span>][:<span class="dv">200</span>], M) <span class="co"># Compute S12 error</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>    exp_values.append(s12)</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>    exp_values.append(s12_err)</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>    xiv <span class="op">=</span> xivar(unbin_cl[<span class="st">'D_ell'</span>][:<span class="dv">200</span>], a, b)</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>    xiv_err <span class="op">=</span> xivar_err2(unbin_cl[<span class="st">'Error'</span>][:<span class="dv">200</span>], a, b)</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>    exp_values.append(xiv)</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>    exp_values.append(xiv_err)</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(exp_values)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[np.float64(-370.63039628777113), np.float64(177.0659741397221), 6781.995259454025, 8911.02849647227, -2.2817921568352797, 12.151239879988692, 40830.65593467453, 50338.344062412005, 377.75603297875824, 352.2198572960234, 6498.650134932141, 7807.580014837832, -128.95251416366483, 79.15464769859057, 1724.0776868546527, 2971.965948875606, -51.358246092204055, 82.08704068459552, 169.87020750675734, 198.5361931057461, 16.045484752258616, 3.3528937140887356, 2107.013413762445, 2869.0266306891504, 73.64860146922494, 69.70753117307935, 2781.0339513301697, 3073.882191771755, -94.93802763445193, 32.63240853788581]</code></pre>
+</div>
+</div>
+</section>
+<section id="montecarlo-simulation" class="level4">
+<h4 class="anchored" data-anchor-id="montecarlo-simulation">Montecarlo simulation</h4>
+<div id="563067fd" class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> MC_calculations(data,lmax,xvals,intervals):</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="co">    Realiza cálculos Monte Carlo para las distribuciones de Cl y Cor, y calcula S12 y xiv.</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="co">    Parámetros:</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="co">    - data: DataFrame con las columnas 'D_ell' </span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a><span class="co">    - lmax: máximo valor de l para los cálculos</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a><span class="co">    - xvals: valores de x para la función de correlación</span></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a><span class="co">    - intervals: lista de tuplas con los intervalos [(a1, b1), (a2, b2), ...]</span></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>    TTCl,  TTcor <span class="op">=</span> data.iloc[<span class="dv">0</span>][:lmax], correlation_func(data.iloc[<span class="dv">0</span>][:lmax], xvals)</span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>    C180 <span class="op">=</span> TTcor[<span class="op">-</span><span class="dv">1</span>]</span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>    th_values<span class="op">=</span> []</span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> a, b <span class="kw">in</span> intervals:</span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>        M <span class="op">=</span> np.load(<span class="ss">f"Tmn__</span><span class="sc">{</span><span class="bu">round</span>(np.arccos(a)<span class="op">*</span><span class="dv">180</span><span class="op">/</span>np.pi)<span class="sc">}</span><span class="ss">__</span><span class="sc">{</span><span class="bu">round</span>(np.arccos(b)<span class="op">*</span><span class="dv">180</span><span class="op">/</span>np.pi)<span class="sc">}</span><span class="ss">.npy"</span>)</span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>        s12 <span class="op">=</span> S12(TTCl,M)</span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>        th_values.append(s12)</span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>        xiv <span class="op">=</span> xivar(TTCl, a, b)</span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>        th_values.append(xiv)</span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (TTCl, TTcor, C180, <span class="op">*</span>th_values)</span>
+<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> MC_results(intervals, data,xvals,n<span class="op">=</span><span class="dv">1000</span>):</span>
+<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb15-28"><a href="#cb15-28" aria-hidden="true" tabindex="-1"></a><span class="co">    Realiza cálculos Monte Carlo para las distribuciones de Cl y Cor, y calcula S12 y xiv.</span></span>
+<span id="cb15-29"><a href="#cb15-29" aria-hidden="true" tabindex="-1"></a><span class="co">    </span></span>
+<span id="cb15-30"><a href="#cb15-30" aria-hidden="true" tabindex="-1"></a><span class="co">    Parámetros:</span></span>
+<span id="cb15-31"><a href="#cb15-31" aria-hidden="true" tabindex="-1"></a><span class="co">    - intervals: lista de tuplas con los intervalos [(a1, b1), (a2, b2), ...]</span></span>
+<span id="cb15-32"><a href="#cb15-32" aria-hidden="true" tabindex="-1"></a><span class="co">    - data: DataFrame con las columnas 'D_ell' y 'Error'</span></span>
+<span id="cb15-33"><a href="#cb15-33" aria-hidden="true" tabindex="-1"></a><span class="co">    - n: número de muestras para la simulación</span></span>
+<span id="cb15-34"><a href="#cb15-34" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb15-35"><a href="#cb15-35" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb15-36"><a href="#cb15-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-37"><a href="#cb15-37" aria-hidden="true" tabindex="-1"></a><span class="co"># Crear una nueva columna con las distribuciones</span></span>
+<span id="cb15-38"><a href="#cb15-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-39"><a href="#cb15-39" aria-hidden="true" tabindex="-1"></a>    data[<span class="st">'dist_per_cl'</span>] <span class="op">=</span> data.<span class="bu">apply</span>(<span class="kw">lambda</span> row: np.random.normal(loc<span class="op">=</span>row[<span class="st">'D_ell'</span>], scale<span class="op">=</span>row[<span class="st">'Error'</span>], size<span class="op">=</span>n), axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb15-40"><a href="#cb15-40" aria-hidden="true" tabindex="-1"></a>    distribuciones <span class="op">=</span> data[<span class="st">'dist_per_cl'</span>].to_list()</span>
+<span id="cb15-41"><a href="#cb15-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-42"><a href="#cb15-42" aria-hidden="true" tabindex="-1"></a><span class="co"># Transponer: cada lista interna tendrá los i-ésimos elementos de cada distribución</span></span>
+<span id="cb15-43"><a href="#cb15-43" aria-hidden="true" tabindex="-1"></a>    trasp <span class="op">=</span> <span class="bu">list</span>(<span class="bu">map</span>(<span class="bu">list</span>, <span class="bu">zip</span>(<span class="op">*</span>distribuciones)))</span>
+<span id="cb15-44"><a href="#cb15-44" aria-hidden="true" tabindex="-1"></a>    df_arrays <span class="op">=</span> pd.DataFrame({<span class="st">'valores'</span>: [np.array(row) <span class="cf">for</span> row <span class="kw">in</span> trasp]})</span>
+<span id="cb15-45"><a href="#cb15-45" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb15-46"><a href="#cb15-46" aria-hidden="true" tabindex="-1"></a>    chain_cols <span class="op">=</span> []</span>
+<span id="cb15-47"><a href="#cb15-47" aria-hidden="true" tabindex="-1"></a>    chain_cols <span class="op">+=</span> [<span class="st">'D_ell'</span>, <span class="st">'Cor'</span>]</span>
+<span id="cb15-48"><a href="#cb15-48" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> a, b <span class="kw">in</span> intervals:</span>
+<span id="cb15-49"><a href="#cb15-49" aria-hidden="true" tabindex="-1"></a>        chain_cols <span class="op">+=</span> [<span class="ss">f's12_</span><span class="sc">{</span><span class="bu">round</span>(np.arccos(a)<span class="op">*</span><span class="dv">180</span><span class="op">/</span>np.pi)<span class="sc">}</span><span class="ss">_</span><span class="sc">{</span><span class="bu">round</span>(np.arccos(b)<span class="op">*</span><span class="dv">180</span><span class="op">/</span>np.pi)<span class="sc">}</span><span class="ss">'</span>,</span>
+<span id="cb15-50"><a href="#cb15-50" aria-hidden="true" tabindex="-1"></a>                       <span class="ss">f'xiv_</span><span class="sc">{</span><span class="bu">round</span>(np.arccos(a)<span class="op">*</span><span class="dv">180</span><span class="op">/</span>np.pi)<span class="sc">}</span><span class="ss">_</span><span class="sc">{</span><span class="bu">round</span>(np.arccos(b)<span class="op">*</span><span class="dv">180</span><span class="op">/</span>np.pi)<span class="sc">}</span><span class="ss">'</span>]</span>
+<span id="cb15-51"><a href="#cb15-51" aria-hidden="true" tabindex="-1"></a>    chain_cols <span class="op">+=</span> [<span class="st">'C180'</span>]</span>
+<span id="cb15-52"><a href="#cb15-52" aria-hidden="true" tabindex="-1"></a>    data_dict <span class="op">=</span> {}</span>
+<span id="cb15-53"><a href="#cb15-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-54"><a href="#cb15-54" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb15-55"><a href="#cb15-55" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span>:</span>
+<span id="cb15-56"><a href="#cb15-56" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb15-57"><a href="#cb15-57" aria-hidden="true" tabindex="-1"></a>        chain_result <span class="op">=</span> df_arrays.<span class="bu">apply</span>(MC_calculations, axis<span class="op">=</span><span class="dv">1</span>, args<span class="op">=</span>(<span class="dv">200</span>, xvals, intervals))</span>
+<span id="cb15-58"><a href="#cb15-58" aria-hidden="true" tabindex="-1"></a>        df_chain <span class="op">=</span> pd.DataFrame(chain_result.tolist(), columns<span class="op">=</span>chain_cols, index<span class="op">=</span>df_arrays.index)</span>
+<span id="cb15-59"><a href="#cb15-59" aria-hidden="true" tabindex="-1"></a>        df <span class="op">=</span> pd.concat([df_chain, df_arrays], axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb15-60"><a href="#cb15-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-61"><a href="#cb15-61" aria-hidden="true" tabindex="-1"></a>        stacked_Cl <span class="op">=</span> np.vstack(df[<span class="st">'D_ell'</span>].values)</span>
+<span id="cb15-62"><a href="#cb15-62" aria-hidden="true" tabindex="-1"></a>        stacked_Cor <span class="op">=</span> np.vstack(df[<span class="st">'Cor'</span>].values)</span>
+<span id="cb15-63"><a href="#cb15-63" aria-hidden="true" tabindex="-1"></a>        mean_Cl <span class="op">=</span> stacked_Cl.mean(axis<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb15-64"><a href="#cb15-64" aria-hidden="true" tabindex="-1"></a>        std_Cl <span class="op">=</span> stacked_Cl.std(axis<span class="op">=</span><span class="dv">0</span>,ddof<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb15-65"><a href="#cb15-65" aria-hidden="true" tabindex="-1"></a>        mean_Cor <span class="op">=</span> stacked_Cor.mean(axis<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb15-66"><a href="#cb15-66" aria-hidden="true" tabindex="-1"></a>        std_Cor <span class="op">=</span> stacked_Cor.std(axis<span class="op">=</span><span class="dv">0</span>,ddof<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb15-67"><a href="#cb15-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-68"><a href="#cb15-68" aria-hidden="true" tabindex="-1"></a>        data_dict[<span class="st">'Simulation'</span>] <span class="op">=</span> (df[chain_cols], mean_Cl, std_Cl, mean_Cor, std_Cor)</span>
+<span id="cb15-69"><a href="#cb15-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-70"><a href="#cb15-70" aria-hidden="true" tabindex="-1"></a>    <span class="cf">except</span> <span class="pp">Exception</span> <span class="im">as</span> e:</span>
+<span id="cb15-71"><a href="#cb15-71" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f'Error: </span><span class="sc">{</span>e<span class="sc">}</span><span class="ss">'</span>)</span>
+<span id="cb15-72"><a href="#cb15-72" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb15-73"><a href="#cb15-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-74"><a href="#cb15-74" aria-hidden="true" tabindex="-1"></a>    <span class="cf">finally</span>:</span>
+<span id="cb15-75"><a href="#cb15-75" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb15-76"><a href="#cb15-76" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Guardar todo el diccionario completo en un solo archivo</span></span>
+<span id="cb15-77"><a href="#cb15-77" aria-hidden="true" tabindex="-1"></a>        <span class="cf">with</span> <span class="bu">open</span>(<span class="ss">f'Simulation_1000.pkl'</span>, <span class="st">'wb'</span>) <span class="im">as</span> f:</span>
+<span id="cb15-78"><a href="#cb15-78" aria-hidden="true" tabindex="-1"></a>            pickle.dump(data_dict, f)</span>
+<span id="cb15-79"><a href="#cb15-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-80"><a href="#cb15-80" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-81"><a href="#cb15-81" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="b670b8a1" class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># MC_results(intervals, unbin_cl,xvals,1000)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="7dad3a80" class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">'Simulation_1000.pkl'</span>, <span class="st">'rb'</span>) <span class="im">as</span> f:</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    data_dict <span class="op">=</span> pickle.load(f)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Recorrer cada entrada del diccionario</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> root_name, (df, mean_Cl, std_Cl, mean_Cor, std_Cor) <span class="kw">in</span> data_dict.items():</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>    xiv_df <span class="op">=</span> df.<span class="bu">filter</span>(regex<span class="op">=</span><span class="vs">r'xiv_'</span>)</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>    s12_df <span class="op">=</span> df.<span class="bu">filter</span>(regex<span class="op">=</span><span class="vs">r's12_'</span>)</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>    est_df <span class="op">=</span> df.copy()</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>    est_df.drop(columns<span class="op">=</span>[<span class="st">'D_ell'</span>, <span class="st">'Cor'</span>], inplace<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>       </span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>    <span class="co">#create_histogram_grid(est_df, est_df.columns, exp_values, f"Histograms for {root_name}", figsize=(15, 15), bins=100)</span></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>    <span class="co">#plot_corr_with_xivar(xvals, unbin_cl,mean_Cor, xiv_df, intervals,root_name)</span></span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>    <span class="co">#plot_corr_with_S12(xvals, unbin_cl,mean_Cor, s12_df, intervals,root_name)</span></span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>    <span class="co">#plot_power_and_correlation(unbin_cl, mean_Cl, std_Cl,</span></span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>    <span class="co">#                            xvals, mean_Cor, std_Cor,</span></span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>    <span class="co">#                            root=root_name, figsize=(18, 7))</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="chain-calculations" class="level3">
+<h3 class="anchored" data-anchor-id="chain-calculations">Chain calculations</h3>
+<div id="9340e2ff" class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co">#chain_results(intervals, roots_planck,'chain_results_planck',1000) # No need to execute this if you have chain_results_planck.pkl (4 chains) or chain_results.pkl (1 chain)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="03fda9d2" class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">'chain_results_planck.pkl'</span>, <span class="st">'rb'</span>) <span class="im">as</span> f1:</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>    data_dict <span class="op">=</span> pickle.load(f1)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">'Simulation_1000.pkl'</span>, <span class="st">'rb'</span>) <span class="im">as</span> f2:</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>    simu_dict <span class="op">=</span> pickle.load(f2)</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>df_simu, cl_simu, _, _, _ <span class="op">=</span> simu_dict[<span class="st">'Simulation'</span>]</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>df2 <span class="op">=</span> df_simu.copy()</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>xiv_simu_df <span class="op">=</span> df_simu.<span class="bu">filter</span>(regex<span class="op">=</span><span class="vs">r'xiv_'</span>)</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>s12_simu_df <span class="op">=</span> df_simu.<span class="bu">filter</span>(regex<span class="op">=</span><span class="vs">r's12_'</span>)</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>df_simu.drop(columns<span class="op">=</span>[<span class="st">'D_ell'</span>, <span class="st">'Cor'</span>], inplace<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Recorrer cadacentrada del diccionario</span></span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> root_name, (df, mean_Cl, std_Cl, mean_Cor, std_Cor) <span class="kw">in</span> data_dict.items():</span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>    xiv_df <span class="op">=</span> df.<span class="bu">filter</span>(regex<span class="op">=</span><span class="vs">r'xiv_'</span>)</span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>    s12_df <span class="op">=</span> df.<span class="bu">filter</span>(regex<span class="op">=</span><span class="vs">r's12_'</span>)</span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>    est_df <span class="op">=</span> df.copy()</span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a>    est_df.drop(columns<span class="op">=</span>[<span class="st">'D_ell'</span>, <span class="st">'Cor'</span>], inplace<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a>    create_histogram_grid(est_df, est_df.columns, exp_values, <span class="ss">f"Histograms for </span><span class="sc">{</span>root_name<span class="sc">}</span><span class="ss"> Experimental VS Theoretical"</span>, figsize<span class="op">=</span>(<span class="dv">15</span>, <span class="dv">15</span>), bins<span class="op">=</span><span class="dv">100</span>)</span>
+<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a>    create_histogram_grid(df_simu, df_simu.columns, exp_values, <span class="ss">f"Histograms for </span><span class="sc">{</span>root_name<span class="sc">}</span><span class="ss"> Experimental VS Gaussian Simulation"</span>, figsize<span class="op">=</span>(<span class="dv">15</span>, <span class="dv">15</span>), bins<span class="op">=</span><span class="dv">100</span>)    </span>
+<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb19-24"><a href="#cb19-24" aria-hidden="true" tabindex="-1"></a>    create_histogram_grid2(df_simu, df_simu.columns, est_df, <span class="ss">f"Histograms for </span><span class="sc">{</span>root_name<span class="sc">}</span><span class="ss"> Theoretical VS Gaussian Simulation"</span>, figsize<span class="op">=</span>(<span class="dv">15</span>, <span class="dv">15</span>), bins<span class="op">=</span><span class="dv">100</span>)</span>
+<span id="cb19-25"><a href="#cb19-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-26"><a href="#cb19-26" aria-hidden="true" tabindex="-1"></a>    <span class="co">#plot_corr_with_xivar(xvals, df2, mean_Cor, xiv_simu_df, intervals, root_name)</span></span>
+<span id="cb19-27"><a href="#cb19-27" aria-hidden="true" tabindex="-1"></a>    <span class="co">#plot_corr_with_S12(xvals, df2, mean_Cor, s12_simu_df, intervals, root_name)</span></span>
+<span id="cb19-28"><a href="#cb19-28" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb19-29"><a href="#cb19-29" aria-hidden="true" tabindex="-1"></a>    <span class="co">#plot_power_and_correlation(df2, mean_Cl, std_Cl,</span></span>
+<span id="cb19-30"><a href="#cb19-30" aria-hidden="true" tabindex="-1"></a>    <span class="co">#                           xvals, mean_Cor, std_Cor,</span></span>
+<span id="cb19-31"><a href="#cb19-31" aria-hidden="true" tabindex="-1"></a>    <span class="co">#                            root=root_name, figsize=(18, 7))#</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="CleanPlanck_files/figure-html/cell-19-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="CleanPlanck_files/figure-html/cell-19-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="CleanPlanck_files/figure-html/cell-19-output-3.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="CleanPlanck_files/figure-html/cell-19-output-4.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="CleanPlanck_files/figure-html/cell-19-output-5.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="CleanPlanck_files/figure-html/cell-19-output-6.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="CleanPlanck_files/figure-html/cell-19-output-7.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="CleanPlanck_files/figure-html/cell-19-output-8.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="CleanPlanck_files/figure-html/cell-19-output-9.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="CleanPlanck_files/figure-html/cell-19-output-10.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="CleanPlanck_files/figure-html/cell-19-output-11.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="CleanPlanck_files/figure-html/cell-19-output-12.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

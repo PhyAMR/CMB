@@ -1,0 +1,21 @@
+[project]
+name = "cmb"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "camb>=1.6.2",
+    "getdist>=1.7.1",
+    "healpy>=1.18.1",
+    "ipykernel>=6.30.0",
+    "jupyter>=1.1.1",
+    "jupyter-client>=8.6.3",
+    "jupytext>=1.17.2",
+    "matplotlib>=3.10.3",
+    "numpy>=2.3.2",
+    "pandas>=2.3.1",
+    "pillow>=11.3.0",
+    "pynvim>=0.5.2",
+    "scienceplots>=2.1.1",
+]

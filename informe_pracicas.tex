@@ -1,0 +1,272 @@
+\documentclass[12pt, a4paper]{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage{setspace}
+\setstretch{1.15}
+\usepackage{float}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=0.5in]{geometry}
+\usepackage[spanish, es-tabla]{babel}
+\usepackage{fancyhdr,parskip}
+\usepackage[T1]{fontenc}
+\usepackage{amssymb,amsmath,amsthm}		% math
+\usepackage{ragged2e}       % justificar
+\usepackage{hyperref}
+\usepackage{subcaption}
+\usepackage{witharrows}
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+
+\usepackage[minnames=1,maxnames=2,maxbibnames = 3, style=authoryear, bibstyle = authoryear, backend=bibtex, giveninits=true, block = none, isbn = false, url = false, doi = false, eprint = false]{biblatex}
+
+\addbibresource{refs.bib} %Imports bibliography file
+
+
+
+\begin{document}
+
+\begin{titlepage}
+  \centering
+  { \bfseries \Large UNIVERSIDAD COMPLUTENSE DE MADRID}
+  \vspace{0.5cm}
+
+  {\bfseries  \Large FACULTAD DE CIENCIAS FÍSICAS}
+  \vspace{1cm}
+
+  %{\large DEPARTAMENTO DE FÍSICA DE LA TIERRA Y ASTROFÍSICA}
+  %\vspace{0.8cm}
+
+  %%%%Logo Complutense%%%%%
+  {\includegraphics[width=0.35\textwidth]{logo_UCM.png}} %Para ajustar la portada a una sola página se puede reducir el tamaño del logo
+  \vspace{0.8cm}
+
+  {\bfseries \Large PRÁCTICAS EN EMPRESA}
+  \vspace{2cm}
+
+  %{\Large Código de TFG:  [C\'odigo TFG] } \vspace{5mm}
+
+  {\Large Análisis estadístico de las anisotropías del fondo cósmico de microondas }\vspace{5mm}
+
+  {\Large UNIVERSIDAD AUTÓNOMA DE MADRID}\vspace{5mm}
+
+  {\Large Yago Ascasibar Sequeiros/Jesús Gallego Maestro}\vspace{10mm}
+
+  {\bfseries \LARGE Álvaro Méndez Rodríguez de Tembleque}\vspace{5mm}
+
+  {\large Grado en Física}\vspace{5mm}
+
+  {\large Curso acad\'emico 20[24-25]}\vspace{5mm}
+
+  {\large Convocatoria Ordinaria}\vspace{5mm}
+
+\end{titlepage}
+
+\newpage
+
+\tableofcontents
+\section{Introducción}
+
+Mis prácticas se han realizado en la Universidad Autónoma de Madrid (UAM), en el departamento de física teórica, concretamente en el área de la cosmología.
+
+El proceso para encontrar mis prácticas fue un poco complicado, ya que tras hablar con varios centros de investigación y o bien no tener respuesta o bien no tener plazas disponibles, finalmente escribi a un grupo de investigación en la UAM en donde me dijeron que no tenían plazas disponibles, pero que si quería podía hablar con el que finalmente fue mi tutor de prácticas, el Dr. Yago Ascasibar Sequeiros. Tras hablar con él, tanto por correo como de forma presencial, para discutir cual de los temas que el me propuso me interesaba más, decidimos el tema de mis prácticas.
+
+Y pese a que pereciera que ya había conseguido y el proceso de búsqueda había terminado, no fue así. El siguiente problema que me encontré fue que el tema resulto muy complicado dada la duración de las prácticas, por lo que nos volvimos a reunir para discutir cual sería un tema factible en el que pudiera trabajar.
+
+Finalmente decidimos que el tema de mis prácticas sería \textit{''El estudio de la función de fondo cósmico de microondas (CMB)''}. Aún así, me faltaba una barrera más por superar, la firma del convenio de prácticas. Todo lo contado anteriormente ocurrió durante el mes de octubre, y el convenio de prácticas no se firmó hasta el mes de diciembre (antes de las vacaciones), y no se me comunicó hasta finales de enero, lo que supuso que durante esos meses no estaba seguro de si iba a poder realizar las prácticas que tanto me había costado encontrar.
+
+Todo esto me llevo a iniciar mis prácticas el 17 de febrero de 2025, concluyendo el 10 de abril de 2025. Por lo tanto, lo que se ba a comentar durante las siguientes páginas es sobre todo aquello que he aprendido y vivido durante mi estancía en la UAM.
+
+\section{Descripción de la práctica}
+
+Mis práctican consistieron en realizar un estudio, desde otra perspectiva, sobre algunas teniones que se han descrito durante los últimos años en relación con los datos de Planck y el modelo cosmológico \textit{Flat Lambda Cold Dark Matter (F-$\Lambda$CDM)} (Ver \autocite{ABDALLA202249} para una revisión sobre los problemas del CMB). Concretamente mis prácticas consistieron en estudiar estas discrepancias desde el punto de vista de la función de corrrelación angular.
+
+A continuación unas breves definiciones de los conceptos que se han utilizado durante mis prácticas:
+
+\begin{definition}[\textbf{Espectro de potencias}]
+  El espectro de potencias es una herramienta fundamental en cosmología, ya que permite describir la distribución de la energía en el universo a diferentes escalas. En el caso del CMB, el espectro de potencias se utiliza para analizar las fluctuaciones de temperatura y polarización en el fondo cósmico de microondas. Este espectro se representa como una función de multipolo $\ell$, que está relacionada con la escala angular en el cielo. En términos simples, el espectro de potencias nos dice cuánta energía hay en diferentes escalas angulares del cielo.
+\end{definition}
+\begin{definition}[\textbf{Función de corrrelación angular}]
+  La función de correlación angular  describe la correlación entre dos puntos en el cielo, en función de su separación angular. En este caso, al aplicarlo al espectro de potencias del CMB, se obtiene como de correlacionada esta la temperatura de un punto con respecto a otro separado una cierta distancia angular, es decir, índica la rleación entre las fluctuaciones de temperatura en el CMB a diferentes escalas angulares.
+\end{definition}
+\begin{definition}[\textbf{Cadenas de Markov Monte Carlo (MCMC)}]
+  Las cadenas de Markov Monte Carlo (MCMC) son algoritmos que generan muestras de distribuciones de probabilidad complejas mediante un proceso de pasos aleatorios, donde cada nuevo estado depende solo del anterior. En cosmología, se utilizan para estimar parámetros del modelo cosmológico, como la densidad de materia o la constante de Hubble, ajustando modelos teóricos a datos observacionales como el fondo cósmico de microondas. Este enfoque permite explorar eficientemente espacios de parámetros de alta dimensión y obtener estimaciones precisas con intervalos de confianza, siendo fundamental en la estadística bayesiana aplicada a la cosmología.
+\end{definition}
+
+
+
+Para llevar acabo este estudio fue necesario realizar una serie de simulaciones, entre ellas se encuentran simulaciones de los parámetros cosmológicos empleando MCMCs, dado el coste computacional de estas simulaciones, se tomaron directamente los resultados disponibles en \autocite{planck_legacy_archive} cuya naturaleza se describe en \autocite{cosmoplanck_2020}.
+
+\subsection{Importancia de las prácticas}
+
+La importancia de las prácticas, en cuanto a su contenido científico, reside en el estudio de las discrepancias que presenta el modelo cosmológico estandar desde un objeto, la función de corrrelación angular, el cual no ha sido muy estudiado en la literatura, y en caso de serlo el objetivo de esos estudios era el de encontrar explicaciones a porque no ajusta bien a los datos y encontrar formas de corregirlo. En este caso, el objetivo es el de estudiar la función de corrrelación angular y ver si presenta alguna discrepancia con respecto a los datos obtenidos por el satélite Planck, indicando a si nuevas tensiones con el modelo estandar.
+
+
+\section{Objetivo de la práctica}
+\subsection{Objetivos principales}
+
+Las prácticas tenían un objetivo principal, el de realizar un estudio de la función de correlación angular y analizar si presenta alguna discrepancia con respecto a los datos obtenidos por el satélite Planck. Esto se debe a que las prácticas no estaban determinadas por una serie de acciones a realizar, si no que había que informarse del estado actual de la literatura acerca de este tema y encontrar una forma de evaluar la discrepancia entre los datos obtenidos por el satélite Planck y el modelo cosmológico estandar.
+\subsection{Tareas asignadas}
+
+Dado que el objetivo de mis prácticas era muy amplio y trabajaba de forma autónoma (se desarrollará más en esta idea más adelante), realicé numerosas tareas, aunque no todas ellas resultarón útiles para el desarrollo de mis prácticas. A continuación se enumeran las tareas que realicé durante mis prácticas (se omiten aquellas tareas que se comentarán en la sección de resultados):
+\begin{enumerate}
+  \item \textbf{Lectura de artículos:} Al igual que es evidente, también es importante. Durante mis prácticas busqué, leí y analicé una gran cantidad de artículos relacionados con el tema de mis prácticas. A medida que comentaba mis descubrimientos con mi tutor se formaba en mi un pensamiento crítico acerca de lo que leía.
+  \item \textbf{Lectura de mapas:} Al inicio del todo intente realizar el mismo análisis que otros artículos, esto me llevo a leer los mapas de Planck, e intenar obtener mis propios espectros de potencias hacienod uso de la librería \textit{healpy} \autocite{Zonca2019,healpix}. Al final decidí usar los resultados de Planck directamente, pero me sirví para comprender la física detrás de mis cálculos.
+  \item \textbf{Simulaciones de MCMC:} Antes de utilizar los resultados de la colaboración Planck, intente realizar mis propias simulaciones, para ello utilicé la librería \textit{Cobaya} \autocite{cobaya}, tras varios intentos decidi usar directamente los resultados.
+  \item \textbf{Simulaciones con CAMB:} Dado que el objetivo era simular universos diferentes, decidí utilizar la librería \textit{CAMB} \autocite{Lewis:1999bs,CAMB_GitHub}, que permite simular diferentes universos y obtener el espectro de potencias y la función de corrrelación angular. Con esta librería hice los calculos que se pueden ver en la figura \ref{fig:esp-cor}.
+  \item \textbf{Estudio del espacio de parámetros:} Muchos de las tensiones que se discuten, se encuentran relacionadas con los valores de los parámetros cosmológicos que ofrece Planck. Para ello, utilicé la librería \textit{GetDist} \autocite{Lewis:2019xzd}. Esto me permitió ver las distribuciones de los parámetros cosmológicos. Finalmente, no encontré como relacionarlos con el objeto de estudio, por lo que opté por ir en otra dirección.
+  \item \textbf{Estadístico $S_{1/2}$:} Pese a ser un estadístico que se ha estudiado en la literatura, su calculo me tuvo varios días inmerso en el. Este estadístico ha sufrido varias variaciones a lo largo de los años y en mi caso lo he empleado para cuantizar las discrepancias en diferentes rangos de ángulos, en vez de usar la forma clásica. Se define como:
+        \begin{DispWithArrows}[format=ll, displaystyle]
+          S_a^b= & \int_a^b C(\theta)^2\sin(\theta)d\theta =\int_a^b \left[\sum_l \frac{2l+1}{2l(l+1)}D_lP_l(\cos(\theta))\right]^2 d\cos(\theta)\\
+          =& \sum_n\sum_m \frac{2n+1}{2n(n+1)}D_n \frac{2m+1}{2m(m+1)}D_m\underbrace{\int_a^b P_n(\cos(\theta))P_m(\cos(\theta)) d\cos(\theta)}_{T_{nm}}
+        \end{DispWithArrows}
+
+        El término $T_{mn}$ fue la parte que más me costó sacar; esto fue porque en la literatura no se detalla el cálculo explícito. Conseguí sacar un cálculo análitico para esta integral el cual es reutilizable ya que solo depende del multipolo más alto, es decir, una vez calculado para un cierto valor de $\ell$ no es necesario volver a calcular esa integral si se quiere obtener el resultado hasta ese multipolo o uno menor.
+        Este término lo obtuve usando ciertas relaciones de los polinómios de Legendre \autocite{Carlitz1961} perimitiendome escribirla de la siguiente forma:
+        \begin{DispWithArrows}[format=ll, displaystyle]
+          T_{mn} = & \int_a^b P_n(\cos(\theta))P_m(\cos(\theta)) d\cos(\theta)\\
+          = &\frac{A_r \cdot A_{m - r} \cdot A_{n - r}}{A_{m + n - r}(2m + 2n - 2r + 1)}  \left[ \left( P_{m+n-2r+1}(b) - P_{m+n-2r-1}(b) \right) - \left( P_{m+n-2r+1}(a) - P_{m+n-2r-1}(a) \right) \right] \notag
+        \end{DispWithArrows}
+        con $A_{r}=\frac{1\cdot3\cdot5\cdots(r-1)}{r!}$
+  \item \textbf{Estadístico $\bar{\langle\xi\rangle}$:} Este estadístico es el que he definido durante mis prácticas, y se interpreta como un valor medio de la función de corrrelación angular en un rango de ángulos. Esta es una nueva forma de caracterizar la función de corrrelación angular. Se define como:
+        \begin{DispWithArrows}[format=ll, displaystyle]
+          \bar{\langle\xi\rangle}_a^b= & \frac{\int_a^b C(\theta)\sin(\theta)d\theta}{\cos(b)-\cos(a)} =\int_a^b \sum_l \frac{2l+1}{2l(l+1)}D_lP_l(\cos(\theta)) d\cos(\theta)=\\
+          = & \sum_l \frac{2l+1}{2l(l+1)}D_l \int_a^b P_l(\cos(\theta)) d\cos(\theta)=\sum_l \frac{D_l}{2l(l+1)}\left[P_{l+1}(\cos(\theta))-P_{l-1}(\cos(\theta))\right]^b_a
+        \end{DispWithArrows}
+
+\end{enumerate}
+
+
+\subsection{Adaptación a la modalidad no presencial}
+El horario durante mis prácticas ha sido bastante libre, el convenio establecía una jornada semipresencial de 4 horas al día 5 días a la semana. Dado el horario de mi tutor yo me adapté a él, y acudía a la universidad los lunes, jueves y viernes. Los martes y miércoles solían ser en remoto. Aunque como he mencionado antes, si era necesario acudir a la universidad para tener una reunión no había ningún problema por ninguna de las partes, al igual que si mi tutor no veía necesaria mi presencia en la universidad podía quedarme en casa trabajando.
+
+Un factor importante acerca de la modalidad presencial fueron los compañeros de despacho que tuve la oportunidad de conocer durante mis prácticas. Afortunadamente, a mediados de mis prácticas unos investigadores doctorales ocuparon las mesas vacías del despacho permitiéndome así poder realmente disfrutar de un ambiente de investigación.
+
+Gracias a eso puede ver como otros investigadores trabajan, pude informarme de otras áreas de investigación y experimentar lo que es tener “compañeros de trabajo”.
+
+La modalidad no presencial de las prácticas ha sido fundamental para compaginar las prácticas con mis estudios, no por que hubiera ningún solapamiento; si no porque me permitía evitarme el desplazamiento y poder estudiar más aquellos días que me encontraba más apurado.
+
+\section{Breve descripción de la entidad}
+
+La Universidad Autónoma de Madrid (UAM) es una institución pública destacada por su excelencia investigadora. Cuenta con más de 300 grupos de investigación y 12 centros especializados, integrando a más de 2.300 investigadores con dedicación exclusiva.
+Además, la UAM es una de las (pocas) universidades públicas de la comunidad de Madrid que posee un programa en física.
+
+La universidad Autónoma de Madrid se encuentra en la localidad de Colmenar Viejo.
+
+En la siguiente infografía puede observarse, no solo el número de empleados aproximados, que es de 4.413, si no también un resumen de su actividad, tanto docente como investigadora, si no también otra información sobre esta institución.
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.7\textwidth]{infografia_esp_2-01-01.png}
+  \caption{Infografía sobre la actividad, resultados y recursos institucionales de la universidad Autónoma de Madrid \autocite{UAMINF}}
+  \label{fig:enter-label}
+\end{figure}
+
+\section{Metodología, resultados y conclusiones}
+\subsection{Metodología}
+
+En mis prácticas prevaleció el trabajo autónomo, esto me permitió realmente aprender a cerca del tema y desarrollar el pensamiento crítico. Aunque tenía reuniones con mi tutor, varias a la semana generalmente, la idea era que yo fuera capaz de obtener mis propias conclusiones y discutirlas con él. El papel de mi tutor era el de guiarme y ayudarme a encontrar la información necesaria para poder realizar mis prácticas, pero no el de darme la información ya hecha.
+
+Esto me permitió realizar todas las tareas ya mencionadas de las cuales aprendí muchisimos conceptos, tanto de cosmología como de estadística. Además, me permitió aperender sin miedo a equivocarme, ya que si me metía en un tema que era demasiado complicado o que no era el adecuado, mi tutor me ayudaba a encontrar otro camino.
+\subsection{Resultados}
+
+Los resultados que he obtenido durante mis prácticas pueden resumirse en los siguientes 4 gráficos\footnote{Tanto estas gráficas como los códigos que he realizado durante el periodo de prácticas pueden verse \href{https://github.com/PhyAMR/Internship}{aquí}}:
+
+
+\begin{itemize}
+  \item \textbf{Gráfico 1:} En estas gráficas podemos observar los datos junto con su error, así como la desviación de un modelo cosmológico. Se puede apreciar que las simulaciones MCMC (Markov Chain Monte Carlo) son bastante estables produciendo una desviación muy pequeña (especialmente en la función de correlación), haciendo que pequeñas variaciones de los parámetros cosmológicos no afecten a la forma funcional que predice la teoría.
+        \begin{figure}[H]
+          \centering
+          \includegraphics[width=0.7\textwidth]{pc.png}
+          \caption{Gráfico de la dispersión de las simulaciones del espectro de potencias y de la función de corrrelación angular.}
+          \label{fig:esp-cor}
+        \end{figure}
+  \item \textbf{Gráfico 2:} En estas gráficas podemos ver como se comporta el estadístico más estudiado en la literatura de la función de correlación. Como se puede ver presenta errores mu grandes, lo que hace que no se pueda establecer una discrepancia significativa con el modelo cosmológico estandar.
+
+        \begin{figure}[H]
+          \centering
+          \includegraphics[width=0.7\textwidth]{s12.png}
+          \caption{Gráfico del estadístico introducido por WMAP \autocite{Spergel_2003}.}
+          \label{fig:enter-label}
+        \end{figure}
+  \item \textbf{Gráfico 3:} Este gráfico muestra el estadístico definido durante mis prácticas, el cual se interpreta como un valor medio de la función de correlanción para un cierto rango de ángulos.
+
+        \begin{figure}[H]
+          \centering
+          \includegraphics[width=0.7\textwidth]{xiv.png}
+          \caption{Gráfico del estádistico definido durante mis prácticas.}
+          \label{fig:enter-label}
+        \end{figure}
+  \item \textbf{Gráfico 4:} En este histograma se puede ver de forma resumida los estadísticos definidos durante mis prácticas y su discrepancia con el modelo cosmológico estandar. Se puede observar que aunque en algunos tramos si aparece una cierta tensión, en lineas generales la diiscrepancia no es significativa.
+        \begin{figure}[H]
+          \centering
+          \includegraphics[width=0.7\textwidth]{hist.png}
+          \caption{Histograma de los estadísticos definidos durante las prácticas y su discrepancias con el modelo.}
+          \label{fig:enter-label}
+        \end{figure}
+\end{itemize}
+
+
+
+\subsection{Conclusiones}
+
+Las conclusiones acerca del trabajo que he tenido tiempo de realizar durante mis prácticas son las siguientes:
+\begin{enumerate}
+  \item Pese a haber encontrado cierta discrepancia, especialmente con el modelo $F-\Lambda CDM$, no es posible establecer una discrepancia significativa que permita afirmar que haya una nueva tensión con el modelo cosmológico estandar.
+  \item Pese a que si hay literatura que estudia la función de correlación, no hay mucho a cerca de que implica que los datos no se ajusten bien y se centran más en intentar corregir la función de correlación para que se ajuste mejor a los datos, o bien en intentar encontrar una explicación a porque no se ajusta bien.
+\end{enumerate}
+\section{Experiencia come resultado de la asignatura}
+
+Las experiencias que he tenido durante mis prácticas han sido muy enriquecedoras tanto a nivel personal como profesional. He podido ver como se trabaja en un departamento de investigación, como se discuten ideas y como se desarrollan nuevos conceptos. Esencialmente por esto opté por estas prácticas, quería experimentar de primera mano una salida profesional sobre la que se nos habla durante la carrera, pero sobre la que realmente uno no tiene mucha idea de lo que es realmente.
+
+Durante la carrera se nos habla continuamente sobre lo experimentos que llevaron a la aparición de nueva física, o sobre un marco teórico que parece caído del cielo, sin embargo, es complicado experimentar lo que es realmente la investigación. En este caso, he tenido la oportunidad de ver como se investiga, he podido ver como se desarrollan ideas nuevas, como se discuten y, lo más complicado, dejar a tiempo las ideas que no funcionan y tanto tiempo han costado de desarrollar.
+
+He podido experimentar todo el proceso que hay detrás de cada artículo, cada figura, cada tabla. Pese a que en muchas ocsaiones intentaba reproducir los resultados de otros artículos con el fin de tener una forma de obtener resultados propios y poder analizarlos, me he dado cuenta de que no es tan sencillo como parece. Realizar un cálculo, progamarlo y luego volver a empezar de nuevo porque no se obtiene el resultado esperado y tener que encontrar el fallo era una tarea que tenía que afrontar todos los días. Y aunque en muchas ocasiones me frustraba, al final era my satisfactorio ver que había conseguido realizar un cálculo que no sabía si iba a ser capaz de realizar.
+
+\section{Competencias adquiridas}
+\subsection{Competencias no curriculares}
+
+
+La competencias no curricularess se encuentran relacionadas con lo que es la investigación en sí, y no tanto en contenidos específicos. A continuación se enumeran las competencias no curriculares que he adquirido durante mis prácticas:
+
+\begin{enumerate}
+  \item \textbf{Trabajo autónomo:} He tenido que trabajar de forma autónoma, fortaleciendo el pensamiento críitico y la capacidad de análisis. A medida que hiba leyendo artículos.
+  \item \textbf{Cosmología:} He profundicado más en la cosmología del universo primitivo, y como diferentes experimentos han ido aportando información sobre el mismo.
+  \item \textbf{Trabajo en equipo:} A medida que iba leyendo artículos encontraba otros autores que habían trabajado en un tema parecido, y en una ocasión me puse en contacto con uno de ellos para pedirles los resultados de su trabajo \autocite{Forconi_2025}, concretamente las cadenas de Markov. El motivo fue ampliar los datos para eliminar sesgos y así contar con los datos de unos autores que cuestionan el valor de los parámetros cosmológicos derivados por Planck.
+
+\end{enumerate}
+
+Aunque podría seguir con una lista de competencias no curriculares, la verdad es que no se como expresar el increible impacto que han tenido estas prácticas en mi formación. Siento que todo lo que he aprendido y vivido durante este periodo ha sido una experiencia increible, y que me ha permitido crecer tanto a nivel personal como profesional.
+
+No solo el trabajar con mi tutor, que ha sido una experiencia increíble, si no también aprender como se hacen, y como no se hacen las cosas. Siento que mi formación no habría estado completa si no hubiera tenido la oportunidad de realizar estas prácticas, y que me han permitido ver lo que es realmente la investigación.
+
+
+
+
+
+
+\subsection{Competencias propias del grado en física}
+
+Aunque muchos de los conocimientos que he adquirido durante años de carrera han sido de vital importancia, los más relevantes para el desarrollo de mis prácticas han sido aquellos obtenidos a base de leer artículos específicos sobre el tema de mis prácticas.
+
+Los conocimientos adquiridos durante la carrera que han sido más relevantes para el desarrollo de mis prácticas han sido los siguientes:
+
+\begin{enumerate}
+  \item \textbf{Programación en Python (Física Computancional $3^{er}$ Curso):} He tenido que programar en Python para poder realizar los cálculos necesarios para el desarrollo de mis prácticas.
+
+        Esto ha sido de vital importancia, ya que me habría sido imposible realizar estas prácticas sin unos conocimientos previos de programación. He tenido que programar tanto para realizar los cálculos necesarios para el desarrollo de mis prácticas, como para poder realizar los gráficos que se han presentado en la sección anterior. Y para poder realizar esos gráficos he realizado otros muchos que no han sido útiles, pero si no hubiera podido tomar tantos caminos equivocados no habría podido llegar a aquellos que si lo han sido.
+  \item \textbf{Estadística (Estadística):} He tenido que realizar un análisis estadístico de los datos obtenidos en la práctica.
+
+        Durante la carrera los conocimentos de estadísticas los he ido obteniendo de forma muy dispersa, ya que no he cursado la asignatura de estadística, esncialmente a través de los laboratorios de física, donde he tenido que realizar análisis estadísticos de los datos obtenidos en los experimentos. Aunque no han sido determinantes para el desarrollo de mis prácticas, si que han sido de gran ayuda a la hora de realizar el análisis estadístico de los datos obtenidos en la práctica.
+  \item \textbf{Cosmología (Cosmología $4^{to}$ Curso):} He tenido que leer, interpretar y entender una gran cantidad de artículos ciéntificos relacionados con esta asignatura.
+
+        Aunque no ha resultado de vital importancia, ya que la he cursado a medida que relaizaba mis prácticas, si que ha falicitado la lectura de artículos y la comprensión de los conceptos gracias a que ya los había visto en clase. No han sido indispensables, ya que mis prácticas son muy específicas y en un tema que no se ve de forma extensa en la carrera, pero sin esta asignatura me habría costado mucho más entender los conceptos, tener un pensamiento crítico acerca de lo que leía y poder discutirlo con mi tutor.
+\end{enumerate}
+
+
+
+\printbibliography
+
+
+
+
+\end{document}
+
