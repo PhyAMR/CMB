@@ -20,3 +20,14 @@ s2wav/
 *.run.xml
 *-blx.bib
 
+# Jupyter notebooks
+Acleannote.ipynb
+CleanPlanck.ipynb
+CMB.ipynb
+slimplanck.ipynb
+compact_planck.ipynb
+
+# Jupyter notebook outputs
+CleanPlanck_files/
+CleanPlanck.html
+CleanPlanck.md
