@@ -136,3 +136,50 @@ def xiv_numerical(D_ell, a, b, n_points=2000):
     cor = correlation_func(D_ell, x)
     integral = simpson(cor, x)
     return integral / (b - a)
+
+if __name__ == '__main__':
+    import time
+    import sys
+    import os
+    # This allows running the script directly to test it
+    sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+    from functions.data import Data_loader
+
+    print("--- xivar Performance and Accuracy Test ---")
+    # Load data using the loader
+    data_loader = Data_loader()
+    D_ell = data_loader.D_ell
+
+    # Define the integration interval in cos(theta)
+    # Corresponds to theta from 60 to 90 degrees
+    a = 0.0  # cos(90 deg)
+    b = 0.5  # cos(60 deg)
+
+    # --- Test Analytical xivar ---
+    start_time_an = time.time()
+    xivar_analytical = xivar(D_ell, a, b)
+    end_time_an = time.time()
+    analytical_duration = end_time_an - start_time_an
+
+    # --- Test Numerical xivar ---
+    start_time_num = time.time()
+    xivar_numerical_val = xiv_numerical(D_ell, a, b, n_points=5000)
+    end_time_num = time.time()
+    numerical_duration = end_time_num - start_time_num
+
+    # --- Report Results ---
+    print(f"Interval [cos(theta)]: [{a}, {b}] (Theta: [60, 90] degrees)")
+    print("\nAnalytical Calculation:")
+    print(f"  Result: {xivar_analytical}")
+    print(f"  Execution Time: {analytical_duration:.6f} seconds")
+
+    print("\nNumerical Calculation:")
+    print(f"  Result: {xivar_numerical_val}")
+    print(f"  Execution Time: {numerical_duration:.6f} seconds")
+
+    print("\nComparison:")
+    difference = abs(xivar_analytical - xivar_numerical_val)
+    relative_difference = difference / abs(xivar_analytical) if xivar_analytical != 0 else 0
+    print(f"  Absolute Difference: {difference}")
+    print(f"  Relative Difference: {relative_difference:.4%}")
+    print("--- End of Test ---")

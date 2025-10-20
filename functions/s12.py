@@ -155,3 +155,61 @@ def s12_numerical(D_ell, a, b, n_points=2000):
     cor_sq = cor**2
     integral = simpson(cor_sq, x)
     return integral
+
+if __name__ == '__main__':
+    import time
+    import sys
+    import os
+    # This allows running the script directly to test it
+    # It adds the project root to the python path
+    sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+    from functions.data import Data_loader
+
+    print("--- S12 Performance and Accuracy Test ---")
+    # Load data using the loader
+    data_loader = Data_loader()
+    D_ell = data_loader.D_ell
+
+    # Define the integration interval in cos(theta)
+    # Corresponds to theta from 60 to 90 degrees
+    a = 0.5  # cos(60 deg)
+    b = 0.0  # cos(90 deg)
+
+    # Load the pre-computed Tmn matrix for the analytical calculation
+    # The path is relative to the project root
+    matrix_path = "files/matrix/Tmn__90__60.npy"
+    try:
+        M = np.load(matrix_path)
+    except FileNotFoundError:
+        print(f"Error: Matrix file not found at {matrix_path}")
+        print("Please ensure you are running this script from the project's root directory.")
+        sys.exit(1)
+
+    # --- Test Analytical S12 ---
+    start_time_an = time.time()
+    s12_analytical = S12(D_ell, M)
+    end_time_an = time.time()
+    analytical_duration = end_time_an - start_time_an
+
+    # --- Test Numerical S12 ---
+    start_time_num = time.time()
+    s12_numerical_val = s12_numerical(D_ell, b, a, n_points=5000)
+    end_time_num = time.time()
+    numerical_duration = end_time_num - start_time_num
+
+    # --- Report Results ---
+    print(f"Interval [cos(theta)]: [{a}, {b}] (Theta: [60, 90] degrees)")
+    print("\nAnalytical Calculation:")
+    print(f"  Result: {s12_analytical}")
+    print(f"  Execution Time: {analytical_duration:.6f} seconds")
+
+    print("\nNumerical Calculation:")
+    print(f"  Result: {s12_numerical_val}")
+    print(f"  Execution Time: {numerical_duration:.6f} seconds")
+
+    print("\nComparison:")
+    difference = abs(s12_analytical - s12_numerical_val)
+    relative_difference = difference / abs(s12_analytical) if s12_analytical != 0 else 0
+    print(f"  Absolute Difference: {difference}")
+    print(f"  Relative Difference: {relative_difference:.4%}")
+    print("--- End of Test ---")

@@ -20,6 +20,12 @@ functions/
 
 ---
 
+## Performance
+
+For detailed performance metrics of the scripts, see the [Performance Analysis](../Performance.md).
+
+---
+
 ## Detailed File Descriptions
 
 ### `correlation_function.py`

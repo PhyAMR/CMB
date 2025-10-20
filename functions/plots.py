@@ -109,7 +109,7 @@ def plot_corr_with_xivar(xvals, unbin_cl, corr_th, est_df, intervals, name):
                         [mean_sq - mean_sq_err], [mean_sq + mean_sq_err], alpha=0.4, color='r')
         ax.plot([np.arccos(a) * 180 / np.pi, np.arccos(b) * 180 / np.pi],
                 [mean_sq, mean_sq], ls='-.', alpha=0.8, color='r',
-                label=rf'$\\xi_{{{round(np.arccos(a)*180/np.pi)}}}^{{{round(np.arccos(b)*180/np.pi)}}}$: {mean_sq:.2f} ± {mean_sq_err:.2f}')
+                label=rf'$\xi_{{{round(np.arccos(a)*180/np.pi)}}}^{{{round(np.arccos(b)*180/np.pi)}}}$: {mean_sq:.2f} ± {mean_sq_err:.2f}')
     
         ax.fill_between([np.arccos(a) * 180 / np.pi, np.arccos(b) * 180 / np.pi],
                         [np.mean(est_df[i]) - np.std(est_df[i])], [np.mean(est_df[i]) + np.std(est_df[i])], alpha=0.4, color='b')
@@ -118,9 +118,9 @@ def plot_corr_with_xivar(xvals, unbin_cl, corr_th, est_df, intervals, name):
                 label=f'{i}: {np.mean(est_df[i]):.2f} ± {np.std(est_df[i]):.2f}')
 
     plt.ylim(-400, 400)
-    plt.xlabel(r"$\\theta$ [º]")
-    plt.ylabel(r"$C(\\theta)$")
-    plt.title(r"$\\xi_a^b$ analysis for " + str(name))
+    plt.xlabel(r"$\theta$ [º]")
+    plt.ylabel(r"$C(\theta)$")
+    plt.title(r"$\xi_a^b$ analysis for " + str(name))
     plt.legend(fontsize=7)
     plt.grid(True)
     plt.tight_layout()
@@ -164,8 +164,8 @@ def plot_corr_with_S12(xvals, unbin_cl, cor_th, est_df, intervals, name):
                 label=f'{i}: {np.mean(est_df[i]):.2f} ± {np.std(est_df[i]):.2f}')
     
     plt.yscale('symlog', linthresh=10)
-    plt.xlabel(r"$\\theta$ [º]")
-    plt.ylabel(r"$C(\\theta)^2$")
+    plt.xlabel(r"$\theta$ [º]")
+    plt.ylabel(r"$C(\theta)^2$")
     plt.title(r"$S_a^b$ analysis for " + str(name))
     plt.legend(fontsize=7)
     plt.grid(True)
