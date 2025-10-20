@@ -22,10 +22,10 @@ s2wav/
 
 # Jupyter notebooks
 Acleannote.ipynb
-CleanPlanck.ipynb
+#CleanPlanck.ipynb
 CMB.ipynb
 slimplanck.ipynb
-compact_planck.ipynb
+#compact_planck.ipynb
 
 # Jupyter notebook outputs
 CleanPlanck_files/
