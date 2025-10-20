@@ -172,12 +172,12 @@ if __name__ == '__main__':
 
     # Define the integration interval in cos(theta)
     # Corresponds to theta from 60 to 90 degrees
-    a = 0.5  # cos(60 deg)
-    b = 0.0  # cos(90 deg)
+    a = -1  # cos(60 deg)
+    b = 0.5  # cos(90 deg)
 
     # Load the pre-computed Tmn matrix for the analytical calculation
     # The path is relative to the project root
-    matrix_path = "files/matrix/Tmn__90__60.npy"
+    matrix_path = "files/matrix/Tmn__180__60.npy"
     try:
         M = np.load(matrix_path)
     except FileNotFoundError:
@@ -193,7 +193,7 @@ if __name__ == '__main__':
 
     # --- Test Numerical S12 ---
     start_time_num = time.time()
-    s12_numerical_val = s12_numerical(D_ell, b, a, n_points=5000)
+    s12_numerical_val = s12_numerical(D_ell, a, b, n_points=5000)
     end_time_num = time.time()
     numerical_duration = end_time_num - start_time_num
 
