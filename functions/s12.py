@@ -171,9 +171,9 @@ if __name__ == '__main__':
     D_ell = data_loader.D_ell
 
     # Define the integration interval in cos(theta)
-    # Corresponds to theta from 60 to 90 degrees
-    a = -1  # cos(60 deg)
-    b = 0.5  # cos(90 deg)
+    # Corresponds to theta from 60 to 180 degrees
+    a = -1  # cos(180 deg)
+    b = 0.5  # cos(60 deg)
 
     # Load the pre-computed Tmn matrix for the analytical calculation
     # The path is relative to the project root
@@ -198,7 +198,7 @@ if __name__ == '__main__':
     numerical_duration = end_time_num - start_time_num
 
     # --- Report Results ---
-    print(f"Interval [cos(theta)]: [{a}, {b}] (Theta: [60, 90] degrees)")
+    print(f"Interval [cos(theta)]: [{a}, {b}] (Theta: [60, 180] degrees)")
     print("\nAnalytical Calculation:")
     print(f"  Result: {s12_analytical}")
     print(f"  Execution Time: {analytical_duration:.6f} seconds")

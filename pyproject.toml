@@ -13,6 +13,7 @@ dependencies = [
     "jupyter-client>=8.6.3",
     "jupytext>=1.17.2",
     "matplotlib>=3.10.3",
+    "matplotlib2tikz>=0.7.6",
     "numpy>=2.3.2",
     "pandas>=2.3.1",
     "pillow>=11.3.0",

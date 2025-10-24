@@ -37,16 +37,16 @@ This script tests the performance and accuracy of the `xivar` statistic calculat
 ```
 --- xivar Performance and Accuracy Test ---
 xivar executed in 0.00 seconds
-correlation_func executed in 4.96 seconds
+correlation_func executed in 4.95 seconds
 Interval [cos(theta)]: [0.0, 0.5] (Theta: [60, 90] degrees)
 
 Analytical Calculation:
   Result: -51.35532340896712
-  Execution Time: 0.004339 seconds
+  Execution Time: 0.004341 seconds
 
 Numerical Calculation:
   Result: -51.355323408817284
-  Execution Time: 4.956192 seconds
+  Execution Time: 4.951445 seconds
 
 Comparison:
   Absolute Difference: 1.4983214668973233e-10
@@ -60,19 +60,19 @@ This script tests the performance and accuracy of the `S12` statistic calculatio
 
 ```
 --- S12 Performance and Accuracy Test ---
-correlation_func executed in 4.95 seconds
-Interval [cos(theta)]: [0.5, 0.0] (Theta: [60, 90] degrees)
+correlation_func executed in 4.97 seconds
+Interval [cos(theta)]: [-1, 0.5] (Theta: [60, 180] degrees)
 
 Analytical Calculation:
-  Result: 1722.4057568617993
-  Execution Time: 0.095577 seconds
+  Result: 6780.273422211044
+  Execution Time: 0.095593 seconds
 
 Numerical Calculation:
-  Result: 1722.4057568441158
-  Execution Time: 4.954779 seconds
+  Result: 6780.374298614481
+  Execution Time: 4.965659 seconds
 
 Comparison:
-  Absolute Difference: 1.7683532860246487e-08
-  Relative Difference: 0.0000%
+  Absolute Difference: 0.10087640343681414
+  Relative Difference: 0.0015%
 --- End of Test ---
 ```

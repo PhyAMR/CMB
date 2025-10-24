@@ -5,20 +5,43 @@ COM_CosmoParams_fullGrid_R3.01
 hlpTT_lowT/
 hlpTT_lowT_Ok/
 s2wav/
+Useless/
+Comp_Graphs/
 
 
 
 # LaTeX auxiliary files
 *.aux
-*.bbl
-*.fdb_latexmk
-*.fls
 *.log
 *.out
-*.synctex.gz
 *.toc
-*.run.xml
-*-blx.bib
+*.lof
+*.lot
+*.bbl
+*.blg
+*.synctex
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+*.ilg
+*.ind
+*.idx
+*.xdy
+*.glo
+*.gls
+*.glg
+*.ist
+*.dvi
+*.ps
+*.nav
+*.snm
+*.vrb
+*.nlo
+*.nls
+*.mw
+*.lec
+*.sty
+*.cls
 
 # Jupyter notebooks
 Acleannote.ipynb

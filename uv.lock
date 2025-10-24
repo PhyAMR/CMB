@@ -326,6 +326,7 @@ dependencies = [
     { name = "jupyter-client" },
     { name = "jupytext" },
     { name = "matplotlib" },
+    { name = "matplotlib2tikz" },
     { name = "numpy" },
     { name = "pandas" },
     { name = "pillow" },
@@ -343,6 +344,7 @@ requires-dist = [
     { name = "jupyter-client", specifier = ">=8.6.3" },
     { name = "jupytext", specifier = ">=1.17.2" },
     { name = "matplotlib", specifier = ">=3.10.3" },
+    { name = "matplotlib2tikz", specifier = ">=0.7.6" },
     { name = "numpy", specifier = ">=2.3.2" },
     { name = "pandas", specifier = ">=2.3.1" },
     { name = "pillow", specifier = ">=11.3.0" },
@@ -1185,6 +1187,21 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/99/5b/a36a337438a14116b16480db471ad061c36c3694df7c2084a0da7ba538b7/matplotlib_inline-0.1.7.tar.gz", hash = "sha256:8423b23ec666be3d16e16b60bdd8ac4e86e840ebd1dd11a30b9f117f2fa0ab90", size = 8159, upload-time = "2024-04-15T13:44:44.803Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/8f/8e/9ad090d3553c280a8060fbf6e24dc1c0c29704ee7d1c372f0c174aa59285/matplotlib_inline-0.1.7-py3-none-any.whl", hash = "sha256:df192d39a4ff8f21b1895d72e6a13f5fcc5099f00fa84384e0ea28c2cc0653ca", size = 9899, upload-time = "2024-04-15T13:44:43.265Z" },
+]
+
+[[package]]
+name = "matplotlib2tikz"
+version = "0.7.6"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "matplotlib" },
+    { name = "numpy" },
+    { name = "pillow" },
+    { name = "six" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/b1/af/2da0c203e497c4edc3126284f8f55068a19ddfc955d9d18cba800f273250/matplotlib2tikz-0.7.6.tar.gz", hash = "sha256:92b2d71d56f3a3e91397cf1dda50fcc009eaa85a2c0006b1c78324f16f18988f", size = 45691, upload-time = "2019-10-17T19:10:06.59Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/15/62/b7a234f09c874402949c044600de030aaaed4ddb1925ba7bf085950f0a40/matplotlib2tikz-0.7.6-py2.py3-none-any.whl", hash = "sha256:eb4fe7905457caa3ec04ce2987bfb9b11c3ce8b505855071e4ca61976b1cef58", size = 35984, upload-time = "2019-10-17T19:10:04.022Z" },
 ]
 
 [[package]]

@@ -120,10 +120,11 @@ class Data_loader:
         """
         Loads a pre-calculated Tmn matrix required for the S12 statistic.
         The matrix filename is constructed based on the angular interval.
+        This function is order-agnostic with respect to a and b.
 
         Args:
-            a (float): The lower bound of the interval (cos(theta_upper)).
-            b (float): The upper bound of the interval (cos(theta_lower)).
+            a (float): One bound of the interval in cos(theta).
+            b (float): The other bound of the interval in cos(theta).
         
         Returns:
             np.ndarray: The loaded Tmn matrix.
@@ -132,30 +133,81 @@ class Data_loader:
             FileNotFoundError: If the matrix file does not exist.
         """
         # Convert cos(theta) values to degrees to construct the filename.
-        theta_a = round(np.arccos(a) * 180 / np.pi)
-        theta_b = round(np.arccos(b) * 180 / np.pi)
+        theta_1 = round(np.arccos(a) * 180 / np.pi)
+        theta_2 = round(np.arccos(b) * 180 / np.pi)
         
-        matrix_path = f"files/matrix/Tmn__{theta_b}__{theta_a}.npy"
+        # The file naming convention is Tmn__{larger_angle}__{smaller_angle}.npy
+        theta_upper = max(theta_1, theta_2)
+        theta_lower = min(theta_1, theta_2)
+        
+        matrix_path = f"files/matrix/Tmn__{theta_upper}__{theta_lower}.npy"
         
         try:
             return np.load(matrix_path)
         except FileNotFoundError:
             print(f"Matrix file not found: {matrix_path}")
             raise
-
     @time_execution
     def get_s12(self, a, b):
-        """
-        Calculates the S12 statistic and its error for a given interval [a, b] in cos(theta).
-        
-        Args:
-            a (float): The lower bound of the interval (cos(theta_upper)).
-            b (float): The upper bound of the interval (cos(theta_lower)).
+            """
+            Calculates the S12 statistic and its error for a given interval [a, b] in cos(theta).
             
-        Returns:
-            tuple: A tuple containing the S12 value (float) and its error (float).
-        """
-        M = self._load_matrix(a, b)
-        val = S12(self.D_ell, M)
-        err = S12_err2(self.D_ell, self.error, M)
-        return val, err
+            Args:
+                a (float): The lower bound of the interval (cos(theta_upper)).
+                b (float): The upper bound of the interval (cos(theta_lower)).
+                
+            Returns:
+                tuple: A tuple containing the S12 value (float) and its error (float).
+            """
+            M = self._load_matrix(a, b)
+            val = S12(self.D_ell, M)
+            err = S12_err2(self.D_ell, self.error, M)
+            return val, err
+    
+    @time_execution
+    def experimental_values(self, intervals):
+            """
+            Calculates experimental values for C(180), S12, and xivar for a given set of angular intervals.
+    
+            Args:
+                intervals (list of tuples): A list of tuples, where each tuple (a, b) defines an
+                                            interval in cos(theta) between -1 and 1.
+    
+            Returns:
+                dict: A dictionary containing the calculated values. The dictionary has keys
+                      'C(180)', 's12', and 'xivar'. 'C(180)' holds a tuple of (value, error).
+                      's12' and 'xivar' are dictionaries themselves, mapping interval labels
+                      (e.g., '60-90') to (value, error) tuples.
+            """
+            results = {
+                's12': {},
+                'xivar': {}
+            }
+    
+            # Calculate C(180)
+            corr, corr_err = self.get_correlation_function()
+            results['C(180)'] = (corr[-1], corr_err[-1])
+    
+            for a, b in intervals:
+                # Create a label for the interval based on the angles in degrees.
+                # Assumes a < b, which means theta_a > theta_b.
+                theta_a = round(np.arccos(a) * 180 / np.pi)
+                theta_b = round(np.arccos(b) * 180 / np.pi)
+                interval_label = f'{theta_b}-{theta_a}'
+    
+                # Calculate S12 for the interval.
+                try:
+                    s12_val, s12_err = self.get_s12(a, b)
+                    results['s12'][interval_label] = (s12_val, s12_err)
+                except FileNotFoundError:
+                    # If the matrix for S12 is not found, skip it for this interval.
+                    results['s12'][interval_label] = (np.nan, np.nan)
+    
+                # Calculate xivar for the interval.
+                xivar_val, xivar_err = self.get_xivar(a, b)
+                results['xivar'][interval_label] = (xivar_val, xivar_err)
+    
+            return results
+    
+
+    
