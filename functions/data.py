@@ -6,7 +6,7 @@ derived from the loaded data.
 import pandas as pd
 import numpy as np
 from .correlation_function import correlation_func, correlation_func_err2
-from .xiv import xivar, xivar_err2
+from .xiv import xivar2, xivar_err2
 from .s12 import S12, S12_err2
 import time
 
@@ -66,7 +66,7 @@ class Data_loader:
             return
 
         # Filter the DataFrame by lmax and convert columns to numpy arrays.
-        self.df = self.df[self.df['ell'].astype(float).to_numpy() < self.lmax].reset_index(drop=True)
+        self.df = self.df[self.df['ell'].astype(float).to_numpy() <= self.lmax].reset_index(drop=True)
         self.ell = self.df['ell'].to_numpy()
         self.D_ell = self.df['D_ell'].to_numpy()
         
@@ -76,7 +76,7 @@ class Data_loader:
         self.error = (self.dD_ell_neg + self.dD_ell_pos) / 2
 
         # Define the grid for the correlation function.
-        self.xvals = np.linspace(1, -1, n_xvals)  # cos(theta)
+        self.xvals = np.linspace(0.9999999999999999, -0.9999999999999999, n_xvals)  # cos(theta)
         self.theta = np.arccos(self.xvals) * 180 / np.pi  # theta in degrees
 
         # Cached properties to avoid redundant calculations.
@@ -112,7 +112,7 @@ class Data_loader:
         Returns:
             tuple: A tuple containing the xivar value (float) and its error (float).
         """
-        val = xivar(self.D_ell, a, b)
+        val = xivar2(self.D_ell, a, b)
         err = xivar_err2(self.error, a, b)
         return val, err
 
@@ -174,40 +174,40 @@ class Data_loader:
                                             interval in cos(theta) between -1 and 1.
     
             Returns:
-                dict: A dictionary containing the calculated values. The dictionary has keys
-                      'C(180)', 's12', and 'xivar'. 'C(180)' holds a tuple of (value, error).
-                      's12' and 'xivar' are dictionaries themselves, mapping interval labels
-                      (e.g., '60-90') to (value, error) tuples.
+                dict: A flattened dictionary with correctly ordered keys for C180, s12, and xivar values.
             """
-            results = {
-                's12': {},
-                'xivar': {}
-            }
+            exp_values = {}
     
             # Calculate C(180)
             corr, corr_err = self.get_correlation_function()
-            results['C(180)'] = (corr[-1], corr_err[-1])
+            exp_values['C180'] = (corr[-1], corr_err[-1])
     
+            s12_values = {}
+            xiv_values = {}
+
             for a, b in intervals:
-                # Create a label for the interval based on the angles in degrees.
-                # Assumes a < b, which means theta_a > theta_b.
-                theta_a = round(np.arccos(a) * 180 / np.pi)
-                theta_b = round(np.arccos(b) * 180 / np.pi)
-                interval_label = f'{theta_b}-{theta_a}'
-    
+                theta_1 = round(np.arccos(a) * 180 / np.pi)
+                theta_2 = round(np.arccos(b) * 180 / np.pi)
+                theta_upper = max(theta_1, theta_2)
+                theta_lower = min(theta_1, theta_2)
+                s12_key = f's12_{theta_upper}_{theta_lower}'
+                xiv_key = f'xiv_{theta_upper}_{theta_lower}'
+
                 # Calculate S12 for the interval.
                 try:
                     s12_val, s12_err = self.get_s12(a, b)
-                    results['s12'][interval_label] = (s12_val, s12_err)
+                    s12_values[s12_key] = (s12_val, s12_err)
                 except FileNotFoundError:
-                    # If the matrix for S12 is not found, skip it for this interval.
-                    results['s12'][interval_label] = (np.nan, np.nan)
+                    s12_values[s12_key] = (np.nan, np.nan)
     
                 # Calculate xivar for the interval.
                 xivar_val, xivar_err = self.get_xivar(a, b)
-                results['xivar'][interval_label] = (xivar_val, xivar_err)
-    
-            return results
+                xiv_values[xiv_key] = (xivar_val, xivar_err)
+
+            exp_values.update(s12_values)
+            exp_values.update(xiv_values)
+
+            return exp_values
     
 
     

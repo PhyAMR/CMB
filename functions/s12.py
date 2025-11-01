@@ -26,7 +26,7 @@ def Tmn(l, l1, l2, a=-1, b=1/2):
     # Set high precision for Decimal calculations to handle large numbers.
     getcontext().prec = 1000
     
-    matrix = np.zeros((l, l), dtype=float)
+    matrix = np.zeros((l, l), dtype=np.longdouble)
     for i in range(l):
         n = i + 2
         for j in range(l):
@@ -38,9 +38,9 @@ def Tmn(l, l1, l2, a=-1, b=1/2):
                 term *= Decimal(legendre(m + n - 2 * r + 1, b) - legendre(m + n - 2 * r - 1, b)) - \
                         Decimal(legendre(m + n - 2 * r + 1, a) - legendre(m + n - 2 * r - 1, a))
                 integral_val += term
-            matrix[i, j] = np.float64(integral_val)
+            matrix[i, j] = np.longdouble(integral_val)
             
-    np.save(f"Tmn_{l1}_{l2}.npy", matrix)
+    np.save(f"files/matrix/Tmn__{l1}__{l2}.npy", matrix)
 
 def S12(D_ell, M):
     """

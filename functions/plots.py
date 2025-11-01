@@ -180,8 +180,7 @@ class CorrelationPlots:
         """
         lmax = self.DL.lmax
         xvals = self.DL.xvals
-        corr = correlation_func(self.DL.D_ell, xvals)
-
+        corr = self.DL._correlation 
         fig, ax = plt.subplots(figsize=(15, 8))
         
         ax.scatter(np.arccos(xvals) * 180 / np.pi, corr, s=2, marker='o', c='r', label='Correlation function data')
@@ -220,7 +219,7 @@ class CorrelationPlots:
         """
         lmax = self.DL.lmax
         xvals = self.DL.xvals
-        corr = correlation_func(self.DL.D_ell, xvals)
+        corr = self.DL._correlation
         
         fig, ax = plt.subplots(figsize=(15, 8))
 
@@ -250,7 +249,7 @@ class CorrelationPlots:
 
         _save_or_show_plot(save_path)
 
-    def create_histogram_grid(self, df, labels, title, comparison_data=None, figsize=(15, 15), bins='auto', ncols=2, save_path=None):
+    def create_histogram_grid(self, df, labels, title, comparison_data=None, figsize=(20, 20), bins='auto', ncols=2, save_path=None):
         """
         Creates a grid of histograms, optionally comparing with another dataset.
 
@@ -264,17 +263,24 @@ class CorrelationPlots:
             ncols (int): Number of columns in the subplot grid.
             save_path (str, optional): The full path to save the plot to. Defaults to None.
         """
-        n_cols_df = len(df.columns)
-        if len(labels) != n_cols_df:
-            raise ValueError("Mismatch in number of columns and labels.")
+        #print(df.columns)
+        n_labels = len(labels)
         
-        n_rows = int(np.ceil(n_cols_df / ncols))
+        n_rows = int(np.ceil(n_labels / ncols))
         fig, axes = plt.subplots(n_rows, ncols, figsize=figsize)
         axes = axes.flatten()
         fig.suptitle(title, fontsize=16)
 
-        for i, (col, label) in enumerate(zip(df.columns, labels)):
+        for i, col in enumerate(labels):
+            #print(f"{i}: {col}")
             ax = axes[i]
+            if col not in df.columns:
+                ax.text(0.5, 0.5, f"'{col}' not in data", ha='center', va='center')
+                ax.set_title(col, fontsize=10)
+                ax.set_xticks([])
+                ax.set_yticks([])
+                continue
+
             data = df[col].dropna()
             if len(data) == 0:
                 continue
@@ -282,7 +288,7 @@ class CorrelationPlots:
             mean_val = np.mean(data)
             std_val = np.std(data)
             
-            n, bins_hist, _ = ax.hist(data, bins=bins, edgecolor='b', alpha=0.7)
+            n, bins_hist, _ = ax.hist(data, bins=bins, histtype='step', edgecolor='b', label='Model')
             self._add_dist_overlay(ax, mean_val, std_val, np.max(n), 'b', 'Model')
 
             sigmas = np.nan
@@ -291,13 +297,16 @@ class CorrelationPlots:
                 if isinstance(comparison_data, pd.DataFrame):
                     if col not in comparison_data.columns:
                         continue
+                    
+                    print(comparison_data.columns)
+
                     data_exp = comparison_data[col].dropna()
                     if len(data_exp) == 0:
                         continue
                     exp_value = np.mean(data_exp)
                     exp_err = np.std(data_exp)
                     
-                    n2, _, _ = ax.hist(data_exp, bins=bins_hist, edgecolor='r', alpha=0.7)
+                    n2, _, _ = ax.hist(data_exp, bins=bins_hist, histtype='step', edgecolor='r', label='Data')
                     self._add_dist_overlay(ax, exp_value, exp_err, np.max(n2), 'r', 'Data')
 
                 elif isinstance(comparison_data, dict):
@@ -312,11 +321,11 @@ class CorrelationPlots:
                 if exp_value is not None and exp_err is not None and (exp_err**2 + std_val**2 > 0):
                     sigmas = np.sqrt((exp_value - mean_val)**2 / (exp_err**2 + std_val**2))
 
-            ax.set_title(f"{label}\nΔ = {sigmas:.2f} σ", fontsize=10)
+            ax.set_title(f"{col}\nΔ = {sigmas:.2f} σ", fontsize=10)
             ax.grid(True, linestyle='--', alpha=0.5)
             ax.legend(fontsize=8)
 
-        for j in range(n_cols_df, len(axes)):
+        for j in range(n_labels, len(axes)):
             fig.delaxes(axes[j])
 
         plt.tight_layout(rect=[0, 0, 1, 0.96])

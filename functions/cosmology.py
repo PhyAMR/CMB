@@ -28,12 +28,22 @@ def compute_cl_cor_pl(parss, lmax, xvals):
             - TTcor (np.ndarray): The temperature correlation function.
             - TTcor[-1] (float): The correlation at 180 degrees (cos(theta)=-1).
     """
-    # Set cosmological parameters using CAMB's set_params function.
-    pars = camb.set_params(ombh2=parss['omegabh2'], omch2=parss['omegach2'], H0=parss['H0'], omk=parss['omegak'],
-                           YHe=parss['yheused'], nnu=parss['nnu'], nrun=parss['nrun'], Alens=parss['Alens'],
-                           ns=parss['ns'], As=np.exp(parss['logA']) * 1e-10, w=-1, wa=parss['wa'],
-                           mnu=parss['mnu'], tau=parss['tau'])
-    
+    try:
+        # Set cosmological parameters using CAMB's set_params function.
+        print("compute_cl_cor_pl parameters:")
+        for key, value in parss.items():
+            print(f"  {key}: {value} (type: {type(value)})")
+
+        pars = camb.set_params(ombh2=parss['omegabh2'], omch2=parss['omegach2'], H0=parss['H0'], omk=parss['omegak'],
+                               YHe=parss['yheused'], nnu=parss['nnu'], nrun=parss['nrun'], Alens=parss['Alens'],
+                               ns=parss['ns'], As=np.exp(parss['logA']) * 1e-10, w=float(-1), wa=parss['wa'],
+                               mnu=parss['mnu'], tau=parss['tau'])
+    except TypeError as e:
+        print(f"TypeError in compute_cl_cor_pl: {e}")
+        for key, value in parss.items():
+            print(f"  Parameter {key}: {value} (type: {type(value)})")
+        raise
+
     # Get the cosmological results from CAMB.
     resu = camb.get_results(pars)
     
@@ -65,11 +75,21 @@ def compute_cl_cor_dv(parss, lmax, xvals):
             - TTcor (np.ndarray): The temperature correlation function.
             - TTcor[-1] (float): The correlation at 180 degrees (cos(theta)=-1).
     """
-    # Set cosmological parameters for a dark energy model.
-    pars = camb.set_params(ombh2=parss['ombh2'], omch2=parss['omch2'], H0=parss['H0'], omk=0,
-                           YHe=parss['YHe'], ns=parss['ns'], As=np.exp(parss['logA']) * 1e-10,
-                           w=parss['w'], mnu=parss['mnu'], tau=parss['tau'])
-    
+    try:
+        # Set cosmological parameters for a dark energy model.
+        print("compute_cl_cor_dv parameters:")
+        for key, value in parss.items():
+            print(f"  {key}: {value} (type: {type(value)})")
+
+        pars = camb.set_params(ombh2=parss['ombh2'], omch2=parss['omch2'], H0=parss['H0'], omk=0,
+                               YHe=parss['YHe'], ns=parss['ns'], As=np.exp(parss['logA']) * 1e-10,
+                               w=parss['w'], mnu=parss['mnu'], tau=parss['tau'])
+    except TypeError as e:
+        print(f"TypeError in compute_cl_cor_dv: {e}")
+        for key, value in parss.items():
+            print(f"  Parameter {key}: {value} (type: {type(value)})")
+        raise
+
     # Get the cosmological results from CAMB.
     resu = camb.get_results(pars)
     
@@ -109,57 +129,79 @@ def expand_dict_values(dict1, dict2):
     z = dict1 | expanded_dict2
     return z
 
-def chain_calculations(parss, lmax, xvals, intervals, c):
+def chain_calculations(parss, data_loader, intervals, c):
     """
     Performs a series of calculations for a given set of cosmological parameters from an MCMC chain.
     This includes computing Cl, correlation function, S12, and xivar statistics.
 
     Args:
         parss (pd.Series): A row from a DataFrame containing cosmological parameters.
-        lmax (int): The maximum multipole (l).
-        xvals (np.ndarray): An array of cos(theta) values.
+        data_loader (Data_loader): An instance of the Data_loader class.
         intervals (list): A list of tuples, each defining an interval [a, b] for S12 and xivar.
         c (int): An index to determine which cosmology computation to use (Planck-like or dark energy).
 
     Returns:
-        tuple: A tuple containing TTCl, TTcor, C180, and the calculated S12 and xivar values.
+        pd.Series: A series containing TTCl, TTcor, C180, and named S12 and xivar values.
     """
+    lmax = data_loader.lmax
+    xvals = data_loader.xvals
+
     # Choose the appropriate cosmology computation based on the index c.
     if c <= 4:
         TTCl, TTcor, C180 = compute_cl_cor_pl(parss, lmax, xvals)
     else:
         TTCl, TTcor, C180 = compute_cl_cor_dv(parss, lmax, xvals)
     
-    th_values = []
+    results = {
+        'D_ell': TTCl,
+        'Cor': TTcor,
+        'C180': C180,
+    }
+    
     for a, b in intervals:
-        # Load the pre-calculated Tmn matrix for the S12 statistic.
-        M = np.load(f"files/matrix/Tmn__{round(np.arccos(a) * 180 / np.pi)}__{round(np.arccos(b) * 180 / np.pi)}.npy")
+        # Make loading order-agnostic
+        theta_1 = round(np.arccos(a) * 180 / np.pi)
+        theta_2 = round(np.arccos(b) * 180 / np.pi)
+        theta_upper = max(theta_1, theta_2)
+        theta_lower = min(theta_1, theta_2)
+        matrix_path = f"files/matrix/Tmn__{theta_upper}__{theta_lower}.npy"
+        M = np.load(matrix_path)
         
+        s12_key = f's12_{theta_upper}_{theta_lower}'
+        xiv_key = f'xiv_{theta_upper}_{theta_lower}'
+
         # Calculate S12 and xivar for the interval.
         s12 = S12(TTCl, M)
-        th_values.append(s12)
+        results[s12_key] = s12
         xiv = xivar(TTCl, a, b)
-        th_values.append(xiv)
+        results[xiv_key] = xiv
 
-    return (TTCl, TTcor, C180, *th_values)
+    return pd.Series(results)
 
-def chain_results(intervals, xvals, roots, name, n=1000):
+def chain_results(data_loader, intervals, roots, name, n=1000):
     """
     Processes MCMC chains to compute cosmological observables and statistics for each sample.
 
     Args:
+        data_loader (Data_loader): An instance of the Data_loader class.
         intervals (list): A list of tuples defining intervals for S12 and xivar.
-        xvals (np.ndarray): An array of cos(theta) values.
         roots (list): A list of file paths to the MCMC chain files (from getdist).
         name (str): The base name for the output pickle file.
         n (int): The number of samples to process from the tail of each chain.
     """
+    xvals = data_loader.xvals
+    lmax = data_loader.lmax
+
     # Define column names for the results DataFrame.
-    chain_cols = ['D_ell', 'Cor']
+    chain_cols = ['D_ell', 'Cor', 'C180']
     for a, b in intervals:
-        chain_cols += [f's12_{round(np.arccos(a) * 180 / np.pi)}_{round(np.arccos(b) * 180 / np.pi)}',
-                       f'xiv_{round(np.arccos(a) * 180 / np.pi)}_{round(np.arccos(b) * 180 / np.pi)}']
-    chain_cols += ['C180']
+        # Make column naming order-agnostic
+        theta_1 = round(np.arccos(a) * 180 / np.pi)
+        theta_2 = round(np.arccos(b) * 180 / np.pi)
+        theta_upper = max(theta_1, theta_2)
+        theta_lower = min(theta_1, theta_2)
+        chain_cols += [f's12_{theta_upper}_{theta_lower}',
+                       f'xiv_{theta_upper}_{theta_lower}']
     
     data_dict = {}
 
@@ -168,22 +210,18 @@ def chain_results(intervals, xvals, roots, name, n=1000):
             # Load the MCMC samples.
             samples = loadMCSamples(file_root=root)
             print(f'Processing: {root}')
-            print('_' * 40)
+            print('_' * 70)
 
             # Get the parameters and fixed values from the chain.
             params = samples.getParams()
             fixed = samples.ranges.fixedValueDict()
-
             # Create a dictionary of the chain data.
             chain_data = {p.name: getattr(params, p.name, np.nan) for p in samples.paramNames.names}
-            
             # Combine chain parameters with fixed parameters.
             data = expand_dict_values(chain_data, fixed)
             df = pd.DataFrame.from_dict(data).tail(n)
-
             # Apply the chain_calculations function to each sample.
-            chain_result = df.apply(chain_calculations, axis=1, args=(200, xvals, intervals, i))
-            df_chain = pd.DataFrame(chain_result.tolist(), columns=chain_cols, index=df.index)
+            df_chain = df.apply(chain_calculations, axis=1, args=(data_loader, intervals, i))
             df = pd.concat([df, df_chain], axis=1)
 
             # Stack the results for Cl and correlation function to compute mean and std.
