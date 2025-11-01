@@ -44,46 +44,75 @@ from functions.simulation import MC_calculations, MC_results
 
 from functions.data import Data_loader
 
+def get_user_choice():
+    """Presents a menu to the user and returns their choice."""
+    while True:
+        print("\nPlease select an option:")
+        print("1. Run chain_results")
+        print("2. Run MC_results")
+        print("3. Run both")
+        print("4. None (only plot existing results)")
+        choice = input("Enter your choice (1-4): ")
+        if choice in ['1', '2', '3', '4']:
+            return choice
+        else:
+            print("Invalid choice. Please enter a number between 1 and 4.")
+
+def swap_prefix(col):
+    if col.startswith("xiv_"):
+        return col.replace("xiv_", "s12_", 1)
+    elif col.startswith("s12_"):
+        return col.replace("s12_", "xiv_", 1)
+    return col  # unchanged if it doesn't start with either prefix
+
+
+
 def main():
     # Load all the data and variables
-    DL = Data_loader(lmax=201)
+    DL = Data_loader(lmax=200)
 
     intervals = [(-0.9999999999999999, 0.5), (0.866, 0.9999999999999999), (0.5, 0.866), (0, 0.5), (-0.5, 0), (-0.866, -0.5), (-0.9999999999999999, -0.866)]
 
-    roots_planck = ['COM_CosmoParams_fullGrid_R3.01/base_omegak/CamSpecHM_TT_lowl_lowE/base_omegak_CamSpecHM_TT_lowl_lowE',
-            'COM_CosmoParams_fullGrid_R3.01/base_omegak/plikHM_TTTEEE_lowl_lowE/base_omegak_plikHM_TTTEEE_lowl_lowE',
-             'COM_CosmoParams_fullGrid_R3.01/base/CamSpecHM_TT_lowl_lowE/base_CamSpecHM_TT_lowl_lowE',
-             'COM_CosmoParams_fullGrid_R3.01/base/plikHM_TT_lowl_lowE/base_plikHM_TT_lowl_lowE']
+    roots_planck = ['Planck_Data/base_omegak/CamSpecHM_TT_lowl_lowE/base_omegak_CamSpecHM_TT_lowl_lowE',
+            'Planck_Data/base_omegak/plikHM_TTTEEE_lowl_lowE/base_omegak_plikHM_TTTEEE_lowl_lowE',
+             'Planck_Data/base/CamSpecHM_TT_lowl_lowE/base_CamSpecHM_TT_lowl_lowE',
+             'Planck_Data/base/plikHM_TT_lowl_lowE/base_plikHM_TT_lowl_lowE']
 
     # Statistics
-    raw_exp_values = DL.experimental_values(intervals)
-    # Flatten the dictionary to match the format expected by the plotting code
-    exp_values = {}
-    exp_values['C180'] = raw_exp_values['C(180)']
+    exp_values = DL.experimental_values(intervals)
 
-    for interval_label, (val, err) in raw_exp_values['s12'].items():
-        # interval_label is like '30-60'. We need to convert to 's12_60_30'
-        lower, upper = interval_label.split('-')
-        exp_values[f's12_{upper}_{lower}'] = (val, err)
-
-    for interval_label, (val, err) in raw_exp_values['xivar'].items():
-        lower, upper = interval_label.split('-')
-        exp_values[f'xiv_{upper}_{lower}'] = (val, err)
+    # Get the desired column order from the experimental values.
+    ordered_cols = list(exp_values.keys())
 
     print("Experimental Values:", exp_values)
+    n = 1000#int(input("Select number of samples/realizations:"))
+    choice = '4' #get_user_choice()
 
-    # Montecarlo Simulation
-    # The MC_results function expects a DataFrame with an 'Error' column.
-    # The Data_loader class stores the error as an attribute, so we add it to the DataFrame.
-    sim_df = DL.df.copy()
-    sim_df['Error'] = DL.error
+    if choice == '1':
 
-    # Run the Monte Carlo simulation with 100 realizations.
-    # MC_results(intervals, sim_df, DL.xvals, n=100)
+        print("Running chain_results...")
+        chain_results(DL, intervals, roots_planck, f'chain_planck_{n}', n)
+        print("chain_results finished.")
+    elif choice == '2':
+        print("Running MC_results...")
+        MC_results(DL, intervals, n=n)
+        print("MC_results finished.")
+    elif choice == '3':
+        print("Running both chain_results and MC_results...")
+        chain_results(DL, intervals, roots_planck, f'chain_planck_{n}', n)
+        MC_results(DL, intervals, n=n)
+        print("Both processes finished.")
+    elif choice == '4':
+        print("Skipping calculations. Will attempt to plot existing results.")
 
     # Load the simulation results from the pickle file.
-    with open('files/pickel/Simulation_1000.pkl', 'rb') as f:
-        sim_data_dict = pickle.load(f)
+    sim_data_dict = None
+    if os.path.exists(f'Simulation_{n}.pkl'):
+        print(f"Loading simulation results from Simulation_{n}.pkl...")
+        with open(f'Simulation_{n}.pkl', 'rb') as f:
+            sim_data_dict = pickle.load(f)
+    else:
+        print(f"Simulation_{n}.pkl not found. Skipping plots that require it.")
 
     # Plotting
     output_dir = "images/script_outputs"
@@ -94,44 +123,71 @@ def main():
         os.makedirs(output_dir)
 
     # Load chain results
-    with open('files/pickel/chain_results_planck.pkl', 'rb') as f1:
-        data_dict = pickle.load(f1)
+    data_dict = None
+    if os.path.exists(f'chain_planck_{n}.pkl'):
+        print(f"Loading chain results from chain_planck_{n}.pkl...")
+        with open(f'chain_planck_{n}.pkl', 'rb') as f1:
+            data_dict = pickle.load(f1)
+    else:
+        print(f"chain_planck_{n}.pkl not found. Skipping plots that require it.")
+
+    if not data_dict and not sim_data_dict:
+        print("No data found to plot. Exiting.")
+        return
 
     # Instantiate plotter with Data_loader object
     CP = CorrelationPlots(DL)
 
     # Prepare simulation data
-    df_simu, cl_simu, _, _, _ = sim_data_dict['Simulation']
-    # Prepare simulation data for histogram plotting by removing non-scalar columns
-    df_simu_hist = df_simu.drop(columns=['D_ell', 'Cor'], errors='ignore')
+    if sim_data_dict:
+        df_simu, cl_simu, _, _, _ = sim_data_dict['Simulation']
+        # Prepare simulation data for histogram plotting by removing non-scalar columns
+        df_simu_hist = df_simu.drop(columns=['D_ell', 'Cor'], errors='ignore')
+        # Reorder the columns to match the experimental data
+        df_simu_hist = df_simu_hist[ordered_cols]
+        #print(df_simu_hist.head())
 
     # Loop through chain results and plot
-    for root_name, (df, mean_Cl, std_Cl, mean_Cor, std_Cor) in data_dict.items():
-        xiv_df = df.filter(regex=r'xiv_')
-        s12_df = df.filter(regex=r's12_')
-        est_df = df.copy()
-        est_df.drop(columns=['D_ell', 'Cor'], inplace=True)
-        
-        # Sanitize root_name for use in filenames
-        safe_root_name = root_name.replace('/', '_')
+    if data_dict:
+        for root_name, (df, mean_Cl, std_Cl, mean_Cor, std_Cor) in data_dict.items():
+            # Apply renaming
+            print("Before swapping the columns")
+            print(df.head())
+            df_fixed = df.copy() #rename(columns=swap_prefix) #df_fixed is a work around because chain results is swapping xiv and s12 values
+            print("After swapping the columns")
+            print(df_fixed.head())
+            est_df = df_fixed.copy()
 
-        # Define save paths
-        hist_exp_th_path = f"{output_dir}/{safe_root_name}_hist_exp_vs_th.{save_format}" if save_format else None
-        hist_exp_sim_path = f"{output_dir}/{safe_root_name}_hist_exp_vs_sim.{save_format}" if save_format else None
-        hist_th_sim_path = f"{output_dir}/{safe_root_name}_hist_th_vs_sim.{save_format}" if save_format else None
-        xivar_path = f"{output_dir}/{safe_root_name}_xivar.{save_format}" if save_format else None
-        s12_path = f"{output_dir}/{safe_root_name}_s12.{save_format}" if save_format else None
-        power_corr_path = f"{output_dir}/{safe_root_name}_power_corr.{save_format}" if save_format else None
-        
-        CP.create_histogram_grid(est_df, est_df.columns, f"Histograms for {root_name} Exp vs Th", comparison_data=exp_values, figsize=(15, 15), bins=100, save_path=hist_exp_th_path)
-        CP.create_histogram_grid(df_simu_hist, df_simu_hist.columns, f"Histograms for {root_name} Exp vs Sim", comparison_data=exp_values, figsize=(15, 15), bins=100, save_path=hist_exp_sim_path)    
-        CP.create_histogram_grid(df_simu_hist, df_simu_hist.columns, f"Histograms for {root_name} Th vs Sim", comparison_data=est_df, figsize=(15, 15), bins=100, save_path=hist_th_sim_path)
+            xiv_df = df_fixed.filter(regex=r'xiv_')
+            s12_df = df_fixed.filter(regex=r's12_')
+            est_df.drop(columns=['D_ell', 'Cor'], inplace=True)
+            
+            # Reorder the columns to match the experimental data
+            est_df = est_df[ordered_cols]
 
-        CP.plot_corr_with_xivar(mean_Cor, xiv_df, intervals, root_name, save_path=xivar_path)
-        CP.plot_corr_with_S12(mean_Cor, s12_df, intervals, root_name, save_path=s12_path)
-        CP.plot_power_and_correlation(mean_Cl, std_Cl,
-                                      mean_Cor, std_Cor,
-                                      root=root_name, figsize=(18, 7), save_path=power_corr_path)
+            
+            # Sanitize root_name for use in filenames
+            safe_root_name = root_name.replace('/', '_')
+
+            # Define save paths
+            hist_exp_th_path = f"{output_dir}/{safe_root_name}_hist_exp_vs_th.{save_format}" if save_format else None
+            hist_exp_sim_path = f"{output_dir}/{safe_root_name}_hist_exp_vs_sim.{save_format}" if save_format else None
+            hist_th_sim_path = f"{output_dir}/{safe_root_name}_hist_th_vs_sim.{save_format}" if save_format else None
+            xivar_path = f"{output_dir}/{safe_root_name}_xivar.{save_format}" if save_format else None
+            s12_path = f"{output_dir}/{safe_root_name}_s12.{save_format}" if save_format else None
+            power_corr_path = f"{output_dir}/{safe_root_name}_power_corr.{save_format}" if save_format else None
+            
+            CP.create_histogram_grid(est_df, ordered_cols, f"Histograms for {root_name} Exp vs Th", comparison_data=exp_values, figsize=(20, 20), bins=100, save_path=hist_exp_th_path)
+            
+            if sim_data_dict:
+                CP.create_histogram_grid(df_simu_hist, ordered_cols, f"Histograms for {root_name} Exp vs Sim", comparison_data=exp_values, figsize=(20, 20), bins=100, save_path=hist_exp_sim_path)    
+                CP.create_histogram_grid(df_simu_hist, ordered_cols, f"Histograms for {root_name} Th vs Sim", comparison_data=est_df, figsize=(20, 20), bins=100, save_path=hist_th_sim_path)
+
+            CP.plot_corr_with_xivar(mean_Cor, xiv_df, intervals, root_name, save_path=xivar_path)
+            CP.plot_corr_with_S12(mean_Cor, s12_df, intervals, root_name, save_path=s12_path)
+            CP.plot_power_and_correlation(mean_Cl, std_Cl,
+                                          mean_Cor, std_Cor,
+                                          root=root_name, figsize=(18, 7), save_path=power_corr_path)
 
 if __name__ == "__main__":
     main()
