@@ -1,0 +1,52 @@
+# CMB Analysis Configuration File
+# Edit this file to customize your analysis parameters
+
+# Analysis settings
+analysis:
+  mode: all  # Options: 'bestfit', 'mcmc', 'simulation', 'all'
+  lmax: 30      # Maximum multipole
+  n_samples: 1000  # Number of realizations (bestfit/simulation) or samples (mcmc)
+
+# Angular intervals for statistics
+# Format: [min_cosθ, max_cosθ]
+intervals:
+  - [-0.9999999999999999, 0.5]  # Classical statistic
+  - [-0.9999999999999999, -0.9010561423012785]  # ~90-102 degrees
+  - [-0.9010561423012785, -0.03888637661577246]  # ~102-180 degrees
+  - [-0.03888637661577246, 0.8654808226792662]   # ~30-92 degrees
+  - [0.8654808226792662, 0.9999999999999999]     # ~0-30 degrees
+
+# MCMC chain files
+# List of paths to Planck chain files (without extension)
+roots:
+  - Planck_Data/base_omegak/CamSpecHM_TT_lowl_lowE/base_omegak_CamSpecHM_TT_lowl_lowE
+  - Planck_Data/base_omegak/plikHM_TTTEEE_lowl_lowE/base_omegak_plikHM_TTTEEE_lowl_lowE
+  - Planck_Data/base/CamSpecHM_TT_lowl_lowE/base_CamSpecHM_TT_lowl_lowE
+  - Planck_Data/base/plikHM_TT_lowl_lowE/base_plikHM_TT_lowl_lowE
+
+# Pipeline parameters for simulations
+pipeline:
+  nside_in: 2048         # HEALPix nside (resolution)
+  fwhm_in_arcmin: 40.0   # Beam FWHM in arcminutes
+  noise_Cl: null         # Noise power spectrum (null = no noise)
+  mask: null             # HEALPix mask (null = no masking)
+  num_workers: null      # Number of parallel workers (null = auto-detect)
+
+# Statistics computation from MCMC chains
+statistics:
+  enabled: true          # Generate statistics from MCMC chains
+  skip_simulation: false # If true, only compute from chains (fast), skip pipeline
+
+# Plotting settings
+plotting:
+  enabled: true          # Generate plots after computation
+  format: pdf            # Output format: 'pdf' or 'png'
+  colors:
+    experimental: red
+    simulation: blue
+    theory: black
+
+# Output settings
+output:
+  base_dir: runs         # Base directory for all runs
+  save_on_param_change: true  # Create new directory when parameters change
