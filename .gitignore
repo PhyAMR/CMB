@@ -1,0 +1,76 @@
+Likelihood/
+__pycache__/
+.venv/
+COM_CosmoParams_fullGrid_R3.01
+hlpTT_lowT/
+hlpTT_lowT_Ok/
+s2wav/
+Useless/
+Comp_Graphs/
+Planck_Data/
+neorg/
+*zip
+
+
+# LaTeX auxiliary files
+*.aux
+*.log
+*.out
+*.toc
+*.lof
+*.lot
+*.bbl
+*.blg
+*.synctex
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+*.ilg
+*.ind
+*.idx
+*.xdy
+*.glo
+*.gls
+*.glg
+*.ist
+*.dvi
+*.ps
+*.nav
+*.snm
+*.vrb
+*.nlo
+*.nls
+*.mw
+*.lec
+*.sty
+*.cls
+*.xml
+*blx.bib
+
+# Jupyter notebooks
+*.ipynb
+
+# Jupyter notebook outputs
+CleanPlanck_files/
+CleanPlanck.html
+CleanPlanck.md
+
+# Ignore Python files except main.py and files in functions/
+*.py
+!main.py
+!functions/
+!functions/*.py
+!functions/**/*.py
+
+*.pdf 
+*.tex 
+!Paper/Paper.pdf
+!Paper/Paper.tex
+run_*/
+!runs/**/config.yml
+# 2. Allow (un-ignore) the specific subdirectories you want to keep
+!runs/**/theory_bestfit/
+!runs/**/theory_mcmc/
+
+# MAPS
+*.fits
