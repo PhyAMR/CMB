@@ -566,7 +566,7 @@ def generate_all_tables(run_dir, roots, experimental_values, derived_params=None
         
         # MCMC table
         if has_mcmc:
-            logger.info(f"  - Generating MCMC table with GetDist and derived parameters...")
+            logger.info("  - Generating MCMC table with GetDist and derived parameters...")
             
             # Generate custom table with percentiles and p-values
             table_tex = generate_statistics_table_mcmc(
@@ -601,14 +601,14 @@ def generate_all_tables(run_dir, roots, experimental_values, derived_params=None
                         f"$p = {global_stats['pvalue']:.2e}$, "
                         f"${global_stats['n_sigma']:.2f}\\sigma$"
                     )
-                    summary_lines.append(f"MCMC Global Tension (theory-based):")
+                    summary_lines.append("MCMC Global Tension (theory-based):")
                     summary_lines.append(f"  χ² = {global_stats['chi2']:.2f} (dof={global_stats['dof']})")
                     summary_lines.append(f"  p-value = {global_stats['pvalue']:.2e}")
                     summary_lines.append(f"  Tension = {global_stats['n_sigma']:.2f}σ")
         
         # Best-fit table
         if has_bestfit:
-            logger.info(f"  - Generating best-fit table with GetDist...")
+            logger.info("  - Generating best-fit table with GetDist...")
             
             table_tex = generate_statistics_table_bestfit(
                 run_dir, model_name, experimental_values, derived_df=derived_params
@@ -638,7 +638,7 @@ def generate_all_tables(run_dir, roots, experimental_values, derived_params=None
                         f"$p = {global_stats['pvalue']:.2e}$, "
                         f"${global_stats['n_sigma']:.2f}\\sigma$"
                     )
-                    summary_lines.append(f"Best-fit Global Tension (theory-based):")
+                    summary_lines.append("Best-fit Global Tension (theory-based):")
                     summary_lines.append(f"  χ² = {global_stats['chi2']:.2f} (dof={global_stats['dof']})")
                     summary_lines.append(f"  p-value = {global_stats['pvalue']:.2e}")
                     summary_lines.append(f"  Tension = {global_stats['n_sigma']:.2f}σ")
