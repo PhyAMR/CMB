@@ -1,17 +1,21 @@
 # Code Flowcharts for CMB Analysis Functions
 
-This document contains flowcharts showing the actual execution flow of each Python module in the functions directory.
+This document contains flowcharts showing the actual execution flow of each Python module in the functions directory. Use these diagrams to understand control flow, data dependencies, and IO patterns for each module.
 
 ## Table of Contents
-1. [correlation_function.py](#correlation_functionpy)
-2. [cosmology.py](#cosmologypy)
-3. [data.py](#datapy)
-4. [maps.py](#mapspy)
-5. [plots.py](#plotspy)
-6. [s12.py](#s12py)
-7. [simulation.py](#simulationpy)
-8. [tools.py](#toolspy)
-9. [xiv.py](#xivpy)
+1. [correlation_function.py](#correlation_functionpy) — Compute two-point correlation function from power spectrum
+2. [cosmo.py](#cosmologypy) — CAMB interface and MCMC chain processing
+3. [data.py](#datapy) — Load experimental power spectrum data and compute statistics
+4. [maps.py](#mapspy) — HEALPix map utilities and pixel operations
+5. [plots.py](#plotspy) — Visualization and comparison plotting
+6. [s12.py](#s12py) — S12 statistic computation and error propagation
+7. [simulation.py](#simulationpy) — Monte Carlo pipeline and synthetic data generation
+8. [tools.py](#toolspy) — Mathematical utilities and helpers
+9. [xiv.py](#xivpy) — Xivar statistic computation and error propagation
+10. [getdist_stats.py](#getdist_statspy) — GetDist integration and table generation
+11. [generate_result_tables.py](#generate_result_tablespy) — Top-level table generation
+12. [unified_stats.py](#unified_statspy) — Unified percentile and statistical functions
+13. [main.py](#mainpy) — Pipeline orchestration and CLI
 
 ---
 
@@ -860,6 +864,239 @@ flowchart TD
     D --> E[Return integral / b-a]
     E --> F[End]
 ```
+
+---
+
+## getdist_stats.py
+
+### build_mcsamples_from_scalars(scalar_dict, names)
+```mermaid
+flowchart TD
+    A[Start] --> B[Extract column names from scalar_dict]
+    B --> C[Convert scalars to MCSamples format]
+    C --> D[Assign parameter names and ranges]
+    D --> E[Return MCSamples object]
+    E --> F[End]
+```
+
+### create_latex_table(mcsamples, columns, precision)
+```mermaid
+flowchart TD
+    A[Start] --> B[Compute mean and credible intervals for each parameter]
+    B --> C[Format values to specified precision]
+    C --> D[Generate LaTeX table rows]
+    D --> E[Combine with headers and footer]
+    E --> F[Return formatted LaTeX table string]
+    F --> G[End]
+```
+
+---
+
+## generate_result_tables.py
+
+### generate_all_tables(run_dir, intervals, output_format)
+```mermaid
+flowchart TD
+    A[Start] --> B[Load scalar statistic files from run_dir]
+    B --> C[Load theory_bestfit results if available]
+    C --> D[Load theory_mcmc results if available]
+    D --> E[Load simulation results if available]
+    E --> F[Build comparison DataFrame]
+    F --> G[Compute statistics and credible intervals]
+    G --> H[Generate LaTeX tables for each interval]
+    H --> I[Generate master table comparing all modes]
+    I --> J{pdflatex available?}
+    J -->|Yes| K[Compile LaTeX to PDF]
+    J -->|No| L[Save LaTeX only]
+    K --> M[Log output paths]
+    L --> M
+    M --> N[End]
+```
+
+### compile_pdf(tex_file)
+```mermaid
+flowchart TD
+    A[Start] --> B[Try: Run pdflatex on tex_file]
+    B --> C{Success?}
+    C -->|Yes| D[Return PDF path]
+    C -->|No| E[Print warning, return None]
+    D --> F[End]
+    E --> F
+```
+
+---
+
+## unified_stats.py
+
+### compute_percentile(data, percentile)
+```mermaid
+flowchart TD
+    A[Start] --> B[Sort data array]
+    B --> C[Compute index = percentile * len data]
+    C --> D{Fractional index?}
+    D -->|Yes| E[Interpolate between adjacent values]
+    D -->|No| F[Return value at index]
+    E --> G[Return interpolated value]
+    F --> G
+    G --> H[End]
+```
+
+### compute_pvalue(observed, distribution)
+```mermaid
+flowchart TD
+    A[Start] --> B[Count values in distribution > observed]
+    B --> C[Compute p-value = count / len distribution]
+    C --> D[Return p-value]
+    D --> E[End]
+```
+
+### compute_sigma_deviation(observed, distribution)
+```mermaid
+flowchart TD
+    A[Start] --> B[Compute mean and std of distribution]
+    B --> C[z-score = observed - mean / std]
+    C --> D[Convert z-score to sigma deviance]
+    D --> E[Return sigma value and p-value]
+    E --> F[End]
+```
+
+---
+
+## main.py (Detailed Flow)
+
+### Main Entry Point & Config Management
+```mermaid
+flowchart TD
+    A[Start main] --> B[Parse command-line arguments]
+    B --> C{--create-config?}
+    C -->|Yes| D[Launch config editor/creator]
+    C -->|No| E[Load config.yml or create default]
+    D --> F[Exit]
+    E --> G[Merge with DEFAULT_CONFIG]
+    G --> H[Log configuration summary]
+    H --> I[Proceed to analysis]
+    I --> J[End main]
+```
+
+### Run Directory Logic
+```mermaid
+flowchart TD
+    A[find_or_create_run_dir] --> B[Compute config hash excluding roots]
+    B --> C[Generate run_name = run_lmax_n_mode_hash]
+    C --> D{Directory exists?}
+    D -->|Yes| E[Load saved config]
+    E --> F{Config matches current?}
+    F -->|Yes| G[Reuse directory, check if roots changed]
+    F -->|No| H[Create new directory]
+    D -->|No| H
+    G --> I[Return run_dir, is_new, roots_changed]
+    H --> I
+    I --> J[End]
+```
+
+### Analysis Dispatch
+```mermaid
+flowchart TD
+    A[run_analysis] --> B[Load Data_loader with lmax]
+    B --> C[Extract config sections]
+    C --> D{mode == bestfit?}
+    D -->|Yes| E[Call chain_results with best_fit=True]
+    D -->|No| F{mode == mcmc?}
+    F -->|Yes| G[Call chain_results with best_fit=False]
+    F -->|No| H{mode == simulation?}
+    H -->|Yes| I[Call MC_results]
+    H -->|No| J{mode == all?}
+    J -->|Yes| K[Call chain_results best_fit=True]
+    K --> L[Call chain_results best_fit=False]
+    L --> M[Call MC_results]
+    J -->|No| N[Error: unknown mode]
+    E --> O[Return run_dir]
+    G --> O
+    I --> O
+    M --> O
+    N --> O
+    O --> P[End]
+```
+
+### Plotting & Table Generation
+```mermaid
+flowchart TD
+    A[run_plotting] --> B[Load Data_loader]
+    B --> C[Compute experimental_values]
+    C --> D{--plot-only or --no-plot?}
+    D -->|Yes| E[Load run data]
+    D -->|No| E
+    E --> F[Initialize CorrelationPlots]
+    F --> G[Generate comparison plots]
+    G --> H[Save plots to images_mode/]
+    H --> I[End]
+```
+
+```mermaid
+flowchart TD
+    A[run_table_generation] --> B{--stats-only?}
+    B -->|Yes| C[Load run results]
+    B -->|No| C
+    C --> D[Convert scalar files to tabular format]
+    D --> E[Compute statistics and percentiles]
+    E --> F[Generate LaTeX tables]
+    F --> G{pdflatex available?}
+    G -->|Yes| H[Compile to PDF master]
+    G -->|No| I[Save LaTeX only]
+    H --> J[Log table paths]
+    I --> J
+    J --> K[End]
+```
+
+---
+
+## Integration Summary
+
+### Data Flow Across Modules
+
+```
+Planck Data (maps/)
+    ↓
+Data_loader (data.py) → experimental_values()
+    ↓
+├─ Theory (CAMB):
+│   Planck MCMC Chains → cosmo.py:chain_results()
+│   ├─ compute_cl_cor_pl/dv() [Generate spectra]
+│   ├─ chain_calculations() [Compute statistics]
+│   └─ Save: theory_bestfit/ or theory_mcmc/
+│
+├─ Simulation (MC):
+│   experimental D_ell ± σ → simulation.py:MC_results()
+│   ├─ MC_calculations() [Process realizations]
+│   └─ Save: simulation/
+│
+└─ Statistics:
+    xivar() [functions/xiv.py]
+    S12() [functions/s12.py]
+    correlation_func() [functions/correlation_function.py]
+    ↓
+    Comparison DataFrames
+    ↓
+    Plotting (plots.py:CorrelationPlots)
+    ├─ plot_corr_with_xivar()
+    ├─ plot_corr_with_S12()
+    ├─ create_histogram_grid()
+    └─ plot_power_and_correlation()
+    ↓
+    Table Generation (generate_result_tables.py)
+    ├─ GetDist integration
+    ├─ LaTeX generation
+    └─ PDF compilation (if available)
+```
+
+### Execution Modes & Outputs
+
+| Mode | Input | Processing | Output |
+|------|-------|-----------|--------|
+| **bestfit** | Single best-fit spectrum (CAMB) | Planck pipeline × n_samples | theory_bestfit/ |
+| **mcmc** | MCMC chains (GetDist) | CAMB + pipeline per sample | theory_mcmc/ |
+| **simulation** | Experimental D_ell ± σ | Random sampling + pipeline | simulation/ |
+| **all** | Both chain + data | All three modes sequential | theory_{bestfit,mcmc}/ + simulation/ |
 
 ---
 
