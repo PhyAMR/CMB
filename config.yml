@@ -5,7 +5,7 @@
 analysis:
   mode: all  # Options: 'bestfit', 'mcmc', 'simulation', 'all'
   lmax: 30      # Maximum multipole
-  n_samples: 1000  # Number of realizations (bestfit/simulation) or samples (mcmc)
+  n_samples: 2  # Number of realizations (bestfit/simulation) or samples (mcmc)
 
 # Angular intervals for statistics
 # Format: [min_cosθ, max_cosθ]
@@ -29,7 +29,7 @@ pipeline:
   nside_in: 2048         # HEALPix nside (resolution)
   fwhm_in_arcmin: 40.0   # Beam FWHM in arcminutes
   noise_Cl: null         # Noise power spectrum (null = no noise)
-  mask: null             # HEALPix mask (null = no masking)
+  mask: null #maps/COM_Mask_CMB-common-Mask-Int_2048_R3.00.fits             # path to mask file (HEALPix format) null if no mask
   num_workers: null      # Number of parallel workers (null = auto-detect)
 
 # Statistics computation from MCMC chains

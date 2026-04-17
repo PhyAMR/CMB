@@ -59,13 +59,20 @@ def _single_realization_worker(args):
         )
     
     if mask is not None:
+        # Calculate sky fraction (percentage of pixels not masked)
+        mask = hp.read_map(mask)
+        f_sky = np.mean(mask >= 0.9) 
+        
         m = hp.ma(m)
         m.mask = mask < 0.9
         m = m.filled(0)
-    
+    else:
+        f_sky = 1.0
+
     if estimate_Cl:
         cl_est = hp.anafast(m, lmax=ell_max)
-        return cl_est[ell]
+        # Correct for the loss of power due to the mask
+        return cl_est[ell] / f_sky
     
     return m
 
