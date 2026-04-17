@@ -66,11 +66,17 @@ CleanPlanck.md
 *.tex 
 !Paper/Paper.pdf
 !Paper/Paper.tex
-run_*/
+runs/
 !runs/**/config.yml
 # 2. Allow (un-ignore) the specific subdirectories you want to keep
 !runs/**/theory_bestfit/
 !runs/**/theory_mcmc/
+# Also keep all files contained within those directories
+!runs/**/theory_bestfit/**
+!runs/**/theory_mcmc/**
+# Keep any files named theory_bestfit or theory_mcmc anywhere under runs/
+!runs/**/theory_bestfit*
+!runs/**/theory_mcmc*
 
 # MAPS
 *.fits
