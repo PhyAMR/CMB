@@ -18,9 +18,9 @@ import sys
 import logging
 import yaml
 import hashlib
-import shutil
-from datetime import datetime
-from pathlib import Path
+#import shutil
+#from datetime import datetime
+#from pathlib import Path
 
 # Import analysis modules
 from functions.data import Data_loader
@@ -30,6 +30,8 @@ from functions.plots import CorrelationPlots, load_run_data
 
 # Configure logging
 logging.basicConfig(
+    filename='analysis.log',
+    filemode = 'w',
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
@@ -210,7 +212,7 @@ def find_or_create_run_dir(config):
                 return run_dir, False, roots_changed
         
         # Config changed significantly - need new directory
-        logger.info(f"Configuration changed - creating new directory")
+        logger.info("Configuration changed - creating new directory")
     
     # Create new directory
     os.makedirs(run_dir, exist_ok=True)
@@ -719,7 +721,7 @@ def run_table_generation(config, run_dir):
             experimental_values,
             derived_params=derived_params
         )
-        logger.info(f"✓ Tables generated successfully")
+        logger.info("✓ Tables generated successfully")
         return run_dir
     
     except Exception as e:

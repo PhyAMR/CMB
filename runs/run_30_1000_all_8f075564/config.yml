@@ -1,0 +1,39 @@
+analysis:
+  mode: all
+  lmax: 30
+  n_samples: 1000
+intervals:
+- - -0.9999999999999999
+  - 0.5
+- - -0.9999999999999999
+  - -0.9010561423012785
+- - -0.9010561423012785
+  - -0.03888637661577246
+- - -0.03888637661577246
+  - 0.8654808226792662
+- - 0.8654808226792662
+  - 0.9999999999999999
+roots:
+- Planck_Data/base_omegak/CamSpecHM_TT_lowl_lowE/base_omegak_CamSpecHM_TT_lowl_lowE
+- Planck_Data/base_omegak/plikHM_TTTEEE_lowl_lowE/base_omegak_plikHM_TTTEEE_lowl_lowE
+- Planck_Data/base/CamSpecHM_TT_lowl_lowE/base_CamSpecHM_TT_lowl_lowE
+- Planck_Data/base/plikHM_TT_lowl_lowE/base_plikHM_TT_lowl_lowE
+pipeline:
+  nside_in: 2048
+  fwhm_in_arcmin: 40.0
+  noise_Cl: null
+  mask: maps/COM_Mask_CMB-common-Mask-Int_2048_R3.00.fits
+  num_workers: null
+statistics:
+  enabled: true
+  skip_simulation: false
+plotting:
+  enabled: true
+  format: pdf
+  colors:
+    experimental: red
+    simulation: blue
+    theory: black
+output:
+  base_dir: runs
+  save_on_param_change: true

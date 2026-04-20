@@ -5,7 +5,7 @@
 analysis:
   mode: all  # Options: 'bestfit', 'mcmc', 'simulation', 'all'
   lmax: 30      # Maximum multipole
-  n_samples: 2  # Number of realizations (bestfit/simulation) or samples (mcmc)
+  n_samples: 1000  # Number of realizations (bestfit/simulation) or samples (mcmc)
 
 # Angular intervals for statistics
 # Format: [min_cosθ, max_cosθ]
