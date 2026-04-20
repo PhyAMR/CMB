@@ -144,7 +144,7 @@ def compute_percentiles(data, samples=None, param_name=None):
 
 
 
-def compute_pvalue_from_percentiles(observed_value, p16, p50, p84):
+def compute_pvalue_from_percentiles(observed_value, p16, p50, p84, values):
     """
     Compute p-value from percentiles using unified method.
     
@@ -163,7 +163,7 @@ def compute_pvalue_from_percentiles(observed_value, p16, p50, p84):
         {'pvalue': p, 'n_sigma': n, 'interpretation': str, 'tension_level': str}
     """
     percentiles_dict = {'p16': p16, 'p50': p50, 'p84': p84}
-    return compute_pvalue_unified(observed_value, percentiles_dict)
+    return compute_pvalue_unified(observed_value, percentiles_dict, values)
 
 
 # ============================================================================
@@ -422,7 +422,7 @@ class CorrelationPlots:
     - Unified percentile-based p-value computation
     """
     
-    def __init__(self, DL, output_dir=None, colors=None, mode='all'):
+    def __init__(self, DL, output_dir=None, colors=None, mode='all', use_sim=True):
         """
         Initialize plotter.
         
@@ -445,6 +445,7 @@ class CorrelationPlots:
             self.colors.update(colors)
         
         self.mode = mode
+        self.use_sim = use_sim
         
         self._apply_style()
     
@@ -590,7 +591,7 @@ class CorrelationPlots:
                        label=f'68% CI: [{p16:.4f}, {p84:.4f}]')
             
             p_value = np.nan
-            n_sigma = np.nan
+            
             
             # Add experimental value and compute p-value
             if exp_data and isinstance(exp_data, dict) and label in exp_data:
@@ -599,17 +600,16 @@ class CorrelationPlots:
                           linestyle='--', linewidth=2,
                           label=f'Experimental: {exp_val:.4f}')
                 # Add error band
-                ax.axvspan(exp_val - exp_err, exp_val + exp_err,
-                          color=self.colors['experimental'], alpha=0.2,
-                          label=f'Exp. error: ±{exp_err:.4f}')
+                #ax.axvspan(exp_val - exp_err, exp_val + exp_err,
+                #          color=self.colors['experimental'], alpha=0.2,
+                #          label=f'Exp. error: ±{exp_err:.4f}')
                 
                 # Compute p-value using unified method
-                pval_info = compute_pvalue_from_percentiles(exp_val, p16, p50, p84)
+                pval_info = compute_pvalue_from_percentiles(exp_val,p16, p50, p84, values)
                 p_value = pval_info['pvalue']
-                n_sigma = pval_info['n_sigma']
             
             # Add simulation overlay if available
-            if sim_data is not None and label in sim_data.columns:
+            if self.use_sim and sim_data is not None and label in sim_data.columns:
                 sim_vals = sim_data[label].dropna().values
                 if len(sim_vals) > 0:
                     sim_perc = compute_percentiles(sim_vals)
@@ -623,10 +623,12 @@ class CorrelationPlots:
             
             # Format title with p-value
             if not np.isnan(p_value):
-                p_label = f"p-val = {p_value:.2e}, {n_sigma:.2f}σ tension"
+                p_label = f"p-val = {p_value:.2e}"
             else:
                 p_label = "p-val: N/A"
-            
+            if label.startswith('s12'):
+                ax.set_xscale('log')
+
             ax.set_xlabel(formatted_label, fontsize=14)
             ax.set_ylabel('Frequency', fontsize=14)
             ax.set_title(f'Distribution: {formatted_label}\n{p_label}', fontsize=14)
@@ -691,7 +693,7 @@ class CorrelationPlots:
                     save_name=f'{base_name}_forest_s12.{file_format}'
                 )
         
-        logger.info(f"✓ Forest plots saved by type")
+        logger.info("✓ Forest plots saved by type")
     
     def _create_single_forest_plot(self, df, labels, comparison_data,
                                    title, save_name):
@@ -815,7 +817,7 @@ class CorrelationPlots:
                     save_name=f'{base_name}_diagnostics_s12.{file_format}'
                 )
         
-        logger.info(f"✓ Diagnostic plots saved by type")
+        logger.info("✓ Diagnostic plots saved by type")
     
     def _create_single_diagnostic(self, df, labels, comparison_data,
                                   title, save_name):
@@ -1154,7 +1156,7 @@ class CorrelationPlots:
                 linewidth=2, label='Theory Mean', zorder=2)
         ax1.fill_between(ell, mean_Cl - std_Cl, mean_Cl + std_Cl,
                         color=self.colors['theory'], alpha=0.3,
-                        label='Theory $\pm 1\sigma$', zorder=1)
+                        label=r'Theory $\pm 1\sigma$', zorder=1)
         
         ax1.set_xlabel(r'Multipole $\ell$', fontsize=14)
         ax1.set_ylabel(r'$D_\ell$ [$\mu K^2$]', fontsize=14)
@@ -1169,7 +1171,7 @@ class CorrelationPlots:
                 linewidth=2, label='Theory Mean', zorder=2)
         ax2.fill_between(theta, mean_Cor - std_Cor, mean_Cor + std_Cor,
                         color=self.colors['theory'], alpha=0.3,
-                        label='Theory $\pm 1\sigma$', zorder=1)
+                        label=r'Theory $\pm 1\sigma$', zorder=1)
         
         ax2.set_xlabel(r'$\theta$ [degrees]', fontsize=14)
         ax2.set_ylabel(r'$C(\theta)$ [$\mu K^2$]', fontsize=14)

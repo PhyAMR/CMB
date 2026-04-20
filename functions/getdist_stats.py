@@ -6,6 +6,8 @@ from getdist import mcsamples, loadMCSamples
 from getdist.types import ResultTable, NoLineTableFormatter
 from scipy import stats
 
+from .unified_stats import compute_percentiles_unified, compute_pvalue_unified
+
 """
 GetDist-based statistics calculator for MCMC posteriors.
 
@@ -346,72 +348,26 @@ def compute_all_percentiles(samples, param_names, percentiles=(16, 50, 84)):
     return results
 
 
-def compute_pvalue_from_percentiles(observed_value, p16, p50, p84):
+def compute_pvalue_from_percentiles(observed_value, p16, p50, p84, values):
     """
-    Compute p-value given observed value and posterior percentiles.
+    Compute p-value from percentiles using unified method.
     
-    Assumes approximately Gaussian posterior and computes p-value
-    based on how many sigma away the observed value is from the median.
+    Consistent with GetDist and all other modules.
     
     Parameters
     ----------
     observed_value : float
         Experimental/simulation value
     p16, p50, p84 : float
-        16th, 50th, 84th percentiles of posterior
+        16th, 50th, 84th percentiles
     
     Returns
     -------
     dict
-        {
-            'pvalue': p,
-            'n_sigma': n,
-            'interpretation': str,
-            'tension_level': str
-        }
+        {'pvalue': p, 'n_sigma': n, 'interpretation': str, 'tension_level': str}
     """
-    # Estimate sigma from percentiles (68% CI width)
-    # For Gaussian: p84 - p50 ≈ 1σ, p50 - p16 ≈ 1σ
-    sigma_upper = p84 - p50
-    sigma_lower = p50 - p16
-    sigma = (sigma_upper + sigma_lower) / 2.0
-    
-    if sigma == 0 or np.isnan(sigma) or np.isinf(sigma):
-        return {
-            'pvalue': 1.0,
-            'n_sigma': 0.0,
-            'interpretation': 'No variance',
-            'tension_level': 'N/A'
-        }
-    
-    # Compute number of sigma away
-    n_sigma = abs(observed_value - p50) / sigma
-    
-    # Two-tailed p-value
-    pvalue = 2 * (1 - stats.norm.cdf(n_sigma))
-    pvalue = max(pvalue, 1e-10)  # Floor to avoid zero
-    
-    # Interpretation levels
-    if pvalue > 0.05:
-        interpretation = 'Consistent'
-        tension_level = '< 2σ'
-    elif pvalue > 0.01:
-        interpretation = 'Marginally inconsistent'
-        tension_level = '2-3σ'
-    elif pvalue > 0.001:
-        interpretation = 'Inconsistent'
-        tension_level = '3-4σ'
-    else:
-        interpretation = 'Highly inconsistent'
-        tension_level = '> 4σ'
-    
-    return {
-        'pvalue': pvalue,
-        'n_sigma': n_sigma,
-        'interpretation': interpretation,
-        'tension_level': tension_level
-    }
-
+    percentiles_dict = {'p16': p16, 'p50': p50, 'p84': p84}
+    return compute_pvalue_unified(observed_value, percentiles_dict, values)
 
 def compute_all_pvalues(samples, param_names, experimental_values):
     """
@@ -452,7 +408,8 @@ def compute_all_pvalues(samples, param_names, experimental_values):
             exp_val,
             perc['p16'],
             perc['p50'],
-            perc['p84']
+            perc['p84'],
+            values=getattr(samples.getParams(), param, None)
         )
         
         results[param] = {
@@ -588,9 +545,9 @@ def generate_statistics_table(samples, param_names, experimental_values,
         # So we build custom LaTeX
         
         rows = []
-        rows.append("\\begin{tabular}{lccccc}")
+        rows.append("\\begin{tabular}{lcccc}")
         rows.append("\\toprule")
-        rows.append("Statistic & Experimental & MCMC Median & 68\\% CI & Tension & $p$-value \\\\")
+        rows.append("Statistic & Experimental & MCMC Median & 68\\% CI  & $p$-value \\\\")
         rows.append("\\midrule")
         
         for param in param_names:
@@ -614,7 +571,6 @@ def generate_statistics_table(samples, param_names, experimental_values,
             # P-value and tension
             pval_info = pvalues_dict[param]
             pval = pval_info['pvalue']
-            n_sigma = pval_info['n_sigma']
             #tension_level = pval_info['tension_level']
             
             if pval < 0.001:
@@ -623,7 +579,7 @@ def generate_statistics_table(samples, param_names, experimental_values,
                 pval_str = f"${pval:.3f}$"
             
             # Add row
-            row = f"{param_label} & {exp_str} & {mcmc_str} & {ci_str} & {n_sigma:.2f}$\\sigma$ & {pval_str} \\\\"
+            row = f"{param_label} & {exp_str} & {mcmc_str} & {ci_str}  & {pval_str} \\\\"
             rows.append(row)
         
         rows.append("\\bottomrule")

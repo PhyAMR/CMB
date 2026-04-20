@@ -7,7 +7,6 @@ using GetDist methods when available, falling back to NumPy.
 
 import numpy as np
 import logging
-from scipy import stats
 
 logger = logging.getLogger(__name__)
 
@@ -182,31 +181,25 @@ def compute_pvalue_unified(observed_value, percentiles_dict, data=None):
         logger.warning("Missing percentile keys")
         return {
             'pvalue': 1.0,
-            'n_sigma': 0.0,
+        #    'n_sigma': 0.0,
             'interpretation': 'No percentiles',
             'tension_level': 'N/A'
         }
     
     # Estimate sigma from percentiles (68% CI width)
     # For Gaussian: p84 - p50 ≈ 1σ, p50 - p16 ≈ 1σ
-    sigma_upper = p84 - p50
-    sigma_lower = p50 - p16
-    sigma = (sigma_upper + sigma_lower) / 2.0
     
-    if sigma == 0 or np.isnan(sigma) or np.isinf(sigma):
+    
+    if data is None or np.isclose(p84, p16):
         return {
             'pvalue': 1.0,
-            'n_sigma': 0.0,
+            #'n_sigma': 0.0,
             'interpretation': 'No variance',
             'tension_level': 'N/A'
         }
     
-    # Compute number of sigma away
-    n_sigma = abs(observed_value - p50) / sigma
-    
-    # Two-tailed p-value
-    pvalue = 2 * (1 - stats.norm.cdf(n_sigma))
-    pvalue = max(pvalue, 1e-10)  # Floor to avoid zero
+    F = np.mean(data <= observed_value)
+    pvalue = 2.0 * min(F, 1.0 - F) if 2.0 * min(F, 1.0 - F) > 1/len(data) else 1/len(data)
     
     # Interpretation levels
     if pvalue > 0.05:
@@ -224,7 +217,7 @@ def compute_pvalue_unified(observed_value, percentiles_dict, data=None):
     
     return {
         'pvalue': pvalue,
-        'n_sigma': n_sigma,
+        #'n_sigma': n_sigma,
         'interpretation': interpretation,
         'tension_level': tension_level
     }

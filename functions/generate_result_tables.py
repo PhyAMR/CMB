@@ -13,6 +13,7 @@ Features:
 import os
 import argparse
 import numpy as np
+import yaml
 import pandas as pd
 import logging
 from getdist import mcsamples
@@ -541,6 +542,52 @@ def generate_all_tables(run_dir, roots, experimental_values, derived_params=None
     master_tex.append("\\begin{document}")
     master_tex.append("\\title{CMB Analysis Results - GetDist Tables}")
     master_tex.append("\\maketitle")
+
+    
+
+    def parse_config(config):
+        rows = []
+        for section, content in config.items():
+            # Skip the roots section as requested
+            if section == 'roots':
+                continue
+                
+            if isinstance(content, dict):
+                for key, value in content.items():
+                    # Handle nested dicts (like 'colors')
+                    if isinstance(value, dict):
+                        for sub_key, sub_val in value.items():
+                            rows.append([f"{section}: {key}: {sub_key}", sub_val])
+                    else:
+                        rows.append([f"{section}: {key}", value])
+                        
+            elif isinstance(content, list) and section == 'intervals':
+                # Format intervals as [a, b] strings
+                for i, interval in enumerate(content):
+                    # Rounding for readability in the table
+                    formatted_range = f"[{interval[0]:.4f}, {interval[1]:.4f}]"
+                    rows.append([f"Interval {i+1}", formatted_range])
+                    
+        return rows
+
+    # Load the file
+    with open(os.path.join(run_dir, 'config.yml'), 'r') as f:
+        config = yaml.safe_load(f)
+
+    # Flatten and convert to DataFrame
+    flat_data = parse_config(config)
+    df = pd.DataFrame(list(flat_data), columns=['Configuration Parameter', 'Value'])
+
+    # Generate LaTeX with specific formatting
+    # escape=True handles the underscores in your file paths
+    latex_table = df.to_latex(
+    index=False, 
+    caption="CMB Analysis Configuration", 
+    label="tab:analysis_config",
+    column_format='lp{6cm}', # Left align keys, 6cm width for values
+    bold_rows=False
+)
+    master_tex.append(str(latex_table).replace('_', ' '))
     
     summary_file = os.path.join(tables_dir, 'statistics_summary.txt')
     summary_lines = []
@@ -548,6 +595,7 @@ def generate_all_tables(run_dir, roots, experimental_values, derived_params=None
     summary_lines.append("STATISTICS SUMMARY WITH P-VALUES (THEORY-BASED)")
     summary_lines.append("=" * 80)
     
+    master_tex.append("\\clearpage")
     for root in roots:
         model_name = root.strip().split('/')[-1]
         
@@ -560,7 +608,7 @@ def generate_all_tables(run_dir, roots, experimental_values, derived_params=None
         has_mcmc = os.path.exists(mcmc_dir_check)
         has_bestfit = os.path.exists(bestfit_dir_check)
         
-        master_tex.append(f"\\section{{{model_name.replace('_', '\\_')}}}")
+        master_tex.append(f"\\section{{{model_name.replace('_', ' ')}}}")
         summary_lines.append(f"\n{model_name}")
         summary_lines.append("-" * 80)
         
