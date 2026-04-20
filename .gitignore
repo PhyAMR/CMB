@@ -7,7 +7,19 @@ hlpTT_lowT_Ok/
 s2wav/
 Useless/
 Comp_Graphs/
-Planck_Data/
+/Planck_Data/*
+
+
+!/Planck_Data/base/
+!/Planck_Data/base_omegak/
+/Planck_Data/base/*
+/Planck_Data/base_omegak/*
+
+!Planck_Data/base_omegak/CamSpecHM_TT_lowl_lowE/
+!Planck_Data/base_omegak/plikHM_TTTEEE_lowl_lowE/
+!Planck_Data/base/CamSpecHM_TT_lowl_lowE/
+!Planck_Data/base/plikHM_TT_lowl_lowE/
+
 neorg/
 *zip
 
@@ -90,3 +102,4 @@ runs/*/tables/*
 
 # MAPS
 *.fits
+
