@@ -8,7 +8,8 @@ s2wav/
 Useless/
 Comp_Graphs/
 /Planck_Data/*
-
+_extensions/
+*.qmd
 
 !/Planck_Data/base/
 !/Planck_Data/base_omegak/
@@ -58,6 +59,7 @@ neorg/
 *.cls
 *.xml
 *blx.bib
+*spl
 
 # Jupyter notebooks
 *.ipynb
