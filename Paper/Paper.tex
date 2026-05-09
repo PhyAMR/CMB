@@ -66,46 +66,6 @@
 \fi
 \makeatother
 
-\usepackage{color}
-\usepackage{fancyvrb}
-\newcommand{\VerbBar}{|}
-\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
-\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
-% Add ',fontsize=\small' for more characters per line
-\usepackage{framed}
-\definecolor{shadecolor}{RGB}{241,243,245}
-\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
-\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
-\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
-\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.40,0.45,0.13}{#1}}
-\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
-\newcommand{\BuiltInTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
-\newcommand{\CharTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
-\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
-\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
-\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
-\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{\textbf{#1}}}
-\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
-\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
-\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
-\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
-\newcommand{\ExtensionTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
-\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
-\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.28,0.35,0.67}{#1}}
-\newcommand{\ImportTok}[1]{\textcolor[rgb]{0.00,0.46,0.62}{#1}}
-\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
-\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{\textbf{#1}}}
-\newcommand{\NormalTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
-\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
-\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
-\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
-\newcommand{\RegionMarkerTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
-\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
-\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
-\newcommand{\StringTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
-\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.07,0.07,0.07}{#1}}
-\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
-\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
 
 \usepackage{longtable,booktabs,array}
 \usepackage{calc} % for calculating minipage widths
@@ -146,25 +106,18 @@
 
  
 \usepackage[]{natbib}
-\bibliographystyle{plainnat}
+\bibliographystyle{elsarticle-harv}
 
 
-\usepackage{fvextra}
+\usepackage{amsmath,amssymb}
+\usepackage{hyperref}
 \usepackage{witharrows}
-\usepackage{amsmath}
-\usepackage{listings}
-\usepackage{geometry}[margin=0.25in]
-\usetikzlibrary{calc}
-\DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,commandchars=\\\{\}}
-\lstset{
-  basicstyle=\small\ttfamily,
-  breaklines=true,
-  frame=single,
-  numbers=left,
-  numberstyle=\tiny\color{gray},
-  captionpos=b,
-  language=R
-}
+%\usepackage{natbib}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{float}
+
+%\usepackage[minnames=1,maxnames=2,maxbibnames = 3, style=authoryear, bibstyle = authoryear, backend=bibtex, giveninits=true, block = none, isbn = false, url = false, doi = false, eprint = false]{biblatex}
 \makeatletter
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
 \AtBeginDocument{%
@@ -231,8 +184,10 @@
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \urlstyle{same}
 \hypersetup{
-  pdftitle={Bayesian Analysis of Event Frequency: Assignment 1},
+  pdftitle={Large-Angle Statistics of the CMB Angular Correlation Function: Testing \textbackslash LambdaCDM at Low Multipoles},
   pdfauthor={Álvaro Méndez Rodríguez de Tembleque},
+  pdfkeywords={cosmic microwave background, angular correlation
+function, large-angle anomalies, Planck, \(\Lambda\)CDM},
   colorlinks=true,
   linkcolor={blue},
   filecolor={Maroon},
@@ -245,787 +200,618 @@
 \begin{document}
 
 \begin{frontmatter}
-\title{Bayesian Analysis of Event Frequency: Assignment 1}
+\title{Large-Angle Statistics of the CMB Angular Correlation Function:
+Testing \(\Lambda\)CDM at Low Multipoles}
 \author[1]{Álvaro Méndez Rodríguez de Tembleque%
 %
 }
  \ead{alvaro.mendezrodriguezdetembleque@studenti.unipd.it} 
 
-\affiliation[1]{organization={Universita degli Studi di
-Padova},addressline={Department of physics and astronomy ``Galileo
-Galilei''},city={City},postcode={12345},postcodesep={}}
+\affiliation[1]{organization={Università degli Studi di
+Padova, Department of Physics and Astronomy ``Galileo
+Galilei''},,postcodesep={}}
 
 \cortext[cor1]{Corresponding author}
 
         
 \begin{abstract}
-In this article, we explore the mathematical and physical framework for
-analyzing the Cosmic Microwave Background (CMB) angular correlation
-function. We demonstrate how this function and its derived statistics
-can be used to test the standard \(\Lambda\)CDM cosmological model,
-potentially revealing new tensions, particularly concerning the
-assumption of a flat geometry.
+We investigate the statistical properties of the cosmic microwave
+background (CMB) angular correlation function at large angular scales
+(\(\ell \leq 30\)) using Planck legacy data. Three complementary
+statistics are studied: the integrated squared correlation \(S_a^b\),
+the interval-averaged correlation \(\langle\xi\rangle_a^b\), and the
+antipodal correlation \(C_{180}\). Theoretical distributions are
+generated via two independent methods --- sampling from the MCMC
+posterior of the standard flat \(\Lambda\)CDM model fitted with the
+CamSpec high-multipole TT likelihood, and Monte Carlo realizations
+around the best-fit spectrum --- allowing a direct comparison of the two
+approaches. We report the empirical p-values for each statistic and
+discuss the apparent sensitivity of the inferred tensions to the choice
+of theoretical ensemble.
 \end{abstract}
 
 
 
 
 
+\begin{keyword}
+    cosmic microwave background \sep angular correlation
+function \sep large-angle anomalies \sep Planck \sep 
+    \(\Lambda\)CDM
+\end{keyword}
 \end{frontmatter}
     
 
-\section{Introduction}\label{introduction}
+\section{Introduction}\label{sec-intro}
 
-The goal of this text is to explain what I have done in order to make
-sure the statistical comparisons presented below are reproducible,
-robust and clearly traceable to the data and code used. This manuscript
-documents the computational pipeline, the choices made for data
-processing, and the statistical tests performed to assess the
-consistency between observed Planck multipoles and theoretical
-expectations.
+The cosmic microwave background (CMB) provides our cleanest window onto
+the primordial universe. On the largest angular scales --- corresponding
+to multipoles \(\ell \lesssim 30\) --- the temperature anisotropy
+pattern carries direct information about the very largest coherent
+structures in the observable universe. The standard \(\Lambda\)CDM model
+predicts that the fluctuations should be a nearly Gaussian,
+statistically isotropic random field fully characterized by the angular
+power spectrum \(C_\ell\).
 
-The work aims to (1) describe the correlation-function based statistics
-used to probe large-angle anomalies in the cosmic microwave background
-(CMB), (2) present a reproducible implementation using CAMB, Monte Carlo
-realizations and Planck-style simulations, and (3) provide clear
-instructions so readers can reproduce and extend the results using the
-code in the repository. The emphasis is on transparency: every derived
-number can be traced to an input file or to a well-documented routine in
-the functions/ directory.
+Several anomalies have been reported at low multipoles since the
+first-year WMAP data release and confirmed in subsequent analyses of the
+Planck temperature maps \citep{cosmoplanck_2020}. Among the most
+discussed is the apparent lack of large-angle correlations: the
+two-point angular correlation function \(C(\theta)\) is observed to be
+anomalously small for \(\theta \gtrsim 60°\), a feature quantified by
+the statistic \(S_{1/2}\) \citep{Spergel_2003, Copi2013Lack}. While
+cosmic variance is large at these scales and makes rigorous significance
+assessment difficult, the tension with \(\Lambda\)CDM predictions
+deserves careful scrutiny.
 
-\subsection{Physics background and
-intuition}\label{physics-background-and-intuition}
+In this work we re-examine these statistics using Planck legacy chains
+and two complementary methods to construct the theoretical sampling
+distribution. We focus on three statistics defined over five angular
+intervals that partition the accessible range \([0°, 180°]\): the
+quadratic statistic \(S_a^b\), the linear statistic
+\(\langle\xi\rangle_a^b\), and the antipodal correlation \(C_{180}\). By
+comparing distributions generated from MCMC posterior samples to those
+obtained from Monte Carlo realizations around the best-fit spectrum, we
+probe the dependence of the inferred tensions on the choice of ensemble.
 
-This subsection provides the physical context and intuition behind the
-statistics used in the analysis so a reader unfamiliar with the
-implementation can understand why the chosen diagnostics are
-informative.
+The primary model considered throughout is the standard flat
+\(\Lambda\)CDM fit to the Planck temperature power spectrum using the
+CamSpec high-multipole TT likelihood combined with the low-\(\ell\)
+temperature and polarization likelihoods \citep{cosmoplanck_2020}.
+Results for the Plik-based likelihood and for models with free curvature
+\(\Omega_k\) are reported in the appendix.
 
-The cosmic microwave background (CMB) temperature field on the sphere is
-a realization of a random process that is to very good approximation
-statistically isotropic and (to leading order) Gaussian. Its statistical
-information is compactly encoded in the angular power spectrum
-\(C_{\ell}\), defined by the ensemble average of spherical-harmonic
-coefficients \(a_{\ell m}\):
-\(\langle a_{\ell m}a^{*}_{\ell' m'}\rangle = C_{\ell}\,\delta_{\ell\ell'}\,\delta_{mm'}\).
-In practice we work with the commonly used scaled quantity
-\(D_{\ell}=\ell(\ell+1)C_{\ell}/(2\pi)\) which emphasizes the
-contribution per logarithmic interval in multipole.
+\section{Statistics}\label{sec-stats}
 
-Large-angle anomalies are features visible at low multipoles
-(\(\ell\lesssim 30\)) where cosmic variance (the intrinsic sample
-variance because we observe only one sky) is large. A direct comparison
-of observed multipoles to theory must therefore account for the full
-sampling distribution of the estimated multipoles and derived
-quantities. This motivates the use of Monte Carlo and pipeline
-simulations that reproduce the estimator behaviour and the effects of
-masks, beams and noise.
+\subsection{Angular Power Spectrum and Correlation
+Function}\label{sec-corr}
 
-The two-point correlation function \(C(\theta)\) is the harmonic-space
-power spectrum transformed back to real (angular) space by a sum over
-Legendre polynomials. Because it is a sum over a wide range of \(\ell\),
-the correlation function is often more intuitive for discussing angular
-separations: features at large angles receive contributions from many
-low-\(\ell\) modes and are therefore sensitive to coherent deviations at
-the largest scales.
+The CMB temperature anisotropy \(\Delta T(\hat{n})/T_0\) is expanded in
+spherical harmonics with coefficients \(a_{\ell m}\). For a
+statistically isotropic Gaussian field the two-point statistics are
+fully encoded in the angular power spectrum
+\(C_\ell = \langle |a_{\ell m}|^2 \rangle\). We work with the
+conventional scaled spectrum \(D_\ell = \ell(\ell+1)C_\ell/(2\pi)\),
+which is approximately flat for a scale-invariant primordial spectrum.
 
-Two complementary statistics are emphasised in this work:
+The angular two-point correlation function is obtained by transforming
+back to real space via a Legendre expansion,
 
-\begin{itemize}
-\tightlist
-\item
-  The interval-averaged correlation \(\langle\xi\rangle_a^b\) is a
-  linear functional of \(C(\theta)\) that summarizes the mean
-  correlation within a chosen angular window. Being linear in the data,
-  it is directly sensitive to shifts in the mean correlation and is
-  relatively straightforward to propagate errors for.
-\item
-  The quadratic statistic \(S_a^b\) (including the classic \(S_{1/2}\)
-  choice) integrates the square of the correlation over an interval.
-  Because it is quadratic in the map (or in \(C(\theta)\)), it is
-  sensitive to the variance of correlations and can emphasize deviations
-  that are small in mean but large in dispersion across realizations.
-  The matrix \(T_{nm}\) that appears in the analytic expression encodes
-  the angular overlap of Legendre modes within the interval and must be
-  computed accurately for robust error estimates.
-\end{itemize}
+\[
+C(\theta) = \sum_\ell \frac{2\ell+1}{4\pi} C_\ell P_\ell(\cos\theta)
+\] \begin{equation}\phantomsection\label{eq-corr}{
+= \sum_\ell \frac{2\ell+1}{2\ell(\ell+1)} D_\ell P_\ell(\cos\theta),
+}\end{equation}
 
-An additional simple but useful diagnostic is \(C_{180}\), the antipodal
-correlation, which probes correlations between widely separated points
-and is comparatively insensitive to small-scale masking effects.
+where \(P_\ell\) are Legendre polynomials. The sum runs from
+\(\ell = 2\) to a chosen \(\ell_{\max} = 30\) throughout this work.
 
-Why two types of statistics? The linear \(\langle\xi\rangle\) is less
-affected by distributional skew or amplified tails and often provides a
-stable test for mean shifts, while the quadratic \(S\) statistic can
-highlight broader classes of departures from Gaussian predictions (for
-example excess variance or coherent real-space structure). Using both
-statistics in parallel gives a more complete picture of possible
-anomalies.
+\subsection{Interval Statistics}\label{sec-statistics}
 
-Role of simulations and modelling: to assess whether an observed
-statistic is anomalous one must know its sampling distribution under the
-null hypothesis (usually the standard cosmological model). There are
-three practical ways to generate such distributions in the code:
+We study three statistics on each of the angular intervals listed in
+Table\textasciitilde{}\ref{tbl-intervals}.
 
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  Per-\(\ell\) Gaussian sampling (fast): draw independent Gaussian
-  perturbations of each reported \(D_{\ell}\) using reported
-  per-\(\ell\) errors and compute derived statistics. This approach is
-  useful for quick checks but neglects estimator covariance introduced
-  by masking and beam corrections.
-\item
-  Planck-style forward pipeline (realistic): generate full-sky
-  realizations from a theoretical \(C_{\ell}\), apply beam and pixel
-  windows, add noise, and run the same estimator as used on the real
-  data. This reproduces measurement biases and mode coupling induced by
-  the mask and is therefore the preferred route when available.
-\item
-  MCMC ensembles (theory sampling): when posterior samples of
-  cosmological parameters are available (Planck chains), converting each
-  posterior sample to a CAMB spectrum and then to \(D_{\ell}\) produces
-  an ensemble that captures theoretical uncertainty propagated from
-  parameter estimation.
-\end{enumerate}
+\textbf{Antipodal correlation} \(C_{180} \equiv C(\theta = 180°)\) is
+the correlation between antipodal points on the sky and is relatively
+insensitive to small-scale masking effects.
 
-Practical interpretation and caveats: p-values reported in this work are
-empirical: for each statistic we compare the observed value to the
-distribution derived from the chosen ensemble and report the fraction of
-simulations as extreme (two-sided) as the observation. Important caveats
-include the ``look-elsewhere'' effect (multiple, correlated statistics
-increase the chance of finding at least one low p-value by chance) and
-the strong influence of cosmic variance at low \(\ell\). Therefore an
-anomalously low p-value should be interpreted as a prompt for further
-investigation rather than definitive evidence for new physics.
+\textbf{Interval-averaged correlation} \(\langle\xi\rangle_a^b\) is the
+mean of \(C(\theta)\) over an angular interval \([\theta_a, \theta_b]\),
+equivalently expressed in terms of \(\mu = \cos\theta\) as
 
-This subsection aims to equip a reader with the conceptual understanding
-needed to follow the code mapping: the next section (Methodology)
-documents how these statistics are implemented and where to find the
-corresponding routines in the repository.
+\[
+\langle\xi\rangle_a^b
+= \frac{1}{b - a}\int_a^b C(\theta)\,d\mu
+\] \begin{equation}\phantomsection\label{eq-xiv}{
+= \sum_\ell \frac{D_\ell}{2\ell(\ell+1)}\,
+  \frac{P_{\ell+1}(b) - P_{\ell-1}(b) - P_{\ell+1}(a) + P_{\ell-1}(a)}{b - a},
+}\end{equation}
 
-\section{Methodology}\label{methodology}
+where \(a = \cos\theta_b\) and \(b = \cos\theta_a\). Being linear in
+\(D_\ell\), this statistic is sensitive to shifts in the mean
+correlation level.
 
-This section describes the data sources, the numerical implementation,
-and the exact sequence of processing steps required to reproduce the
-reported results. The repository contains a set of scripts and a
-directory structure (for example \texttt{run\_\{lmax\}\_\{n\}}) that
-collect simulation outputs, theory chains and auxiliary files; the
-Methods below explain which files are produced and how they are used by
-the plotting and analysis routines.
+\textbf{Integrated squared correlation} \(S_a^b\) is defined as
 
-We emphasize two practical points that improve reproducibility for users
-of this repository:
+\begin{equation}\phantomsection\label{eq-s12}{
+S_a^b = \int_a^b C^2(\theta)\,\sin\theta\,d\theta
+= \sum_{n,m} A_n A_m D_n D_m\, T_{nm},
+}\end{equation}
 
-\begin{itemize}
-\tightlist
-\item
-  All Monte Carlo and chain outputs are saved as human-readable or
-  standard binary arrays (e.g.~.npy, .txt) in the run directory; when
-  present the plotting functions will read these files rather than any
-  intermediary pickle files.
-\item
-  A boolean flag (use\_recomputed\_statistics) is provided to instruct
-  the plotting utilities to use statistics recomputed from a replacement
-  D\_ell file (the recomputed files live under
-  run\_dir/recomputed\_statistics). By default this flag is false,
-  matching the principle that analysis should reproduce published
-  results unless a replacement dataset is intentionally provided.
-\end{itemize}
+where \(A_\ell = (2\ell+1)/[2\ell(\ell+1)]\) and \(T_{nm}\) are overlap
+integrals of Legendre polynomials over the interval. The classic
+\(S_{1/2}\) statistic corresponds to the interval \([60°, 180°]\)
+\citep{Spergel_2003}. Being quadratic in \(D_\ell\), this statistic
+amplifies deviations that are coherent across multipoles.
 
-The remainder of this subsection provides details about the specific
-statistics and the files produced by each stage.
+\begin{table}
 
-\subsection{Functions and statistics}\label{functions-and-statistics}
+\caption{\label{tbl-intervals}Angular intervals used for $S_a^b$ and $\langle\xi\rangle_a^b$.}
 
-The analysis relies on three related observables computed from a power
-spectrum \(D_{\ell}\) (equivalently \(C_{\ell}\)):
+\centering{
+
+\centering
+
+
+\begin{tabular}{lll}
+\toprule
+Angular range & Description & $[\cos\theta_b,\;\cos\theta_a]$ \\
+\midrule
+$[0°,\;30°]$   & Small angles      & $[0.865,\ 1.000]$  \\
+$[30°,\;92°]$  & Intermediate      & $[-0.039,\ 0.865]$ \\
+$[92°,\;154°]$ & Large angles      & $[-0.901,\ -0.039]$\\
+$[154°,\;180°]$& Near-antipodal    & $[-1.000,\ -0.901]$\\
+$[60°,\;180°]$ & Classic $S_{1/2}$ & $[-1.000,\ 0.500]$ \\
+\bottomrule
+\end{tabular}
+
+}
+
+\end{table}%
+
+\section{Data}\label{sec-data}
+
+\subsection{Planck Posterior Chains}\label{sec-planck}
+
+We use the publicly available Planck 2018 MCMC chains from the Planck
+Legacy Archive\footnote{\url{https://pla.esac.esa.int/}}. The primary
+dataset is the CamSpec high-multipole TT likelihood combined with the
+low-\(\ell\) temperature and polarization likelihoods
+(\texttt{base\_CamSpecHM\_TT\_lowl\_lowE}). This provides posterior
+samples of the six standard \(\Lambda\)CDM parameters
+\(\{\Omega_b h^2,\,\Omega_c h^2,\,H_0,\,\tau,\,n_s,\,A_s\}\) along with
+a suite of derived quantities. The Plik-based TT likelihood and two
+curvature-extended runs are considered in
+Appendix\textasciitilde{}\ref{sec-appendix-tables}.
+
+For each posterior sample the theoretical power spectrum \(D_\ell\) is
+computed with CAMB \citep{CAMB_GitHub}, and the corresponding
+\(C(\theta)\) and derived statistics are evaluated analytically using
+equations \ref{eq-corr}--\ref{eq-s12}.
+
+\subsection{Observed Planck Multipoles}\label{sec-obs}
+
+The experimental values of each statistic are computed from the Planck
+2018 Commander temperature map and associated beam and pixel window
+functions, using the same multipole range \(\ell \in [2, 30]\). These
+observed values serve as the reference against which the theoretical
+distributions are compared.
+
+P-values are defined empirically: the fraction of Monte Carlo or
+MCMC-derived realizations whose statistic is at least as extreme (in
+absolute deviation from the median) as the observed value. The multiple
+statistics studied here are correlated, so individual p-values should
+not be combined naively.
+
+\subsection{Ensemble Construction}\label{sec-ensemble}
+
+Two independent strategies are used to construct the theoretical
+sampling distribution:
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
-\tightlist
 \item
-  The two-point correlation function \(C(\theta)\), which probes
-  temperature correlations as a function of angular separation.
+  \textbf{MCMC ensemble.} The last 1000 samples from the Planck
+  posterior chain are converted to CAMB spectra, where one realization
+  is generated for each sample. The resulting set of 1000 theoretical
+  \(D_\ell\) vectors spans the parameter uncertainty and constitutes a
+  Bayesian predictive distribution for each statistic. In this approach
+  we directly propagate the full posterior uncertainty through to the
+  derived statistics, and we also take in to account the cosmic variance
+  for each sample
 \item
-  The interval-averaged correlation statistic \(\langle\xi\rangle_a^b\),
-  a linear functional of \(C(\theta)\) that summarizes the mean
-  correlation within an angular interval \([\theta_a,\theta_b]\)
-  (expressed below in terms of \(a=\cos\theta_b\), \(b=\cos\theta_a\)
-  for convenience).
-\item
-  The integrated squared-correlation \(S_a^b\) (originally \(S_{1/2}\)
-  when \(a=\cos(60^\circ)\) and \(b=\cos(180^\circ)\)), which emphasizes
-  power on a given angular range and is quadratic in the spectrum.
+  \textbf{Best-fit ensemble.} The single best-fit parameter vector is
+  used to compute \(D_\ell^{bf}\). An ensemble of 1000 realizations is
+  then obtained by drawing independent samples of each \(a_{\ell m}\)
+  from the chi-squared distribution dictated by \(C_\ell^{bf}\) and
+  reconstructing \(D_\ell\) from those coefficients. This approach
+  captures cosmic-variance scatter around the best-fit spectrum while
+  fixing the cosmological parameters.
 \end{enumerate}
 
-Below we summarise each quantity and state how it is computed and stored
-in the repository outputs.
-
-\textbf{Correlation function.} The correlation function is defined as
-
-\[C(\theta)=\sum_{\ell}\frac{2\ell+1}{2\ell(\ell+1)}D_{\ell}P_{\ell}(\cos\theta)\]
-
-where \(D_{\ell}=\ell(\ell+1)C_{\ell}/(2\pi)\) in the conventions used
-here. In practice the summation runs from \(\ell=2\) to a configured
-\(\ell_{\max}\) (the code parameter \texttt{lmax}). The implementation
-used to compute \(C(\theta)\) is provided in Appendix A, Listing 1; the
-function supports both direct use of a CAMB-produced theoretical
-spectrum and Monte Carlo realizations produced by the Planck-style
-pipeline.
-
-Computed outputs and storage:
-
-\begin{itemize}
-\tightlist
-\item
-  Per-realization correlation arrays are saved as \texttt{Corr.npy} in
-  the simulation or model directory.
-\item
-  The mean correlation used for plotting and comparison is written as
-  the mean across realizations and also exposed via the plotting helpers
-  (see functions/plots.py).
-\end{itemize}
-
-\textbf{Interval-averaged correlation \(\langle\xi\rangle_a^b\).} The
-interval average is defined by
-
-\[\langle\xi\rangle_a^b = \frac{\int_a^b C(\theta) \, d\cos\theta}{b-a} = \sum_{\ell} \frac{D_{\ell}}{2\ell(\ell+1)}\frac{1}{b-a}\left[P_{\ell+1}(\cos\theta)-P_{\ell-1}(\cos\theta)\right]_{a}^{b}\]
-
-This is implemented in the repository (see Appendix A, Listing 2) and
-the per-realization values are saved as columns in
-\texttt{xiv\_statistic.txt} (with a corresponding \texttt{columns.txt}
-describing the order).
-
-\textbf{\(C_{180}\) and \(S_a^b\).} The \(C_{180}\) statistic is simply
-\(C(180^{\circ})\), i.e.~the antipodal correlation; it is robust to
-certain mask effects because it samples the largest angular separation.
-The quadratic statistic is defined as
-
-\[S_a^b = \int_a^b C(\theta)^2\sin\theta\, d\theta = \sum_{n,m} A_{n}A_{m} D_n D_m\, T_{nm}\]
-
-where \(T_{nm}\) are overlap integrals of Legendre polynomials over the
-interval. The code computes the \(T_{nm}\) matrix analytically (see
-Appendix A, Listing 3) and writes per-realization \(S\) values to
-\texttt{S\_statistics.txt} and a separate file
-\texttt{C180\_statistics.txt} for the antipodal values.
-
-Implementation notes:
-
-\begin{itemize}
-\tightlist
-\item
-  The code carefully handles edge cases where single-realization outputs
-  reduce to 1D arrays and ensures consistent column ordering via
-  \texttt{columns.txt} files.
-\item
-  All text outputs accompanying a run are plain ASCII tables
-  (\texttt{.txt}) so they can be reloaded by other tools without
-  requiring the Python source.
-\end{itemize}
-
-\subsection{Experimental values}\label{experimental-values}
-
-The experimental inputs used throughout the analysis are taken from the
-Planck legacy archive and the associated likelihood releases compiled by
-the Planck Collaboration. Concretely, the quantities used are the binned
-and deconvolved temperature multipoles \(D_{\ell}\) (or equivalently
-\(C_{\ell}\)) and their reported uncertainties. When reproducing these
-results the following practical choices were applied:
-
-\begin{itemize}
-\tightlist
-\item
-  \textbf{Source and versioning:} the specific Planck chains and central
-  best-fit products are documented in the repository's
-  \texttt{README.md} and were downloaded from the Planck Legacy Archive.
-  Users should verify the exact file timestamps if precise bitwise
-  reproducibility is required.
-\item
-  \textbf{Multipole selection:} for large-angle statistics the low
-  multipoles (\(\ell\lesssim 30\)) carry most of the signal; however the
-  pipeline accepts any configured \(\ell_{\max}\) and the scripts record
-  the value used in the run directory.
-\item
-  \textbf{Uncertainties and mask treatment:} the Planck collaboration
-  provides covariance or per-\(\ell\) error estimates depending on the
-  data product. In this work we treat reported multipole errors as
-  Gaussian 1\(\sigma\) uncertainties when generating naive per-\(\ell\)
-  Monte Carlo samples (see Appendix A). For more realistic simulations
-  the Planck-style pipeline (\texttt{functions/simulation.py})
-  propagates mask, beam and noise effects explicitly when
-  \texttt{run\_pipeline=True}.
-\item
-  \textbf{Reproducible ingest:} the function
-  \texttt{Data\_loader.experimental\_values(...)} in the codebase
-  centralizes the parsing of experimental inputs and returns a
-  dictionary of named statistics (e.g.~\texttt{s12\_60\_180} or
-  \texttt{xiv\_...}) that the plotting routines use. This ensures
-  consistent ordering and naming between experimental and simulated
-  columns.
-\end{itemize}
-
-\subsection{Theory and simulations}\label{theory-and-simulations}
-
-\subsubsection{Theory}\label{theory}
-
-Theoretical predictions are generated with CAMB. The code calls CAMB
-with a vector of cosmological parameters sampled either from a best-fit
-vector or from an MCMC chain, then extracts the temperature power
-spectrum and converts it to the \(D_{\ell}\) convention used throughout
-the repository. The CAMB calls are implemented in
-\texttt{functions/cosmo.py} (see Listing 1).
-
-Parameters: the full set of sampled parameters is listed below and
-matches the labels used in the Planck chains. When a chain is available
-the code reads the last \(N\) samples (by default 1000) to form an
-ensemble of theoretical spectra; when only a best-fit entry is used the
-code instead samples per-\(\ell\) Monte Carlo realizations around the
-reported \(D_{\ell}\) (see below).
-
-\begin{itemize}
-\tightlist
-\item
-  \texttt{ombh2}, \texttt{omch2}, \texttt{H0}, \texttt{omk},
-  \texttt{YHe}, \texttt{nnu}, \texttt{nrun}, \texttt{Alens},
-  \texttt{ns}, \texttt{As}, \texttt{w}, \texttt{wa}, \texttt{mnu},
-  \texttt{tau}
-\end{itemize}
-
-\subsubsection{Simulation pipelines}\label{simulation-pipelines}
-
-Two complementary strategies are provided to obtain ensembles of
-\(D_{\ell}\) and derived correlation statistics:
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  \textbf{Per-\(\ell\) Monte Carlo (fast, approximate).} Starting from a
-  vector of reported multipoles and their 1\(\sigma\) errors, the code
-  draws independent Gaussian realizations for each \(\ell\) (or uses the
-  per-\(\ell\) sampling that simulates the underlying \(a_{\ell m}\)
-  modes when available). This method is computationally cheap and useful
-  to estimate sampling distributions under the simplifying assumption of
-  independent multipoles; its implementation appears in Listing 2 and
-  the results are written to \texttt{simulation/D\_ell.npy},
-  \texttt{simulation/Corr.npy}, and the scalar statistic files
-  (\texttt{S\_statistics.txt}, \texttt{xiv\_statistic.txt},
-  \texttt{C180\_statistics.txt}) together with \texttt{columns.txt}.
-\item
-  \textbf{Planck-style pipeline (detailed, realistic).} The code can
-  instead run a Planck-like simulation that generates full-sky
-  realizations of the CMB given a theoretical \(C_{\ell}\), applies the
-  instrumental beam and pixel window, adds a noise model, and estimates
-  \(D_{\ell}\) from the simulated sky maps using the same estimator as
-  in the Planck pipeline. This yields realistic covariance between
-  multipoles induced by masking, beam convolution and noise. The
-  parallel implementation is available in
-  \texttt{functions/simulation.py} (Listing 3) and stores outputs in the
-  same directory structure as above for downstream analysis.
-\end{enumerate}
-
-\textbf{MCMC-based ensembles.} When a parameter chain (getdist or plain
-text chains) is available the script \texttt{chain\_results(...)} (in
-\texttt{functions/cosmo.py}) fetches the requested final segments of the
-chain, converts each sample to CAMB cosmological parameters, computes
-the theoretical spectrum and correlation for each sample, and stores the
-per-sample arrays under
-\texttt{theory/\textless{}model\textgreater{}/D\_ell.npy} and
-\texttt{theory/\textless{}model\textgreater{}/Corr.npy}. The
-corresponding scalar statistics for each sample are written to
-\texttt{theory/\textless{}model\textgreater{}/S\_statistics.txt},
-\texttt{xiv\_statistic.txt} and \texttt{C180\_statistics.txt} and a
-\texttt{columns.txt} file is included to guarantee consistent ordering.
-
-\textbf{Run directory layout and bookkeeping.} Each analysis run is
-organized under a directory named \texttt{run\_\{lmax\}\_\{n\}} where
-the simulation outputs and theory models are stored in the subfolders
-\texttt{simulation/} and
-\texttt{theory/\textless{}model\textgreater{}/}. When the optional
-recompute step (see \texttt{recompute\_statistics} in \texttt{main.py})
-is invoked it writes replacement statistic files to
-\texttt{run\_.../recomputed\_statistics/}; the plotting utilities expose
-a flag \texttt{use\_recomputed\_statistics} that directs them to read
-these recomputed files if desired. This separation keeps original run
-outputs intact while allowing straightforward replacement for dedicated
-tests.
-
-\textbf{Outputs and reproducibility notes.}
-
-\begin{itemize}
-\tightlist
-\item
-  All numeric arrays are saved as \texttt{.npy} where possible (fast
-  binary reload) and scalar tables as ASCII \texttt{.txt} to ease
-  inspection.
-\item
-  The repository scripts record key metadata (\texttt{lmax}, number of
-  realizations, random seeds when used) inside the run folder so
-  reported figures can be traced back to the exact inputs.
-\end{itemize}
-
-Following the generation of theoretical and simulated ensembles, the
-pipeline computes the statistics described above for every realization
-and uses those distributions to assign empirical p-values when comparing
-to the experimental measurements.
-
-\section{Results}\label{results}
-
-Below is a brief description of the cosmological models analysed in the
-figures that follow. The \texttt{base\_plikHM\_TT} and
-\texttt{base\_CamSpecHM\_TT} entries are the standard six-parameter
-\(\Lambda\)CDM fits using the Plik and CamSpec high-multipole TT
-likelihoods respectively, while the \texttt{base\_omegak\_*} variants
-additionally allow spatial curvature (\(\Omega_k\)) to vary. Panels
-labelled ``best-fit'' use a single best-fit theoretical spectrum with
-per-\(\ell\) Gaussian Monte Carlo realizations; panels labelled ``MCMC''
-show ensembles generated from posterior samples.
-
-\subsection{MCMC sampling results}\label{mcmc-sampling-results}
-
-This subsection presents the empirical distributions obtained from the
-MCMC-based ensemble. Figures below show histograms of the simulated
-statistics (simulation-derived distributions) together with the
-experimental value (vertical marker). The images were produced by the
-repository plotting utilities and saved under the example run directory
-\texttt{run\_30\_100/images/histograms}.
-
-Notably, when the ensemble is constructed from the best 1000 MCMC
-posterior samples the observed experimental statistics tend to lie in
-the tails of the MCMC-derived distributions, indicating that the data is
-not well described by that sampled-theory ensemble. In contrast, using
-the single best-fit spectrum and generating per-ell Monte Carlo
-realizations around that best-fit produces empirical distributions that
-are consistent with theoretical expectations: the observed statistics
-fall within the simulated distributions. This distinction suggests the
-apparent tension depends on the choice of ensemble (MCMC sampling versus
-best-fit Monte Carlo) rather than signaling an outright breakdown of the
-underlying theoretical model; possible origins and caveats are discussed
-below.
-
-\subsubsection{Model: base\_plikHM\_TT}\label{model-base_plikhm_tt}
-
-MCMC-derived histograms for model \texttt{base\_plikHM\_TT} (from
-\texttt{run\_30\_100}).
-
-\subsubsection{Model:
-base\_CamSpecHM\_TT}\label{model-base_camspechm_tt}
-
-MCMC-derived histograms for model \texttt{base\_CamSpecHM\_TT} (from
-\texttt{run\_30\_100}).
-
-\subsubsection{Model:
-base\_omegak\_CamSpecHM\_TT}\label{model-base_omegak_camspechm_tt}
-
-MCMC-derived histograms for model \texttt{base\_omegak\_CamSpecHM\_TT}
-(from \texttt{run\_30\_100}).
-
-\subsubsection{Model:
-base\_omegak\_plikHM\_TTTEEE}\label{model-base_omegak_plikhm_ttteee}
-
-MCMC-derived histograms for model \texttt{base\_omegak\_plikHM\_TTTEEE}
-(from \texttt{run\_30\_100}).
-
-\subsection{Best-fit (per-ell) results}\label{best-fit-per-ell-results}
-
-The panels below show the histograms obtained using the best-fit power
-spectrum and per-\(\ell\) Monte Carlo realizations (the ``best-fit''
-mode). These images are stored under
-\texttt{run\_30\_10001/images/histograms} and demonstrate the
-alternative (fast) sampling approach where per-\(\ell\) Gaussian draws
-are used instead of full pipeline realizations.
-
-\subsubsection{Model: base\_plikHM\_TT
-(best-fit)}\label{model-base_plikhm_tt-best-fit}
-
-Best-fit per-\(\ell\) histograms for model \texttt{base\_plikHM\_TT}
-(from \texttt{run\_30\_10001}).
-
-\subsubsection{Model: base\_CamSpecHM\_TT
-(best-fit)}\label{model-base_camspechm_tt-best-fit}
-
-Best-fit per-\(\ell\) histograms for model \texttt{base\_CamSpecHM\_TT}
-(from \texttt{run\_30\_10001}).
-
-\subsubsection{Model: base\_omegak\_CamSpecHM\_TT
-(best-fit)}\label{model-base_omegak_camspechm_tt-best-fit}
-
-Best-fit per-\(\ell\) histograms for model
-\texttt{base\_omegak\_CamSpecHM\_TT} (from \texttt{run\_30\_10001}).
-
-\subsubsection{Model: base\_omegak\_plikHM\_TTTEEE
-(best-fit)}\label{model-base_omegak_plikhm_ttteee-best-fit}
-
-Best-fit per-\(\ell\) histograms for model
-\texttt{base\_omegak\_plikHM\_TTTEEE} (from \texttt{run\_30\_10001}).
-
-\section{Appendix A: Code and
-implementation}\label{appendix-a-code-and-implementation}
-
-Below are important implementation excerpts used in this work. Full
-source code and additional helper functions are available in the
-\texttt{functions/} directory. These snippets illustrate the generation
-of Monte Carlo realizations, the computation of CAMB spectra and
-correlations, and the Planck-style simulation pipeline used to produce
-observed-like \(D_l\) realizations.
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{\#| label: lst{-}genDl\_cosmo}
-\CommentTok{\#| caption: "Generation of per{-}ell D\_l realizations (functions/cosmo.py)"}
-
-\KeywordTok{def}\NormalTok{ generate\_Dl\_realizations(row, n):}
-    \CommentTok{"""}
-\CommentTok{    Generate n realizations for a given row. If the provided D\_ell is an array (full spectrum)}
-\CommentTok{    use the parallel planck{-}style pipeline, otherwise fall back to the original per{-}ell sampling.}
-\CommentTok{    """}
-\NormalTok{    D\_ell }\OperatorTok{=}\NormalTok{ row[}\StringTok{\textquotesingle{}L\textquotesingle{}}\NormalTok{]}
-
-    \CommentTok{\# === original per{-}ell Monte Carlo sampling (fallback) ===}
-\NormalTok{    ell }\OperatorTok{=} \BuiltInTok{int}\NormalTok{(row[}\StringTok{\textquotesingle{}\#\textquotesingle{}}\NormalTok{])}
-\NormalTok{    D\_ell\_scalar }\OperatorTok{=} \BuiltInTok{float}\NormalTok{(D\_ell)}
-
-\NormalTok{    F }\OperatorTok{=}\NormalTok{ ell }\OperatorTok{*}\NormalTok{ (ell }\OperatorTok{+} \DecValTok{1}\NormalTok{) }\OperatorTok{/}\NormalTok{ (}\DecValTok{2} \OperatorTok{*}\NormalTok{ np.pi)}
-\NormalTok{    C\_ell }\OperatorTok{=}\NormalTok{ D\_ell\_scalar }\OperatorTok{/}\NormalTok{ F      }\CommentTok{\# convert back to C\_ell}
-
-    \CommentTok{\# Protect against negative or NaN C\_ell which would make the variance invalid for sampling}
-\NormalTok{    safe\_C }\OperatorTok{=}\NormalTok{ C\_ell }\ControlFlowTok{if}\NormalTok{ (np.isfinite(C\_ell) }\KeywordTok{and}\NormalTok{ C\_ell }\OperatorTok{\textgreater{}} \FloatTok{0.0}\NormalTok{) }\ControlFlowTok{else} \FloatTok{0.0}
-
-\NormalTok{    results }\OperatorTok{=}\NormalTok{ []}
-
-    \ControlFlowTok{for}\NormalTok{ \_ }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(n):}
-        \CommentTok{\# Storage for a\_lm from m={-}ell..+ell}
-\NormalTok{        a\_lm }\OperatorTok{=}\NormalTok{ np.zeros(}\DecValTok{2}\OperatorTok{*}\NormalTok{ell}\OperatorTok{+}\DecValTok{1}\NormalTok{, dtype}\OperatorTok{=}\NormalTok{np.complex128)}
-
-        \CommentTok{\# m = 0 → purely real Gaussian}
-\NormalTok{        a\_lm[ell] }\OperatorTok{=}\NormalTok{ np.random.normal(}\DecValTok{0}\NormalTok{, np.sqrt(safe\_C))}
-
-        \CommentTok{\# m \textgreater{} 0}
-        \ControlFlowTok{for}\NormalTok{ m }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(}\DecValTok{1}\NormalTok{, ell}\OperatorTok{+}\DecValTok{1}\NormalTok{):}
-\NormalTok{            re }\OperatorTok{=}\NormalTok{ np.random.normal(}\DecValTok{0}\NormalTok{, np.sqrt(safe\_C}\OperatorTok{/}\DecValTok{2}\NormalTok{))}
-\NormalTok{            im }\OperatorTok{=}\NormalTok{ np.random.normal(}\DecValTok{0}\NormalTok{, np.sqrt(safe\_C}\OperatorTok{/}\DecValTok{2}\NormalTok{))}
-\NormalTok{            a\_lm[ell }\OperatorTok{+}\NormalTok{ m] }\OperatorTok{=}\NormalTok{ re }\OperatorTok{+} \OtherTok{1j}\OperatorTok{*}\NormalTok{im}
-
-            \CommentTok{\# m \textless{} 0 via symmetry}
-\NormalTok{            a\_lm[ell }\OperatorTok{{-}}\NormalTok{ m] }\OperatorTok{=}\NormalTok{ (}\OperatorTok{{-}}\DecValTok{1}\NormalTok{)}\OperatorTok{**}\NormalTok{m }\OperatorTok{*}\NormalTok{ np.conj(a\_lm[ell }\OperatorTok{+}\NormalTok{ m])}
-
-        \CommentTok{\# Compute C\_ell estimator}
-\NormalTok{        Cl\_hat }\OperatorTok{=}\NormalTok{ np.}\BuiltInTok{sum}\NormalTok{(np.}\BuiltInTok{abs}\NormalTok{(a\_lm)}\OperatorTok{**}\DecValTok{2}\NormalTok{) }\OperatorTok{/}\NormalTok{ (}\DecValTok{2}\OperatorTok{*}\NormalTok{ell }\OperatorTok{+} \DecValTok{1}\NormalTok{)}
-
-        \CommentTok{\# Convert to D\_ell}
-\NormalTok{        Dl\_hat }\OperatorTok{=}\NormalTok{ F }\OperatorTok{*}\NormalTok{ Cl\_hat}
-
-\NormalTok{        results.append(Dl\_hat)}
-
-    \ControlFlowTok{return}\NormalTok{ results}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{\#| label: lst{-}compute\_cl\_cor\_pl}
-\CommentTok{\#| caption: "Computing CAMB D\_l and correlation (functions/cosmo.py)"}
-
-\KeywordTok{def}\NormalTok{ compute\_cl\_cor\_pl(parss, lmax, xvals, run\_pipeline}\OperatorTok{=}\VariableTok{False}\NormalTok{,}
-\NormalTok{                      nside\_in}\OperatorTok{=}\DecValTok{2048}\NormalTok{, fwhm\_in\_arcmin}\OperatorTok{=}\FloatTok{40.0}\NormalTok{, noise\_Cl}\OperatorTok{=}\VariableTok{None}\NormalTok{,}
-\NormalTok{                      mask}\OperatorTok{=}\VariableTok{None}\NormalTok{, num\_workers}\OperatorTok{=}\DecValTok{1}\NormalTok{):}
-    \ControlFlowTok{try}\NormalTok{:}
-\NormalTok{        pars }\OperatorTok{=}\NormalTok{ camb.set\_params(ombh2}\OperatorTok{=}\NormalTok{parss[}\StringTok{\textquotesingle{}omegabh2\textquotesingle{}}\NormalTok{], omch2}\OperatorTok{=}\NormalTok{parss[}\StringTok{\textquotesingle{}omegach2\textquotesingle{}}\NormalTok{], H0}\OperatorTok{=}\NormalTok{parss[}\StringTok{\textquotesingle{}H0\textquotesingle{}}\NormalTok{], omk}\OperatorTok{=}\NormalTok{parss[}\StringTok{\textquotesingle{}omegak\textquotesingle{}}\NormalTok{],}
-\NormalTok{                               YHe}\OperatorTok{=}\NormalTok{parss[}\StringTok{\textquotesingle{}yheused\textquotesingle{}}\NormalTok{], nnu}\OperatorTok{=}\NormalTok{parss[}\StringTok{\textquotesingle{}nnu\textquotesingle{}}\NormalTok{], nrun}\OperatorTok{=}\NormalTok{parss[}\StringTok{\textquotesingle{}nrun\textquotesingle{}}\NormalTok{], Alens}\OperatorTok{=}\NormalTok{parss[}\StringTok{\textquotesingle{}Alens\textquotesingle{}}\NormalTok{],}
-\NormalTok{                               ns}\OperatorTok{=}\NormalTok{parss[}\StringTok{\textquotesingle{}ns\textquotesingle{}}\NormalTok{], As}\OperatorTok{=}\NormalTok{np.exp(parss[}\StringTok{\textquotesingle{}logA\textquotesingle{}}\NormalTok{]) }\OperatorTok{*} \FloatTok{1e{-}10}\NormalTok{, w}\OperatorTok{=}\BuiltInTok{float}\NormalTok{(}\OperatorTok{{-}}\DecValTok{1}\NormalTok{), wa}\OperatorTok{=}\NormalTok{parss[}\StringTok{\textquotesingle{}wa\textquotesingle{}}\NormalTok{],}
-\NormalTok{                               mnu}\OperatorTok{=}\NormalTok{parss[}\StringTok{\textquotesingle{}mnu\textquotesingle{}}\NormalTok{], tau}\OperatorTok{=}\NormalTok{parss[}\StringTok{\textquotesingle{}tau\textquotesingle{}}\NormalTok{])}
-    \ControlFlowTok{except} \PreprocessorTok{TypeError} \ImportTok{as}\NormalTok{ e:}
-\NormalTok{        logger.exception(}\SpecialStringTok{f"TypeError in compute\_cl\_cor\_pl: }\SpecialCharTok{\{}\NormalTok{e}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
-        \ControlFlowTok{for}\NormalTok{ key, value }\KeywordTok{in}\NormalTok{ parss.items():}
-\NormalTok{            logger.debug(}\SpecialStringTok{f"  Parameter }\SpecialCharTok{\{}\NormalTok{key}\SpecialCharTok{\}}\SpecialStringTok{: }\SpecialCharTok{\{}\NormalTok{value}\SpecialCharTok{\}}\SpecialStringTok{ (type: }\SpecialCharTok{\{}\BuiltInTok{type}\NormalTok{(value)}\SpecialCharTok{\}}\SpecialStringTok{)"}\NormalTok{)}
-        \ControlFlowTok{raise}
-
-\NormalTok{    resu }\OperatorTok{=}\NormalTok{ camb.get\_results(pars)}
-\NormalTok{    cls }\OperatorTok{=}\NormalTok{ resu.get\_cmb\_power\_spectra(pars, CMB\_unit}\OperatorTok{=}\StringTok{\textquotesingle{}muK\textquotesingle{}}\NormalTok{, lmax}\OperatorTok{=}\NormalTok{lmax)}
-\NormalTok{    totCL }\OperatorTok{=}\NormalTok{ cls[}\StringTok{\textquotesingle{}total\textquotesingle{}}\NormalTok{]}
-
-    \CommentTok{\# theoretical D\_l from CAMB (starts at l=2)}
-\NormalTok{    TTCl\_theory }\OperatorTok{=}\NormalTok{ totCL[}\DecValTok{2}\NormalTok{:, }\DecValTok{0}\NormalTok{]}
-
-    \ControlFlowTok{if}\NormalTok{ run\_pipeline:}
-        \ControlFlowTok{try}\NormalTok{:}
-\NormalTok{            ell }\OperatorTok{=}\NormalTok{ np.arange(}\DecValTok{2}\NormalTok{, lmax }\OperatorTok{+} \DecValTok{1}\NormalTok{, dtype}\OperatorTok{=}\BuiltInTok{int}\NormalTok{)}
-\NormalTok{            df\_sim }\OperatorTok{=}\NormalTok{ planck\_style\_pipeline\_parallel(}
-\NormalTok{                ell}\OperatorTok{=}\NormalTok{ell,}
-\NormalTok{                D\_ell\_theory}\OperatorTok{=}\NormalTok{[TTCl\_theory],}
-\NormalTok{                nside\_in}\OperatorTok{=}\NormalTok{nside\_in,}
-\NormalTok{                fwhm\_in\_arcmin}\OperatorTok{=}\BuiltInTok{float}\NormalTok{(fwhm\_in\_arcmin),}
-\NormalTok{                noise\_Cl}\OperatorTok{=}\NormalTok{noise\_Cl,}
-\NormalTok{                mask}\OperatorTok{=}\NormalTok{mask,}
-\NormalTok{                estimate\_Cl}\OperatorTok{=}\VariableTok{True}\NormalTok{,}
-\NormalTok{                num\_workers}\OperatorTok{=}\NormalTok{num\_workers,}
-\NormalTok{            )}
-\NormalTok{            recovered\_D\_ell }\OperatorTok{=}\NormalTok{ np.asarray(df\_sim[}\StringTok{\textquotesingle{}D\_ell\_arr\textquotesingle{}}\NormalTok{].iloc[}\DecValTok{0}\NormalTok{])}
-        \ControlFlowTok{except} \PreprocessorTok{Exception} \ImportTok{as}\NormalTok{ e:}
-\NormalTok{            logger.exception(}\SpecialStringTok{f"Planck pipeline failed in compute\_cl\_cor\_pl, falling back to theory: }\SpecialCharTok{\{}\NormalTok{e}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
-\NormalTok{            recovered\_D\_ell }\OperatorTok{=}\NormalTok{ TTCl\_theory}
-    \ControlFlowTok{else}\NormalTok{:}
-\NormalTok{        recovered\_D\_ell }\OperatorTok{=}\NormalTok{ TTCl\_theory}
-
-    \CommentTok{\# convert 1D recovered D\_l (starts at l=2) to full cls array for camb.cl2corr}
-\NormalTok{    ncomp }\OperatorTok{=}\NormalTok{ totCL.shape[}\DecValTok{1}\NormalTok{]}
-\NormalTok{    full\_cl }\OperatorTok{=}\NormalTok{ np.zeros((lmax }\OperatorTok{+} \DecValTok{1}\NormalTok{, ncomp), dtype}\OperatorTok{=}\BuiltInTok{float}\NormalTok{)}
-\NormalTok{    ell\_idx }\OperatorTok{=}\NormalTok{ np.arange(}\DecValTok{2}\NormalTok{, lmax }\OperatorTok{+} \DecValTok{1}\NormalTok{, dtype}\OperatorTok{=}\BuiltInTok{int}\NormalTok{)}
-\NormalTok{    full\_cl[ell\_idx, }\DecValTok{0}\NormalTok{] }\OperatorTok{=}\NormalTok{ recovered\_D\_ell}
-
-\NormalTok{    totCorr\_rec }\OperatorTok{=}\NormalTok{ camb.correlations.cl2corr(full\_cl, xvals, lmax)}
-\NormalTok{    TTcor\_rec }\OperatorTok{=}\NormalTok{ totCorr\_rec[:, }\DecValTok{0}\NormalTok{]}
-
-    \ControlFlowTok{return}\NormalTok{ recovered\_D\_ell, TTcor\_rec, TTcor\_rec[}\OperatorTok{{-}}\DecValTok{1}\NormalTok{]}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{\#| label: lst{-}planck\_pipeline}
-\CommentTok{\#| caption: "Planck{-}style parallel simulation pipeline (functions/simulation.py)"}
-
-\KeywordTok{def}\NormalTok{ planck\_style\_pipeline\_parallel(}
-\NormalTok{    ell, D\_ell\_theory, nside\_in, fwhm\_in\_arcmin, noise\_Cl,}
-\NormalTok{    mask}\OperatorTok{=}\VariableTok{None}\NormalTok{, estimate\_Cl}\OperatorTok{=}\VariableTok{True}\NormalTok{, num\_workers}\OperatorTok{=}\VariableTok{None}
-\NormalTok{):}
-\NormalTok{    ell }\OperatorTok{=}\NormalTok{ np.asarray(ell, dtype}\OperatorTok{=}\BuiltInTok{int}\NormalTok{)}
-    \ControlFlowTok{if} \BuiltInTok{isinstance}\NormalTok{(D\_ell\_theory, (pd.Series, }\BuiltInTok{list}\NormalTok{, }\BuiltInTok{tuple}\NormalTok{)):}
-\NormalTok{        D\_ell\_theory }\OperatorTok{=}\NormalTok{ np.asarray(}\BuiltInTok{list}\NormalTok{(D\_ell\_theory), dtype}\OperatorTok{=}\BuiltInTok{float}\NormalTok{)}
-    \ControlFlowTok{else}\NormalTok{:}
-\NormalTok{        D\_ell\_theory }\OperatorTok{=}\NormalTok{ np.asarray(D\_ell\_theory, dtype}\OperatorTok{=}\BuiltInTok{float}\NormalTok{)}
-\NormalTok{    n\_sims }\OperatorTok{=}\NormalTok{ D\_ell\_theory.shape[}\DecValTok{0}\NormalTok{]}
-
-    \CommentTok{\# Convert D\_ell to C\_ell for all rows at once}
-\NormalTok{    F }\OperatorTok{=}\NormalTok{ ell }\OperatorTok{*}\NormalTok{ (ell }\OperatorTok{+} \DecValTok{1}\NormalTok{) }\OperatorTok{/}\NormalTok{ (}\DecValTok{2} \OperatorTok{*}\NormalTok{ np.pi)}
-\NormalTok{    C\_ell }\OperatorTok{=}\NormalTok{ D\_ell\_theory }\OperatorTok{/}\NormalTok{ F}
-
-    \CommentTok{\# Beam and pixel window}
-\NormalTok{    sigma }\OperatorTok{=}\NormalTok{ np.radians(fwhm\_in\_arcmin }\OperatorTok{/} \DecValTok{60}\NormalTok{) }\OperatorTok{/}\NormalTok{ np.sqrt(}\DecValTok{8} \OperatorTok{*}\NormalTok{ np.log(}\DecValTok{2}\NormalTok{))}
-\NormalTok{    b\_ell }\OperatorTok{=}\NormalTok{ np.exp(}\OperatorTok{{-}}\FloatTok{0.5} \OperatorTok{*}\NormalTok{ ell }\OperatorTok{*}\NormalTok{ (ell }\OperatorTok{+} \DecValTok{1}\NormalTok{) }\OperatorTok{*}\NormalTok{ sigma}\OperatorTok{**}\DecValTok{2}\NormalTok{)}
-\NormalTok{    p\_ell }\OperatorTok{=}\NormalTok{ hp.pixwin(nside\_in, lmax}\OperatorTok{=}\BuiltInTok{int}\NormalTok{(np.}\BuiltInTok{max}\NormalTok{(ell)))[ell]}
-
-\NormalTok{    Cl\_to\_simulate }\OperatorTok{=}\NormalTok{ C\_ell }\OperatorTok{*}\NormalTok{ (b\_ell}\OperatorTok{**}\DecValTok{2}\NormalTok{) }\OperatorTok{*}\NormalTok{ (p\_ell}\OperatorTok{**}\DecValTok{2}\NormalTok{)}
-
-    \ControlFlowTok{if}\NormalTok{ num\_workers }\KeywordTok{is} \VariableTok{None}\NormalTok{:}
-\NormalTok{        num\_workers }\OperatorTok{=} \BuiltInTok{max}\NormalTok{(}\DecValTok{1}\NormalTok{, }\BuiltInTok{int}\NormalTok{(cpu\_count() }\OperatorTok{{-}} \DecValTok{4}\NormalTok{))}
-
-\NormalTok{    tasks }\OperatorTok{=}\NormalTok{ [}
-\NormalTok{        (Cl\_to\_simulate[i], ell, nside\_in, fwhm\_in\_arcmin, noise\_Cl, mask, estimate\_Cl)}
-        \ControlFlowTok{for}\NormalTok{ i }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(n\_sims)}
-\NormalTok{    ]}
-
-    \ControlFlowTok{with}\NormalTok{ Pool(processes}\OperatorTok{=}\NormalTok{num\_workers) }\ImportTok{as}\NormalTok{ pool:}
-\NormalTok{        results }\OperatorTok{=}\NormalTok{ pool.}\BuiltInTok{map}\NormalTok{(\_single\_realization\_worker, tasks)}
-
-\NormalTok{    Cl\_matrix }\OperatorTok{=}\NormalTok{ np.array(results)}
-
-    \CommentTok{\# Convert back to D\_ell}
-\NormalTok{    D\_ell\_out }\OperatorTok{=}\NormalTok{ Cl\_matrix }\OperatorTok{*}\NormalTok{ F}
-\NormalTok{    df\_out }\OperatorTok{=}\NormalTok{ pd.DataFrame(\{}\StringTok{\textquotesingle{}D\_ell\_arr\textquotesingle{}}\NormalTok{: [D\_ell\_out[i] }\ControlFlowTok{for}\NormalTok{ i }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(n\_sims)]\})}
-    \ControlFlowTok{return}\NormalTok{ df\_out}
-\end{Highlighting}
-\end{Shaded}
-
-These snippets are cited from the repository and are referenced in the
-main text (Methodology). Full source and additional helper functions are
-available in functions/cosmo.py and functions/simulation.py.
-
-\section{Appendix B: Error
-propagation}\label{appendix-b-error-propagation}
-
-The error propagation assumes that the multipoles are independent of
-each other and have a Gaussian distribution. Also, it is assumed that
-the angle has no error at all.
-
-\subsection{Error of the correlation
-function}\label{error-of-the-correlation-function}
-
-The error of the correlation function can be calculated according to
-this derivation
-
-\[\Delta^2 C(\theta) = \Bigl(\frac{\partial C(\theta)}{\partial D_l}\,\Delta D_l\Bigr)^2 = \Bigl(\sum_l \Delta D_l\frac{2l+1}{2l(l+1)} P_l(\cos(\theta))\Bigr)^2\]
-
-\[\Delta C(\theta) =\sqrt{\Bigl(\sum_l \Delta D_l\frac{2l+1}{2l(l+1)} P_l(\cos(\theta))\Bigr)^2}\]
-
-with this function
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{\#| label: lst{-}correlation\_func\_err}
-\CommentTok{\#| caption: "Code to calculate the error of the correlation function (functions/correlation\_function.py)"}
-
-\KeywordTok{def}\NormalTok{ correlation\_func\_err(error,xvals):}
-\NormalTok{    cor\_err}\OperatorTok{=}\DecValTok{0}
-
-\NormalTok{    fac\_err}\OperatorTok{=}\NormalTok{ [(}\DecValTok{2}\OperatorTok{*}\NormalTok{(l}\OperatorTok{+}\DecValTok{2}\NormalTok{)}\OperatorTok{+}\DecValTok{1}\NormalTok{)}\OperatorTok{/}\NormalTok{(}\DecValTok{2}\OperatorTok{*}\NormalTok{(l}\OperatorTok{+}\DecValTok{2}\NormalTok{)}\OperatorTok{*}\NormalTok{((l}\OperatorTok{+}\DecValTok{2}\NormalTok{)}\OperatorTok{+}\DecValTok{1}\NormalTok{))}\OperatorTok{*}\NormalTok{c }\ControlFlowTok{for}\NormalTok{ l,c }\KeywordTok{in} \BuiltInTok{enumerate}\NormalTok{(error)]}
-    \ControlFlowTok{for}\NormalTok{ l,f }\KeywordTok{in} \BuiltInTok{enumerate}\NormalTok{(fac\_err):}
-\NormalTok{        cor\_err}\OperatorTok{+=}\NormalTok{(f}\OperatorTok{*}\NormalTok{P(l}\OperatorTok{+}\DecValTok{2}\NormalTok{,xvals))}\OperatorTok{**}\DecValTok{2}
-    \ControlFlowTok{return}\NormalTok{ cor\_err}\OperatorTok{**}\FloatTok{0.5}
-\end{Highlighting}
-\end{Shaded}
-
-\subsection{\texorpdfstring{Error of
-\(S_{1/2}\)}{Error of S\_\{1/2\}}}\label{error-of-s_12}
-
-\[\Delta^2 S_a^b = \Bigl(\frac{\partial S_a^b}{\partial D_n}\,\Delta D_n\Bigr)^2  + \Bigl(\frac{\partial S_a^b}{\partial D_m}\,\Delta D_m\Bigr)^2\]
-
-\[= \Bigl(\sum_n\sum_m \frac{2n+1}{2n(n+1)} \frac{2m+1}{2m(m+1)}D_m T_{nm}\,\Delta D_n\Bigr)^2 + \Bigl(\sum_n\sum_m \frac{2n+1}{2n(n+1)}D_n \frac{2m+1}{2m(m+1)} T_{nm}\,\Delta D_m\Bigr)^2\]
-
-\[= \sum_n\sum_m \Bigl(\frac{2n+1}{2n(n+1)} \frac{2m+1}{2m(m+1)}T_{nm}\Bigr)^2 \Bigl(D_m^2 \Delta D_n^2 + D_n^2 \Delta D_m^2\Bigr)\]
-
-\[\Delta S_a^b =\sqrt{\sum_n\sum_m \Bigl(\frac{2n+1}{2n(n+1)} \frac{2m+1}{2m(m+1)}T_{nm}\Bigr)^2 \Bigl(D_m^2 \Delta D_n^2 + D_n^2 \Delta D_m^2\Bigr)}\]
-
-with this function
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{\#| label: lst{-}S12\_err}
-\CommentTok{\#| caption: "Code to calculate the error of the old statistic (functions/s12.py)"}
-
-\KeywordTok{def}\NormalTok{ S12\_err(D\_ell,D\_ell\_err,M):}
-    \CommentTok{\# Set the precision high enough to handle large calculations}
-\NormalTok{    getcontext().prec }\OperatorTok{=} \DecValTok{1000}
-\NormalTok{    s}\OperatorTok{=}\NormalTok{Decimal(}\DecValTok{0}\NormalTok{)}
-    \ControlFlowTok{for}\NormalTok{ i,xn }\KeywordTok{in} \BuiltInTok{enumerate}\NormalTok{(D\_ell\_err):}
-\NormalTok{        n}\OperatorTok{=}\NormalTok{i}\OperatorTok{+}\DecValTok{2}
-\NormalTok{        fac1}\OperatorTok{=}\NormalTok{(((}\DecValTok{2}\OperatorTok{*}\NormalTok{n}\OperatorTok{+}\DecValTok{1}\NormalTok{))}\OperatorTok{/}\NormalTok{(}\DecValTok{2}\OperatorTok{*}\NormalTok{n}\OperatorTok{*}\NormalTok{(n}\OperatorTok{+}\DecValTok{1}\NormalTok{)))}
-        \ControlFlowTok{for}\NormalTok{ j,xm }\KeywordTok{in} \BuiltInTok{enumerate}\NormalTok{(D\_ell):}
-\NormalTok{            m}\OperatorTok{=}\NormalTok{j}\OperatorTok{+}\DecValTok{2}
-\NormalTok{            fac2}\OperatorTok{=}\NormalTok{(((}\DecValTok{2}\OperatorTok{*}\NormalTok{m}\OperatorTok{+}\DecValTok{1}\NormalTok{))}\OperatorTok{/}\NormalTok{(}\DecValTok{2}\OperatorTok{*}\NormalTok{m}\OperatorTok{*}\NormalTok{(m}\OperatorTok{+}\DecValTok{1}\NormalTok{)))}
-\NormalTok{            Amn}\OperatorTok{=}\NormalTok{fac1}\OperatorTok{*}\NormalTok{fac2}
-\NormalTok{            integral}\OperatorTok{=}\NormalTok{M[i,j]}
-
-\NormalTok{            s }\OperatorTok{+=}\NormalTok{ Decimal(Amn}\OperatorTok{**}\DecValTok{2}\NormalTok{)}\OperatorTok{*}\NormalTok{Decimal(integral}\OperatorTok{**}\DecValTok{2}\NormalTok{)}\OperatorTok{*}\NormalTok{Decimal(D\_ell[i]}\OperatorTok{**}\DecValTok{2}\OperatorTok{*}\NormalTok{xm}\OperatorTok{**}\DecValTok{2} \OperatorTok{+}\NormalTok{ D\_ell[j]}\OperatorTok{**}\DecValTok{2}\OperatorTok{*}\NormalTok{xn}\OperatorTok{**}\DecValTok{2}\NormalTok{)}
-
-    \ControlFlowTok{return} \BuiltInTok{float}\NormalTok{(s)}\OperatorTok{**}\FloatTok{0.5}
-\end{Highlighting}
-\end{Shaded}
-
-\subsection{\texorpdfstring{Error of
-\(\langle\xi\rangle_a^b\)}{Error of \textbackslash langle\textbackslash xi\textbackslash rangle\_a\^{}b}}\label{error-of-langlexirangle_ab}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{\#| label: lst{-}xivar\_err}
-\CommentTok{\#| caption: "Code to calculate the error of the new statistic (functions/xiv.py)"}
-
-\KeywordTok{def}\NormalTok{ xivar\_err(D\_ell\_err, a,b):}
-\NormalTok{    s}\OperatorTok{=}\DecValTok{0}
-    \ControlFlowTok{for}\NormalTok{ i,d }\KeywordTok{in} \BuiltInTok{enumerate}\NormalTok{(D\_ell\_err):}
-\NormalTok{        l}\OperatorTok{=}\NormalTok{i}\OperatorTok{+}\DecValTok{2}
-\NormalTok{        fac}\OperatorTok{=}\NormalTok{d}\OperatorTok{/}\NormalTok{(}\DecValTok{2}\OperatorTok{*}\NormalTok{l}\OperatorTok{*}\NormalTok{(l}\OperatorTok{+}\DecValTok{1}\NormalTok{))}
-
-
-\NormalTok{        integral }\OperatorTok{=}\NormalTok{ Decimal(legendre(l }\OperatorTok{+} \DecValTok{1}\NormalTok{, b) }\OperatorTok{{-}}\NormalTok{ legendre(l }\OperatorTok{{-}} \DecValTok{1}\NormalTok{, b)}\OperatorTok{{-}}\NormalTok{legendre(l }\OperatorTok{+} \DecValTok{1}\NormalTok{, a) }\OperatorTok{+}\NormalTok{ legendre(l }\OperatorTok{{-}} \DecValTok{1}\NormalTok{, a))}
-
-\NormalTok{        s}\OperatorTok{+=}\NormalTok{(fac}\OperatorTok{*}\BuiltInTok{float}\NormalTok{(integral)}\OperatorTok{/}\NormalTok{(b}\OperatorTok{{-}}\NormalTok{a))}\OperatorTok{**}\DecValTok{2}
-
-    \ControlFlowTok{return}\NormalTok{ (s)}\OperatorTok{**}\FloatTok{0.5}
-\end{Highlighting}
-\end{Shaded}
+In both cases the realization where made using the
+\citep{sullivan2024methodscmbmapanalysis} code, which takes in to
+account masking effects and the Planck beam and pixel window functions.
+The resulting \(D_\ell\) are then transformed to \(C(\theta)\) and the
+derived statistics using the same analytical expressions as for the MCMC
+samples.
+
+All the code can be found in the GitHub repository
+\href{https://github.com/PhyAMR/CMB}{here}. With a small sample of the
+data and the code, so the analysis can be extended to more angle
+intervals or different models with a Planck format (ie. using the same
+names for the aparemeters).
+
+\section{Results: Best-Fit Analysis}\label{sec-bestfit}
+
+In the best-fit analysis the theoretical sampling distribution is
+generated by Monte Carlo realizations of the CMB sky drawn from the
+best-fit CamSpec \(\Lambda\)CDM spectrum. This approach isolates cosmic
+variance from parameter uncertainty.
+
+Figures \ref{fig-hist-bestfit-s12} and \ref{fig-hist-bestfit-xiv}
+display the distributions of the \(S_a^b\) and \(\langle\xi\rangle_a^b\)
+statistics respectively, for all five angular intervals. Each panel
+shows the distribution over the 1000 Monte Carlo realizations (blue
+histogram), and the observed Planck value (red vertical line).
+Figure\textasciitilde{}\ref{fig-hist-bestfit-c180} shows the analogous
+distribution for \(C_{180}\).
+
+\begin{figure}
+
+\begin{minipage}{0.50\linewidth}
+
+\pandocbounded{\includegraphics[keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_bestfit/histograms/base_CamSpecHM_TT_lowl_lowE_hist_s12-180-60.pdf}}
+
+\subcaption{\label{}\({S}_{60}^{180}\) (classic \(S_{1/2}\))}
+\end{minipage}%
+%
+\begin{minipage}{0.50\linewidth}
+
+\pandocbounded{\includegraphics[keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_bestfit/histograms/base_CamSpecHM_TT_lowl_lowE_hist_s12-180-154.pdf}}
+
+\subcaption{\label{}\({S}_{154}^{180}\)}
+\end{minipage}%
+\newline
+\begin{minipage}{0.50\linewidth}
+
+\pandocbounded{\includegraphics[keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_bestfit/histograms/base_CamSpecHM_TT_lowl_lowE_hist_s12-154-92.pdf}}
+
+\subcaption{\label{}\({S}_{92}^{154}\)}
+\end{minipage}%
+%
+\begin{minipage}{0.50\linewidth}
+
+\pandocbounded{\includegraphics[keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_bestfit/histograms/base_CamSpecHM_TT_lowl_lowE_hist_s12-92-30.pdf}}
+
+\subcaption{\label{}\({S}_{30}^{92}\)}
+\end{minipage}%
+\newline
+\begin{minipage}{0.50\linewidth}
+
+\pandocbounded{\includegraphics[keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_bestfit/histograms/base_CamSpecHM_TT_lowl_lowE_hist_s12-30-0.pdf}}
+
+\subcaption{\label{}\({S}_{0}^{30}\)}
+\end{minipage}%
+
+\caption{\label{fig-hist-bestfit-s12}Best-fit Monte Carlo distributions
+of the \(S_a^b\) statistic for model
+\texttt{base\_CamSpecHM\_TT\_lowl\_lowE} (\(\ell_{\max} = 30\)). Each
+panel shows the normalized histogram of 1000 realizations; the red line
+marks the observed Planck value.}
+
+\end{figure}%
+
+\begin{figure}
+
+\begin{minipage}{0.50\linewidth}
+
+\pandocbounded{\includegraphics[keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_bestfit/histograms/base_CamSpecHM_TT_lowl_lowE_hist_xiv-180-60.pdf}}
+
+\subcaption{\label{}\(\langle\xi\rangle_{60}^{180}\)}
+\end{minipage}%
+%
+\begin{minipage}{0.50\linewidth}
+
+\pandocbounded{\includegraphics[keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_bestfit/histograms/base_CamSpecHM_TT_lowl_lowE_hist_xiv-180-154.pdf}}
+
+\subcaption{\label{}\(\langle\xi\rangle_{154}^{180}\)}
+\end{minipage}%
+\newline
+\begin{minipage}{0.50\linewidth}
+
+\pandocbounded{\includegraphics[keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_bestfit/histograms/base_CamSpecHM_TT_lowl_lowE_hist_xiv-154-92.pdf}}
+
+\subcaption{\label{}\(\langle\xi\rangle_{92}^{154}\)}
+\end{minipage}%
+%
+\begin{minipage}{0.50\linewidth}
+
+\pandocbounded{\includegraphics[keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_bestfit/histograms/base_CamSpecHM_TT_lowl_lowE_hist_xiv-92-30.pdf}}
+
+\subcaption{\label{}\(\langle\xi\rangle_{30}^{92}\)}
+\end{minipage}%
+\newline
+\begin{minipage}{0.50\linewidth}
+
+\pandocbounded{\includegraphics[keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_bestfit/histograms/base_CamSpecHM_TT_lowl_lowE_hist_xiv-30-0.pdf}}
+
+\subcaption{\label{}\(\langle\xi\rangle_{0}^{30}\)}
+\end{minipage}%
+
+\caption{\label{fig-hist-bestfit-xiv}Best-fit Monte Carlo distributions
+of the interval-averaged correlation \(\langle\xi\rangle_a^b\) for model
+\texttt{base\_CamSpecHM\_TT\_lowl\_lowE}.}
+
+\end{figure}%
+
+\begin{figure}
+
+\centering{
+
+\includegraphics[width=0.6\linewidth,height=\textheight,keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_bestfit/histograms/base_CamSpecHM_TT_lowl_lowE_hist_C180.pdf}
+
+}
+
+\caption{\label{fig-hist-bestfit-c180}Best-fit Monte Carlo distribution
+of the antipodal correlation \(C_{180}\) for model
+\texttt{base\_CamSpecHM\_TT\_lowl\_lowE}.}
+
+\end{figure}%
+
+The statistical summary --- including the median, 68\% credible
+interval, observed value, and empirical p-value for each statistic ---
+is reported in Table\textasciitilde{}\ref{tbl-bestfit-camspec}.
+
+\begin{table*}[htbp]
+\centering
+\caption{Statistical summary for the best-fit analysis of model
+\texttt{base\_CamSpecHM\_TT\_lowl\_lowE}. Columns give the experimental value,
+best-fit median, 68\% interval, and empirical p-value.}
+\label{tbl-bestfit-camspec}
+\input{../runs/run_30_1000_all_8e4057ec/tables/bestfit/base_CamSpecHM_TT_lowl_lowE.tex}
+\end{table*}
+
+\section{Results: MCMC Analysis}\label{sec-mcmc}
+
+In the MCMC analysis the theoretical sampling distribution is
+constructed directly from the Planck posterior, propagating full
+parameter uncertainty through to the derived statistics. The 1000
+posterior samples drawn from the CamSpec \(\Lambda\)CDM chain each yield
+a distinct \(D_\ell\) spectrum, whose distribution reflects both cosmic
+variance and parameter degeneracies.
+
+Figures \ref{fig-hist-mcmc-s12}, \ref{fig-hist-mcmc-xiv}, and
+\ref{fig-hist-mcmc-c180} show the resulting distributions of \(S_a^b\),
+\(\langle\xi\rangle_a^b\), and \(C_{180}\) respectively. The broader
+width of the MCMC-derived histograms compared to the best-fit case
+reflects the additional spread due to cosmological parameter
+uncertainty.
+
+\begin{figure}
+
+\begin{minipage}{0.50\linewidth}
+
+\pandocbounded{\includegraphics[keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_mcmc/histograms/base_CamSpecHM_TT_lowl_lowE_hist_s12-180-60.pdf}}
+
+\subcaption{\label{}\({S}_{60}^{180}\) (classic \(S_{1/2}\))}
+\end{minipage}%
+%
+\begin{minipage}{0.50\linewidth}
+
+\pandocbounded{\includegraphics[keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_mcmc/histograms/base_CamSpecHM_TT_lowl_lowE_hist_s12-180-154.pdf}}
+
+\subcaption{\label{}\({S}_{154}^{180}\)}
+\end{minipage}%
+\newline
+\begin{minipage}{0.50\linewidth}
+
+\pandocbounded{\includegraphics[keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_mcmc/histograms/base_CamSpecHM_TT_lowl_lowE_hist_s12-154-92.pdf}}
+
+\subcaption{\label{}\({S}_{92}^{154}\)}
+\end{minipage}%
+%
+\begin{minipage}{0.50\linewidth}
+
+\pandocbounded{\includegraphics[keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_mcmc/histograms/base_CamSpecHM_TT_lowl_lowE_hist_s12-92-30.pdf}}
+
+\subcaption{\label{}\({S}_{30}^{92}\)}
+\end{minipage}%
+\newline
+\begin{minipage}{0.50\linewidth}
+
+\pandocbounded{\includegraphics[keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_mcmc/histograms/base_CamSpecHM_TT_lowl_lowE_hist_s12-30-0.pdf}}
+
+\subcaption{\label{}\({S}_{0}^{30}\)}
+\end{minipage}%
+
+\caption{\label{fig-hist-mcmc-s12}MCMC posterior distributions of the
+\(S_a^b\) statistic for model \texttt{base\_CamSpecHM\_TT\_lowl\_lowE}.
+Each panel shows the distribution over 1000 posterior samples from the
+Planck CamSpec chain.}
+
+\end{figure}%
+
+\begin{figure}
+
+\begin{minipage}{0.50\linewidth}
+
+\pandocbounded{\includegraphics[keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_mcmc/histograms/base_CamSpecHM_TT_lowl_lowE_hist_xiv-180-60.pdf}}
+
+\subcaption{\label{}\(\langle\xi\rangle_{60}^{180}\)}
+\end{minipage}%
+%
+\begin{minipage}{0.50\linewidth}
+
+\pandocbounded{\includegraphics[keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_mcmc/histograms/base_CamSpecHM_TT_lowl_lowE_hist_xiv-180-154.pdf}}
+
+\subcaption{\label{}\(\langle\xi\rangle_{154}^{180}\)}
+\end{minipage}%
+\newline
+\begin{minipage}{0.50\linewidth}
+
+\pandocbounded{\includegraphics[keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_mcmc/histograms/base_CamSpecHM_TT_lowl_lowE_hist_xiv-154-92.pdf}}
+
+\subcaption{\label{}\(\langle\xi\rangle_{92}^{154}\)}
+\end{minipage}%
+%
+\begin{minipage}{0.50\linewidth}
+
+\pandocbounded{\includegraphics[keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_mcmc/histograms/base_CamSpecHM_TT_lowl_lowE_hist_xiv-92-30.pdf}}
+
+\subcaption{\label{}\(\langle\xi\rangle_{30}^{92}\)}
+\end{minipage}%
+\newline
+\begin{minipage}{0.50\linewidth}
+
+\pandocbounded{\includegraphics[keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_mcmc/histograms/base_CamSpecHM_TT_lowl_lowE_hist_xiv-30-0.pdf}}
+
+\subcaption{\label{}\(\langle\xi\rangle_{0}^{30}\)}
+\end{minipage}%
+
+\caption{\label{fig-hist-mcmc-xiv}MCMC posterior distributions of
+\(\langle\xi\rangle_a^b\) for model
+\texttt{base\_CamSpecHM\_TT\_lowl\_lowE}.}
+
+\end{figure}%
+
+\begin{figure}
+
+\centering{
+
+\includegraphics[width=0.6\linewidth,height=\textheight,keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_mcmc/histograms/base_CamSpecHM_TT_lowl_lowE_hist_C180.pdf}
+
+}
+
+\caption{\label{fig-hist-mcmc-c180}MCMC posterior distribution of
+\(C_{180}\) for model \texttt{base\_CamSpecHM\_TT\_lowl\_lowE}.}
+
+\end{figure}%
+
+The quantitative results for the MCMC ensemble are collected in
+Table\textasciitilde{}\ref{tbl-mcmc-camspec}.
+
+\begin{table*}[htbp]
+\centering
+\caption{Statistical summary for the MCMC analysis of model
+\texttt{base\_CamSpecHM\_TT\_lowl\_lowE}. Columns give the experimental value,
+MCMC median, 68\% credible interval, and empirical p-value.}
+\label{tbl-mcmc-camspec}
+\input{../runs/run_30_1000_all_8e4057ec/tables/mcmc/base_CamSpecHM_TT_lowl_lowE.tex}
+\end{table*}
+
+\section{Discussion}\label{sec-discussion}
+
+The two ensembles --- best-fit Monte Carlo and MCMC posterior ---
+provide complementary perspectives on the significance of the
+large-angle anomalies.
+
+The best-fit ensemble captures cosmic-variance scatter at fixed
+cosmological parameters. If the observed statistics fall within the bulk
+of this distribution, the data are consistent with \(\Lambda\)CDM at the
+best-fit point and any apparent anomaly is simply a statistical
+fluctuation of the measured sky.
+
+The MCMC ensemble additionally folds in parameter uncertainty. The
+broader spread of the MCMC distributions reflects the fact that
+different points in the posterior predict somewhat different large-angle
+correlation functions. When the observed statistics fall in the tails of
+the MCMC-derived distributions, this indicates that the data are not
+well described by the bulk of the posterior, suggesting a tension
+between the large-scale and small-scale information encoded in the
+Planck data.
+
+A key caveat is the look-elsewhere effect: eleven correlated statistics
+are examined simultaneously, so finding one or more with low p-values is
+expected even under the null hypothesis. A proper assessment of global
+significance requires a multivariate test statistic, which is reported
+in the table summaries. An additional concern at low multipoles is the
+strong influence of cosmic variance, which means that even a statistic
+with a p-value of a few per cent does not necessarily signal new
+physics.
+
+The results for alternative likelihoods and models with free curvature
+\(\Omega_k\) are reported in
+Appendix\textasciitilde{}\ref{sec-appendix-tables}. The dependence of
+the results on the likelihood choice (CamSpec vs.~Plik) provides a
+useful cross-check, while the curvature-extended models test whether a
+departure from flatness could alleviate the observed tensions.
+
+\section{Conclusions}\label{sec-conclusions}
+
+We have studied the large-angle CMB angular correlation function and its
+derived statistics using Planck 2018 data and two complementary
+ensembles for the theoretical sampling distributions. The statistics
+examined --- the quadratic \(S_a^b\), the linear
+\(\langle\xi\rangle_a^b\), and the antipodal \(C_{180}\) --- probe
+distinct aspects of the large-angle temperature field.
+
+The best-fit and MCMC ensembles yield qualitatively different
+assessments of significance for some statistics, underscoring that the
+choice of theoretical ensemble matters when evaluating low-\(\ell\)
+anomalies. A complete summary of all p-values and multivariate tension
+estimates for the primary \texttt{base\_CamSpecHM\_TT\_lowl\_lowE} model
+is provided in Tables\textasciitilde{}\ref{tbl-bestfit-camspec} and
+\ref{tbl-mcmc-camspec}; results for additional models appear in
+Appendix\textasciitilde{}\ref{sec-appendix-tables}.
+
+\section*{References}\label{references}
+\addcontentsline{toc}{section}{References}
+
+\renewcommand{\bibsection}{}
+\bibliography{main.bib}
+
+\appendix
+
+\section{Additional Models: Statistical
+Tables}\label{sec-appendix-tables}
+
+The tables in this appendix report the full statistical summary for
+three additional Planck models. All quantities are defined as in the
+main text. Model names follow the Planck convention: \texttt{omegak}
+denotes a run with free spatial curvature; \texttt{plikHM} denotes the
+Plik high-multipole likelihood; \texttt{TTTEEE} denotes a joint
+temperature and polarization fit.
+
+\subsection{MCMC Results}\label{sec-app-mcmc}
+
+\begin{table*}[htbp]
+\centering
+\caption{MCMC results for \texttt{base\_plikHM\_TT\_lowl\_lowE}.}
+\input{../runs/run_30_1000_all_8e4057ec/tables/mcmc/base_plikHM_TT_lowl_lowE.tex}
+\end{table*}
+
+\begin{table*}[htbp]
+\centering
+\caption{MCMC results for \texttt{base\_omegak\_CamSpecHM\_TT\_lowl\_lowE}.}
+\input{../runs/run_30_1000_all_8e4057ec/tables/mcmc/base_omegak_CamSpecHM_TT_lowl_lowE.tex}
+\end{table*}
+
+\begin{table*}[htbp]
+\centering
+\caption{MCMC results for \texttt{base\_omegak\_plikHM\_TTTEEE\_lowl\_lowE}.}
+\input{../runs/run_30_1000_all_8e4057ec/tables/mcmc/base_omegak_plikHM_TTTEEE_lowl_lowE.tex}
+\end{table*}
+
+\subsection{Best-Fit Results}\label{sec-app-bestfit}
+
+\begin{table*}[htbp]
+\centering
+\caption{Best-fit results for \texttt{base\_plikHM\_TT\_lowl\_lowE}.}
+\input{../runs/run_30_1000_all_8e4057ec/tables/bestfit/base_plikHM_TT_lowl_lowE.tex}
+\end{table*}
+
+\begin{table*}[htbp]
+\centering
+\caption{Best-fit results for \texttt{base\_omegak\_CamSpecHM\_TT\_lowl\_lowE}.}
+\input{../runs/run_30_1000_all_8e4057ec/tables/bestfit/base_omegak_CamSpecHM_TT_lowl_lowE.tex}
+\end{table*}
+
+\begin{table*}[htbp]
+\centering
+\caption{Best-fit results for \texttt{base\_omegak\_plikHM\_TTTEEE\_lowl\_lowE}.}
+\input{../runs/run_30_1000_all_8e4057ec/tables/bestfit/base_omegak_plikHM_TTTEEE_lowl_lowE.tex}
+\end{table*}
 
 
 
