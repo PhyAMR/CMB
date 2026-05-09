@@ -199,8 +199,8 @@ def compute_pvalue_unified(observed_value, percentiles_dict, data=None):
         }
     
     F = np.mean(data <= observed_value)
-    pvalue = 2.0 * min(F, 1.0 - F) if 2.0 * min(F, 1.0 - F) > 1/len(data) else 1/len(data)
-    
+    #pvalue_two = 2.0 * min(F, 1.0 - F) if 2.0 * min(F, 1.0 - F) > 1/len(data) else 1/len(data)
+    pvalue =  F if F > 1/len(data) else 1/len(data)
     # Interpretation levels
     if pvalue > 0.05:
         interpretation = 'Consistent'

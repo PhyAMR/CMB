@@ -574,7 +574,7 @@ def generate_statistics_table(samples, param_names, experimental_values,
             #tension_level = pval_info['tension_level']
             
             if pval < 0.001:
-                pval_str = f"${pval:.2e}$"
+                pval_str = f"${pval:.3f}$"
             else:
                 pval_str = f"${pval:.3f}$"
             

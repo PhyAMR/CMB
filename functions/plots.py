@@ -623,7 +623,7 @@ class CorrelationPlots:
             
             # Format title with p-value
             if not np.isnan(p_value):
-                p_label = f"p-val = {p_value:.2e}"
+                p_label = f"p-val = {p_value:.3f}"
             else:
                 p_label = "p-val: N/A"
             if label.startswith('s12'):
