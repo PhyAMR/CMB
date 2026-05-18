@@ -18,6 +18,7 @@ import pandas as pd
 import logging
 from getdist import mcsamples
 from scipy import stats
+from scipy.stats import cauchy
 
 from .getdist_stats import (
     #load_statistics_as_mcsamples,
@@ -293,13 +294,54 @@ def generate_global_statistics_mcmcv1(run_dir, model_name, experimental_values, 
     
     return tension
 
+def acat(pvals, weights=None):
+    """
+    Aggregated Cauchy Association Test (ACAT; Liu & Xie, 2020).
+
+    Combines individual p-values using a weighted Cauchy statistic:
+        T = sum(w_i * tan((0.5 - p_i) * pi))
+        p_combined = 0.5 - arctan(T) / pi
+
+    Parameters
+    ----------
+    pvals : array-like
+        Individual p-values; all must be in the open interval (0, 1).
+    weights : array-like, optional
+        Non-negative weights for each p-value. Normalised internally.
+        Defaults to uniform weights (1/n each).
+
+    Returns
+    -------
+    float
+        Combined p-value in (0, 1).
+
+    Raises
+    ------
+    ValueError
+        If any p-value is not strictly in (0, 1).
+    """
+    pvals = np.asarray(pvals, dtype=float)
+    if np.any((pvals <= 0) | (pvals >= 1)):
+        raise ValueError("All p-values must be in (0, 1)")
+    n = len(pvals)
+    if weights is None:
+        weights = np.ones(n) / n
+    else:
+        weights = np.asarray(weights, dtype=float)
+        weights = weights / np.sum(weights)
+    t = np.sum(weights * np.tan((0.5 - pvals) * np.pi))
+    return float(0.5 - np.arctan(t) / np.pi), t
+
+
 def generate_global_statistics_mcmc(run_dir, model_name, experimental_values, derived_df=None):
     """
-    Compute global multivariate tension statistic using GetDist percentiles.
-    
-    Uses the covariance matrix from the theory (MCMC realizations)
-    to compute tension with observations.
-    
+    Compute global tension statistic using the Cauchy Combination Test (CCT).
+
+    Computes a per-parameter marginal p-value from the weighted MCMC empirical
+    CDF, then combines them via the CCT (Liu & Xie, 2020):
+        T = mean(tan((0.5 - p_i) * pi))
+        p_combined = 0.5 - arctan(T) / pi
+
     Parameters
     ----------
     run_dir : str
@@ -310,31 +352,26 @@ def generate_global_statistics_mcmc(run_dir, model_name, experimental_values, de
         {param: (value, error)}
     derived_df : pd.DataFrame, optional
         Derived parameters to add
-    
+
     Returns
     -------
     dict
-        {'chi2': val, 'dof': n, 'pvalue': p, 'n_sigma': n}
+        {'chi2': None, 'dof': n, 'pvalue': p, 'n_sigma': n,
+         'cauchy_T': float, 'individual_pvalues': list,
+         'theory_mean': array, 'theory_std': array, 'obs_values': array}
     """
-    # Load samples
     samples = load_chain_with_derived_params(
         run_dir, model_name, mode='mcmc', derived_df=derived_df
     )
-    
     if samples is None:
         return None
-    
-    # Get parameter names
+
     param_names = list(experimental_values.keys())
-    
-    # Extract observed values
-    obs_values = np.array([experimental_values[p][0] for p in param_names])
-    
+    obs_values  = np.array([experimental_values[p][0] for p in param_names])
+
     # ================================================================
-    # Compute THEORY statistics and covariance
+    # Extract parameter arrays from the MCMC chain
     # ================================================================
-    
-    # Get theory values from samples
     param_arrays = []
     for p in param_names:
         try:
@@ -342,73 +379,78 @@ def generate_global_statistics_mcmc(run_dir, model_name, experimental_values, de
             if param_vals is None:
                 logger.warning(f"Parameter {p} not found in samples")
                 return None
-            param_arrays.append(param_vals)
+            param_arrays.append(np.asarray(param_vals, dtype=float))
         except Exception as e:
             logger.warning(f"Could not extract {p}: {e}")
             return None
-    
-    param_matrix = np.column_stack(param_arrays)
-    
-    # Compute theory mean and covariance (weighted if MCMC)
+
+    weights = None
     if hasattr(samples, 'weights') and samples.weights is not None:
-        weights = samples.weights / np.sum(samples.weights)
-        theory_mean = np.average(param_matrix, axis=0, weights=weights)
-        theory_cov = np.cov(param_matrix.T, aweights=samples.weights, ddof=0)
-    else:
-        theory_mean = np.mean(param_matrix, axis=0)
-        theory_cov = np.cov(param_matrix.T, ddof=0)
-    
-    logger.info(f"Theory mean: {theory_mean}")
-    logger.info(f"Theory std (diagonal): {np.sqrt(np.diag(theory_cov))}")
-    logger.info(f"Observed values: {obs_values}")
-    
+        weights = np.asarray(samples.weights, dtype=float)
+        weights = weights / weights.sum()
+
     # ================================================================
-    # Compute chi-squared statistic
+    # Compute one marginal p-value per parameter (two-sided empirical CDF)
     # ================================================================
-    try:
-        delta = obs_values - theory_mean
-        
-        # Use theory covariance
-        inv_cov = np.linalg.inv(theory_cov)
-        chi2 = delta.T @ inv_cov @ delta
-        
-        dof = len(param_names)
-        pvalue = stats.chi2.sf(chi2, dof)
-        
-        # Equivalent n-sigma
-        pvalue_safe = max(pvalue, 1e-16)
-        n_sigma = stats.norm.isf(pvalue_safe / 2)
-        
-        logger.info(f"Chi2 = {chi2:.4f} (dof={dof})")
-        logger.info(f"p-value = {pvalue:.4e}")
-        logger.info(f"Tension = {n_sigma:.2f}σ")
-        
-        return {
-            'chi2': float(chi2),
-            'dof': dof,
-            'pvalue': float(pvalue),
-            'n_sigma': float(n_sigma),
-            'theory_mean': theory_mean,
-            'theory_std': np.sqrt(np.diag(theory_cov)),
-            'theory_cov': theory_cov,
-            'obs_values': obs_values
-        }
-    
-    except np.linalg.LinAlgError as e:
-        logger.error(f"Covariance matrix is singular: {e}")
-        return None
-    except Exception as e:
-        logger.exception(f"Error computing multivariate tension: {e}")
-        return None
+    individual_pvalues = []
+    theory_means = []
+    theory_stds  = []
+
+    for arr, obs, pname in zip(param_arrays, obs_values, param_names):
+        if weights is not None:
+            mu  = float(np.average(arr, weights=weights))
+            var = float(np.average((arr - mu) ** 2, weights=weights))
+            std = float(np.sqrt(var))
+            sorter = np.argsort(arr)
+            F = float(np.interp(obs, arr[sorter], np.cumsum(weights[sorter])))
+        else:
+            mu  = float(arr.mean())
+            std = float(arr.std(ddof=0))
+            F   = float(np.mean(arr <= obs))
+        pval = 2.0 * min(F, 1.0 - F)
+        p_i = max(pval, 1e-16)
+        individual_pvalues.append(p_i)
+        theory_means.append(mu)
+        theory_stds.append(std)
+        logger.info(f"  {pname}: mu={mu:.4g}, std={std:.4g}, obs={obs:.4g}, p={p_i:.4e}")
+
+    # ================================================================
+    # ACAT: Aggregated Cauchy Association Test
+    # ================================================================
+    p_arr      = np.array(individual_pvalues)
+    combined_p, T = acat(p_arr)
+    combined_p = max(combined_p, 1e-16)
+    # Recover T from the acat formula for logging
+    n_sigma    = float(stats.norm.isf(combined_p/2)) #  / 2 for two-sided, but we use one-sided in acat already
+    dof        = len(param_names)
+
+    logger.info(f"ACAT T = {T:.4f}")
+    logger.info(f"Combined p-value = {combined_p:.4e}")
+    logger.info(f"Tension = {n_sigma:.2f}σ")
+
+    return {
+        'chi2':               None,
+        'dof':                dof,
+        'pvalue':             combined_p,
+        'n_sigma':            n_sigma,
+        'cauchy_T':           T,
+        'individual_pvalues': individual_pvalues,
+        'theory_mean':        np.array(theory_means),
+        'theory_std':         np.array(theory_stds),
+        'obs_values':         obs_values,
+    }
 
 
 def generate_global_statistics_bestfit(run_dir, model_name, experimental_values, derived_df=None):
     """
-    Compute global multivariate tension statistic for best-fit mode.
-    
-    Uses the covariance matrix from the best-fit realizations
-    to compute tension with observations.
-    
+    Compute global tension statistic using the Cauchy Combination Test (CCT).
+
+    Same as the MCMC variant but uses unweighted best-fit realisations.
+    Computes per-parameter marginal p-values from the empirical CDF, then
+    combines them via the CCT (Liu & Xie, 2020):
+        T = mean(tan((0.5 - p_i) * pi))
+        p_combined = 0.5 - arctan(T) / pi
+
     Parameters
     ----------
     run_dir : str
@@ -419,31 +461,26 @@ def generate_global_statistics_bestfit(run_dir, model_name, experimental_values,
         {param: (value, error)}
     derived_df : pd.DataFrame, optional
         Derived parameters to add
-    
+
     Returns
     -------
     dict
-        {'chi2': val, 'dof': n, 'pvalue': p, 'n_sigma': n}
+        {'chi2': None, 'dof': n, 'pvalue': p, 'n_sigma': n,
+         'cauchy_T': float, 'individual_pvalues': list,
+         'theory_mean': array, 'theory_std': array, 'obs_values': array}
     """
-    # Load samples
     samples = load_chain_with_derived_params(
         run_dir, model_name, mode='bestfit', derived_df=derived_df
     )
-    
     if samples is None:
         return None
-    
-    # Get parameter names
+
     param_names = list(experimental_values.keys())
-    
-    # Extract observed values
-    obs_values = np.array([experimental_values[p][0] for p in param_names])
-    
+    obs_values  = np.array([experimental_values[p][0] for p in param_names])
+
     # ================================================================
-    # Compute THEORY statistics and covariance
+    # Extract parameter arrays from best-fit realisations
     # ================================================================
-    
-    # Get theory values from samples
     param_arrays = []
     for p in param_names:
         try:
@@ -451,59 +488,119 @@ def generate_global_statistics_bestfit(run_dir, model_name, experimental_values,
             if param_vals is None:
                 logger.warning(f"Parameter {p} not found in samples")
                 return None
-            param_arrays.append(param_vals)
+            param_arrays.append(np.asarray(param_vals, dtype=float))
         except Exception as e:
             logger.warning(f"Could not extract {p}: {e}")
             return None
-    
-    param_matrix = np.column_stack(param_arrays)
-    
-    # Compute theory mean and covariance (unweighted for best-fit)
-    theory_mean = np.mean(param_matrix, axis=0)
-    theory_cov = np.cov(param_matrix.T, ddof=0)
-    
-    logger.info(f"Theory mean: {theory_mean}")
-    logger.info(f"Theory std (diagonal): {np.sqrt(np.diag(theory_cov))}")
-    logger.info(f"Observed values: {obs_values}")
-    
+
     # ================================================================
-    # Compute chi-squared statistic
+    # Compute one marginal p-value per parameter (two-sided empirical CDF)
+    # Unweighted for best-fit mode
     # ================================================================
-    try:
-        delta = obs_values - theory_mean
-        
-        # Use theory covariance
-        inv_cov = np.linalg.inv(theory_cov)
-        chi2 = delta.T @ inv_cov @ delta
-        
-        dof = len(param_names)
-        pvalue = stats.chi2.sf(chi2, dof)
-        
-        # Equivalent n-sigma
-        pvalue_safe = max(pvalue, 1e-16)
-        n_sigma = stats.norm.isf(pvalue_safe / 2)
-        
-        logger.info(f"Chi2 = {chi2:.4f} (dof={dof})")
-        logger.info(f"p-value = {pvalue:.4e}")
-        logger.info(f"Tension = {n_sigma:.2f}σ")
-        
-        return {
-            'chi2': float(chi2),
-            'dof': dof,
-            'pvalue': float(pvalue),
-            'n_sigma': float(n_sigma),
-            'theory_mean': theory_mean,
-            'theory_std': np.sqrt(np.diag(theory_cov)),
-            'theory_cov': theory_cov,
-            'obs_values': obs_values
-        }
-    
-    except np.linalg.LinAlgError as e:
-        logger.error(f"Covariance matrix is singular: {e}")
-        return None
-    except Exception as e:
-        logger.exception(f"Error computing multivariate tension: {e}")
-        return None
+    individual_pvalues = []
+    theory_means = []
+    theory_stds  = []
+
+    for arr, obs, pname in zip(param_arrays, obs_values, param_names):
+        mu  = float(arr.mean())
+        std = float(arr.std(ddof=0))
+        F   = float(np.mean(arr <= obs))
+
+        pval = 2.0 * min(F, 1.0 - F)
+        p_i = max(pval, 1e-16)
+        individual_pvalues.append(p_i)
+        theory_means.append(mu)
+        theory_stds.append(std)
+        logger.info(f"  {pname}: mu={mu:.4g}, std={std:.4g}, obs={obs:.4g}, p={p_i:.4e}")
+
+    # ================================================================
+    # ACAT: Aggregated Cauchy Association Test
+    # ================================================================
+    p_arr      = np.array(individual_pvalues)
+    combined_p, T = acat(p_arr)
+    combined_p = max(combined_p, 1e-16)
+    # Recover T from the acat formula for logging
+    n_sigma    = float(stats.norm.isf(combined_p/2 )) # / 2 for two-sided, but we are treating the p-values as one-sided here
+    dof        = len(param_names)
+
+    logger.info(f"ACAT T = {T:.4f}")
+    logger.info(f"Combined p-value = {combined_p:.4e}")
+    logger.info(f"Tension = {n_sigma:.2f}σ")
+
+    return {
+        'chi2':               None,
+        'dof':                dof,
+        'pvalue':             combined_p,
+        'n_sigma':            n_sigma,
+        'cauchy_T':           T,
+        'individual_pvalues': individual_pvalues,
+        'theory_mean':        np.array(theory_means),
+        'theory_std':         np.array(theory_stds),
+        'obs_values':         obs_values,
+    }
+
+
+def _inject_global_tension_row(table_tex, global_stats):
+    """
+    Insert a full-width global-tension row into a LaTeX tabular string,
+    placed immediately before the first \\toprule (i.e. above the column headers).
+
+    The number of columns is inferred from the first line that contains '&',
+    or falls back to a single spanning cell.
+
+    Parameters
+    ----------
+    table_tex : str
+        LaTeX tabular produced by generate_statistics_table.
+    global_stats : dict
+        Dict returned by generate_global_statistics_mcmc/bestfit with keys
+        'cauchy_T', 'dof', 'pvalue', 'n_sigma'.
+
+    Returns
+    -------
+    str
+        Modified LaTeX string with the tension row prepended inside the tabular.
+    """
+    if global_stats is None:
+        return table_tex
+
+    # Build the cell content
+    tension_cell = (
+        r"\textbf{Global tension (ACAT):} "
+        rf"$T = {global_stats['cauchy_T']:.3f}$,\ "
+        rf"$p = {global_stats['pvalue']:.2e}$,\ "
+        rf"${global_stats['n_sigma']:.2f}\sigma$"
+    )
+
+    # Count columns from the first data/header line containing '&'
+    ncols = 1
+    for line in table_tex.splitlines():
+        stripped = line.strip()
+        if '&' in stripped and not stripped.startswith('%'):
+            ncols = stripped.count('&') + 1
+            break
+
+    tension_row = (
+        rf"\multicolumn{{{ncols}}}{{l}}{{{tension_cell}}} \\"
+        + "\n"
+        + r"\midrule"
+    )
+
+    # Insert before the first \toprule
+    marker = r"\toprule"
+    if marker in table_tex:
+        table_tex = table_tex.replace(marker, marker + "\n" + tension_row, 1)
+    else:
+        # Fallback: prepend after \begin{tabular}{...}
+        import re
+        table_tex = re.sub(
+            r"(\\begin\{tabular\}\{[^}]*\})",
+            r"\1\n" + tension_row,
+            table_tex,
+            count=1,
+        )
+
+    return table_tex
 
 
 def generate_all_tables(run_dir, roots, experimental_values, derived_params=None):
@@ -622,35 +719,28 @@ def generate_all_tables(run_dir, roots, experimental_values, derived_params=None
             )
             
             if table_tex:
-                # Save individual table
-                with open(os.path.join(mcmc_dir, f'{model_name}.tex'), 'w') as f:
-                    f.write(table_tex)
-                
                 # Compute global statistics
                 global_stats = generate_global_statistics_mcmc(
                     run_dir, model_name, experimental_values, derived_df=derived_params
                 )
+
+                # Inject global tension row into the table before column headers
+                table_tex = _inject_global_tension_row(table_tex, global_stats)
+
+                # Save individual table (with tension row already embedded)
+                with open(os.path.join(mcmc_dir, f'{model_name}.tex'), 'w') as f:
+                    f.write(table_tex)
                 
                 # Add to master
                 master_tex.append("\\subsection{MCMC Analysis}")
-                master_tex.append("\\subsubsection{Parameter Constraints}")
                 master_tex.append("\\begin{table}[h]\\centering")
                 master_tex.append(f"\\input{{mcmc/{model_name}.tex}}")
                 master_tex.append(f"\\caption{{MCMC results for {model_name.replace('_', '\\_')}}}")
                 master_tex.append("\\end{table}")
-                
-                # Add global statistics
+
                 if global_stats:
-                    master_tex.append("\\subsubsection{Global Tension}")
-                    master_tex.append(
-                        f"Multivariate $\\chi^2$ statistic: "
-                        f"$\\chi^2 = {global_stats['chi2']:.2f}$ "
-                        f"(dof = {global_stats['dof']}), "
-                        f"$p = {global_stats['pvalue']:.2e}$, "
-                        f"${global_stats['n_sigma']:.2f}\\sigma$"
-                    )
-                    summary_lines.append("MCMC Global Tension (theory-based):")
-                    summary_lines.append(f"  χ² = {global_stats['chi2']:.2f} (dof={global_stats['dof']})")
+                    summary_lines.append("MCMC Global Tension (ACAT):")
+                    summary_lines.append(f"  Cauchy T = {global_stats['cauchy_T']:.3f} (dof={global_stats['dof']})")
                     summary_lines.append(f"  p-value = {global_stats['pvalue']:.2e}")
                     summary_lines.append(f"  Tension = {global_stats['n_sigma']:.2f}σ")
         
@@ -663,31 +753,25 @@ def generate_all_tables(run_dir, roots, experimental_values, derived_params=None
             )
             
             if table_tex:
-                with open(os.path.join(bestfit_dir, f'{model_name}.tex'), 'w') as f:
-                    f.write(table_tex)
-                
                 global_stats = generate_global_statistics_bestfit(
                     run_dir, model_name, experimental_values, derived_df=derived_params
                 )
+
+                # Inject global tension row into the table before column headers
+                table_tex = _inject_global_tension_row(table_tex, global_stats)
+
+                with open(os.path.join(bestfit_dir, f'{model_name}.tex'), 'w') as f:
+                    f.write(table_tex)
                 
                 master_tex.append("\\subsection{Best-Fit Analysis}")
-                master_tex.append("\\subsubsection{Parameter Constraints}")
                 master_tex.append("\\begin{table}[h]\\centering")
                 master_tex.append(f"\\input{{bestfit/{model_name}.tex}}")
                 master_tex.append(f"\\caption{{Best-fit results for {model_name.replace('_', '\\_')}}}")
                 master_tex.append("\\end{table}")
-                
+
                 if global_stats:
-                    master_tex.append("\\subsubsection{Global Tension}")
-                    master_tex.append(
-                        f"Multivariate $\\chi^2$ statistic: "
-                        f"$\\chi^2 = {global_stats['chi2']:.2f}$ "
-                        f"(dof = {global_stats['dof']}), "
-                        f"$p = {global_stats['pvalue']:.2e}$, "
-                        f"${global_stats['n_sigma']:.2f}\\sigma$"
-                    )
-                    summary_lines.append("Best-fit Global Tension (theory-based):")
-                    summary_lines.append(f"  χ² = {global_stats['chi2']:.2f} (dof={global_stats['dof']})")
+                    summary_lines.append("Best-fit Global Tension (ACAT):")
+                    summary_lines.append(f"  Cauchy T = {global_stats['cauchy_T']:.3f} (dof={global_stats['dof']})")
                     summary_lines.append(f"  p-value = {global_stats['pvalue']:.2e}")
                     summary_lines.append(f"  Tension = {global_stats['n_sigma']:.2f}σ")
         

@@ -185,7 +185,7 @@
 \urlstyle{same}
 \hypersetup{
   pdftitle={Large-Angle Statistics of the CMB Angular Correlation Function: Testing \textbackslash LambdaCDM at Low Multipoles},
-  pdfauthor={Álvaro Méndez Rodríguez de Tembleque},
+  pdfauthor={Álvaro Méndez Rodríguez de Tembleque; Yago Ascasibar Sequeiros},
   pdfkeywords={cosmic microwave background, angular correlation
 function, large-angle anomalies, Planck, \(\Lambda\)CDM},
   colorlinks=true,
@@ -206,12 +206,19 @@ Testing \(\Lambda\)CDM at Low Multipoles}
 %
 }
  \ead{alvaro.mendezrodriguezdetembleque@studenti.unipd.it} 
+\author[2]{Yago Ascasibar Sequeiros%
+%
+}
+ \ead{yago.ascasibar@uam.es} 
 
 \affiliation[1]{organization={Università degli Studi di
 Padova, Department of Physics and Astronomy ``Galileo
 Galilei''},,postcodesep={}}
+\affiliation[2]{organization={Universidad Autónoma de
+Madrid, Departamento de Física Teórica},,postcodesep={}}
 
 \cortext[cor1]{Corresponding author}
+
 
         
 \begin{abstract}
@@ -253,9 +260,20 @@ predicts that the fluctuations should be a nearly Gaussian,
 statistically isotropic random field fully characterized by the angular
 power spectrum \(C_\ell\).
 
+\begin{figure}[H]
+
+{\centering \includegraphics[width=1.1\linewidth,height=\textheight,keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_bestfit/powerspectrum/base_CamSpecHM_TT_lowl_lowE_power_corr.pdf}
+
+}
+
+\caption{Power spectrum and correlation function}
+
+\end{figure}%
+
 Several anomalies have been reported at low multipoles since the
 first-year WMAP data release and confirmed in subsequent analyses of the
-Planck temperature maps \citep{cosmoplanck_2020}. Among the most
+Planck temperature maps
+\citep{cosmoplanck_2020, Ade2013Planck, Spergel_2003}. Among the most
 discussed is the apparent lack of large-angle correlations: the
 two-point angular correlation function \(C(\theta)\) is observed to be
 anomalously small for \(\theta \gtrsim 60°\), a feature quantified by
@@ -339,10 +357,10 @@ S_a^b = \int_a^b C^2(\theta)\,\sin\theta\,d\theta
 }\end{equation}
 
 where \(A_\ell = (2\ell+1)/[2\ell(\ell+1)]\) and \(T_{nm}\) are overlap
-integrals of Legendre polynomials over the interval. The classic
-\(S_{1/2}\) statistic corresponds to the interval \([60°, 180°]\)
-\citep{Spergel_2003}. Being quadratic in \(D_\ell\), this statistic
-amplifies deviations that are coherent across multipoles.
+integrals of Legendre polynomials over the interval \citep{Carlitz1961}.
+The classic \(S_{1/2}\) statistic corresponds to the interval
+\([60°, 180°]\) \citep{Spergel_2003}. Being quadratic in \(D_\ell\),
+this statistic amplifies deviations that are coherent across multipoles.
 
 \begin{table}
 
@@ -374,14 +392,14 @@ $[60°,\;180°]$ & Classic $S_{1/2}$ & $[-1.000,\ 0.500]$ \\
 \subsection{Planck Posterior Chains}\label{sec-planck}
 
 We use the publicly available Planck 2018 MCMC chains from the Planck
-Legacy Archive\footnote{\url{https://pla.esac.esa.int/}}. The primary
-dataset is the CamSpec high-multipole TT likelihood combined with the
-low-\(\ell\) temperature and polarization likelihoods
-(\texttt{base\_CamSpecHM\_TT\_lowl\_lowE}). This provides posterior
-samples of the six standard \(\Lambda\)CDM parameters
-\(\{\Omega_b h^2,\,\Omega_c h^2,\,H_0,\,\tau,\,n_s,\,A_s\}\) along with
-a suite of derived quantities. The Plik-based TT likelihood and two
-curvature-extended runs are considered in
+Legacy Archive\footnote{\url{https://pla.esac.esa.int/}}
+\citep{planck_legacy_archive}. The primary dataset is the CamSpec
+high-multipole TT likelihood combined with the low-\(\ell\) temperature
+and polarization likelihoods (\texttt{base\_CamSpecHM\_TT\_lowl\_lowE}).
+This provides posterior samples of the six standard \(\Lambda\)CDM
+parameters \(\{\Omega_b h^2,\,\Omega_c h^2,\,H_0,\,\tau,\,n_s,\,A_s\}\)
+along with a suite of derived quantities. The Plik-based TT likelihood
+and two curvature-extended runs are considered in
 Appendix\textasciitilde{}\ref{sec-appendix-tables}.
 
 For each posterior sample the theoretical power spectrum \(D_\ell\) is
@@ -436,13 +454,20 @@ The resulting \(D_\ell\) are then transformed to \(C(\theta)\) and the
 derived statistics using the same analytical expressions as for the MCMC
 samples.
 
+In order to reduce the ``look-elsewhere'' effect a global p-value is
+computed using the ACAT method \citep{Liu02012020}, which combines the
+individual p-values of the eleven statistics into a single test
+statistic that accounts for their correlations.
+
 All the code can be found in the GitHub repository
 \href{https://github.com/PhyAMR/CMB}{here}. With a small sample of the
 data and the code, so the analysis can be extended to more angle
 intervals or different models with a Planck format (ie. using the same
 names for the aparemeters).
 
-\section{Results: Best-Fit Analysis}\label{sec-bestfit}
+\section{Results}\label{results}
+
+\subsection{Best-Fit Analysis}\label{sec-bestfit}
 
 In the best-fit analysis the theoretical sampling distribution is
 generated by Monte Carlo realizations of the CMB sky drawn from the
@@ -459,37 +484,37 @@ distribution for \(C_{180}\).
 
 \begin{figure}
 
-\begin{minipage}{0.50\linewidth}
+\begin{minipage}{\linewidth}
 
-\pandocbounded{\includegraphics[keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_bestfit/histograms/base_CamSpecHM_TT_lowl_lowE_hist_s12-180-60.pdf}}
+\includegraphics[width=0.7\linewidth,height=\textheight,keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_bestfit/histograms/base_CamSpecHM_TT_lowl_lowE_hist_s12-180-60.pdf}
 
 \subcaption{\label{}\({S}_{60}^{180}\) (classic \(S_{1/2}\))}
 \end{minipage}%
-%
-\begin{minipage}{0.50\linewidth}
+\newline
+\begin{minipage}{\linewidth}
 
-\pandocbounded{\includegraphics[keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_bestfit/histograms/base_CamSpecHM_TT_lowl_lowE_hist_s12-180-154.pdf}}
+\includegraphics[width=0.7\linewidth,height=\textheight,keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_bestfit/histograms/base_CamSpecHM_TT_lowl_lowE_hist_s12-180-154.pdf}
 
 \subcaption{\label{}\({S}_{154}^{180}\)}
 \end{minipage}%
 \newline
-\begin{minipage}{0.50\linewidth}
+\begin{minipage}{\linewidth}
 
-\pandocbounded{\includegraphics[keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_bestfit/histograms/base_CamSpecHM_TT_lowl_lowE_hist_s12-154-92.pdf}}
+\includegraphics[width=0.7\linewidth,height=\textheight,keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_bestfit/histograms/base_CamSpecHM_TT_lowl_lowE_hist_s12-154-92.pdf}
 
 \subcaption{\label{}\({S}_{92}^{154}\)}
 \end{minipage}%
-%
-\begin{minipage}{0.50\linewidth}
+\newline
+\begin{minipage}{\linewidth}
 
-\pandocbounded{\includegraphics[keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_bestfit/histograms/base_CamSpecHM_TT_lowl_lowE_hist_s12-92-30.pdf}}
+\includegraphics[width=0.7\linewidth,height=\textheight,keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_bestfit/histograms/base_CamSpecHM_TT_lowl_lowE_hist_s12-92-30.pdf}
 
 \subcaption{\label{}\({S}_{30}^{92}\)}
 \end{minipage}%
 \newline
-\begin{minipage}{0.50\linewidth}
+\begin{minipage}{\linewidth}
 
-\pandocbounded{\includegraphics[keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_bestfit/histograms/base_CamSpecHM_TT_lowl_lowE_hist_s12-30-0.pdf}}
+\includegraphics[width=0.7\linewidth,height=\textheight,keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_bestfit/histograms/base_CamSpecHM_TT_lowl_lowE_hist_s12-30-0.pdf}
 
 \subcaption{\label{}\({S}_{0}^{30}\)}
 \end{minipage}%
@@ -504,37 +529,37 @@ marks the observed Planck value.}
 
 \begin{figure}
 
-\begin{minipage}{0.50\linewidth}
+\begin{minipage}{\linewidth}
 
-\pandocbounded{\includegraphics[keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_bestfit/histograms/base_CamSpecHM_TT_lowl_lowE_hist_xiv-180-60.pdf}}
+\includegraphics[width=0.7\linewidth,height=\textheight,keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_bestfit/histograms/base_CamSpecHM_TT_lowl_lowE_hist_xiv-180-60.pdf}
 
 \subcaption{\label{}\(\langle\xi\rangle_{60}^{180}\)}
 \end{minipage}%
-%
-\begin{minipage}{0.50\linewidth}
+\newline
+\begin{minipage}{\linewidth}
 
-\pandocbounded{\includegraphics[keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_bestfit/histograms/base_CamSpecHM_TT_lowl_lowE_hist_xiv-180-154.pdf}}
+\includegraphics[width=0.7\linewidth,height=\textheight,keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_bestfit/histograms/base_CamSpecHM_TT_lowl_lowE_hist_xiv-180-154.pdf}
 
 \subcaption{\label{}\(\langle\xi\rangle_{154}^{180}\)}
 \end{minipage}%
 \newline
-\begin{minipage}{0.50\linewidth}
+\begin{minipage}{\linewidth}
 
-\pandocbounded{\includegraphics[keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_bestfit/histograms/base_CamSpecHM_TT_lowl_lowE_hist_xiv-154-92.pdf}}
+\includegraphics[width=0.7\linewidth,height=\textheight,keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_bestfit/histograms/base_CamSpecHM_TT_lowl_lowE_hist_xiv-154-92.pdf}
 
 \subcaption{\label{}\(\langle\xi\rangle_{92}^{154}\)}
 \end{minipage}%
-%
-\begin{minipage}{0.50\linewidth}
+\newline
+\begin{minipage}{\linewidth}
 
-\pandocbounded{\includegraphics[keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_bestfit/histograms/base_CamSpecHM_TT_lowl_lowE_hist_xiv-92-30.pdf}}
+\includegraphics[width=0.7\linewidth,height=\textheight,keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_bestfit/histograms/base_CamSpecHM_TT_lowl_lowE_hist_xiv-92-30.pdf}
 
 \subcaption{\label{}\(\langle\xi\rangle_{30}^{92}\)}
 \end{minipage}%
 \newline
-\begin{minipage}{0.50\linewidth}
+\begin{minipage}{\linewidth}
 
-\pandocbounded{\includegraphics[keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_bestfit/histograms/base_CamSpecHM_TT_lowl_lowE_hist_xiv-30-0.pdf}}
+\includegraphics[width=0.7\linewidth,height=\textheight,keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_bestfit/histograms/base_CamSpecHM_TT_lowl_lowE_hist_xiv-30-0.pdf}
 
 \subcaption{\label{}\(\langle\xi\rangle_{0}^{30}\)}
 \end{minipage}%
@@ -549,7 +574,7 @@ of the interval-averaged correlation \(\langle\xi\rangle_a^b\) for model
 
 \centering{
 
-\includegraphics[width=0.6\linewidth,height=\textheight,keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_bestfit/histograms/base_CamSpecHM_TT_lowl_lowE_hist_C180.pdf}
+\includegraphics[width=0.7\linewidth,height=\textheight,keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_bestfit/histograms/base_CamSpecHM_TT_lowl_lowE_hist_C180.pdf}
 
 }
 
@@ -572,7 +597,7 @@ best-fit median, 68\% interval, and empirical p-value.}
 \input{../runs/run_30_1000_all_8e4057ec/tables/bestfit/base_CamSpecHM_TT_lowl_lowE.tex}
 \end{table*}
 
-\section{Results: MCMC Analysis}\label{sec-mcmc}
+\subsection{MCMC Analysis}\label{sec-mcmc}
 
 In the MCMC analysis the theoretical sampling distribution is
 constructed directly from the Planck posterior, propagating full
@@ -590,37 +615,37 @@ uncertainty.
 
 \begin{figure}
 
-\begin{minipage}{0.50\linewidth}
+\begin{minipage}{\linewidth}
 
-\pandocbounded{\includegraphics[keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_mcmc/histograms/base_CamSpecHM_TT_lowl_lowE_hist_s12-180-60.pdf}}
+\includegraphics[width=0.7\linewidth,height=\textheight,keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_mcmc/histograms/base_CamSpecHM_TT_lowl_lowE_hist_s12-180-60.pdf}
 
 \subcaption{\label{}\({S}_{60}^{180}\) (classic \(S_{1/2}\))}
 \end{minipage}%
-%
-\begin{minipage}{0.50\linewidth}
+\newline
+\begin{minipage}{\linewidth}
 
-\pandocbounded{\includegraphics[keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_mcmc/histograms/base_CamSpecHM_TT_lowl_lowE_hist_s12-180-154.pdf}}
+\includegraphics[width=0.7\linewidth,height=\textheight,keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_mcmc/histograms/base_CamSpecHM_TT_lowl_lowE_hist_s12-180-154.pdf}
 
 \subcaption{\label{}\({S}_{154}^{180}\)}
 \end{minipage}%
 \newline
-\begin{minipage}{0.50\linewidth}
+\begin{minipage}{\linewidth}
 
-\pandocbounded{\includegraphics[keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_mcmc/histograms/base_CamSpecHM_TT_lowl_lowE_hist_s12-154-92.pdf}}
+\includegraphics[width=0.7\linewidth,height=\textheight,keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_mcmc/histograms/base_CamSpecHM_TT_lowl_lowE_hist_s12-154-92.pdf}
 
 \subcaption{\label{}\({S}_{92}^{154}\)}
 \end{minipage}%
-%
-\begin{minipage}{0.50\linewidth}
+\newline
+\begin{minipage}{\linewidth}
 
-\pandocbounded{\includegraphics[keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_mcmc/histograms/base_CamSpecHM_TT_lowl_lowE_hist_s12-92-30.pdf}}
+\includegraphics[width=0.7\linewidth,height=\textheight,keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_mcmc/histograms/base_CamSpecHM_TT_lowl_lowE_hist_s12-92-30.pdf}
 
 \subcaption{\label{}\({S}_{30}^{92}\)}
 \end{minipage}%
 \newline
-\begin{minipage}{0.50\linewidth}
+\begin{minipage}{\linewidth}
 
-\pandocbounded{\includegraphics[keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_mcmc/histograms/base_CamSpecHM_TT_lowl_lowE_hist_s12-30-0.pdf}}
+\includegraphics[width=0.7\linewidth,height=\textheight,keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_mcmc/histograms/base_CamSpecHM_TT_lowl_lowE_hist_s12-30-0.pdf}
 
 \subcaption{\label{}\({S}_{0}^{30}\)}
 \end{minipage}%
@@ -634,37 +659,37 @@ Planck CamSpec chain.}
 
 \begin{figure}
 
-\begin{minipage}{0.50\linewidth}
+\begin{minipage}{\linewidth}
 
-\pandocbounded{\includegraphics[keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_mcmc/histograms/base_CamSpecHM_TT_lowl_lowE_hist_xiv-180-60.pdf}}
+\includegraphics[width=0.7\linewidth,height=\textheight,keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_mcmc/histograms/base_CamSpecHM_TT_lowl_lowE_hist_xiv-180-60.pdf}
 
 \subcaption{\label{}\(\langle\xi\rangle_{60}^{180}\)}
 \end{minipage}%
-%
-\begin{minipage}{0.50\linewidth}
+\newline
+\begin{minipage}{\linewidth}
 
-\pandocbounded{\includegraphics[keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_mcmc/histograms/base_CamSpecHM_TT_lowl_lowE_hist_xiv-180-154.pdf}}
+\includegraphics[width=0.7\linewidth,height=\textheight,keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_mcmc/histograms/base_CamSpecHM_TT_lowl_lowE_hist_xiv-180-154.pdf}
 
 \subcaption{\label{}\(\langle\xi\rangle_{154}^{180}\)}
 \end{minipage}%
 \newline
-\begin{minipage}{0.50\linewidth}
+\begin{minipage}{\linewidth}
 
-\pandocbounded{\includegraphics[keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_mcmc/histograms/base_CamSpecHM_TT_lowl_lowE_hist_xiv-154-92.pdf}}
+\includegraphics[width=0.7\linewidth,height=\textheight,keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_mcmc/histograms/base_CamSpecHM_TT_lowl_lowE_hist_xiv-154-92.pdf}
 
 \subcaption{\label{}\(\langle\xi\rangle_{92}^{154}\)}
 \end{minipage}%
-%
-\begin{minipage}{0.50\linewidth}
+\newline
+\begin{minipage}{\linewidth}
 
-\pandocbounded{\includegraphics[keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_mcmc/histograms/base_CamSpecHM_TT_lowl_lowE_hist_xiv-92-30.pdf}}
+\includegraphics[width=0.7\linewidth,height=\textheight,keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_mcmc/histograms/base_CamSpecHM_TT_lowl_lowE_hist_xiv-92-30.pdf}
 
 \subcaption{\label{}\(\langle\xi\rangle_{30}^{92}\)}
 \end{minipage}%
 \newline
-\begin{minipage}{0.50\linewidth}
+\begin{minipage}{\linewidth}
 
-\pandocbounded{\includegraphics[keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_mcmc/histograms/base_CamSpecHM_TT_lowl_lowE_hist_xiv-30-0.pdf}}
+\includegraphics[width=0.7\linewidth,height=\textheight,keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_mcmc/histograms/base_CamSpecHM_TT_lowl_lowE_hist_xiv-30-0.pdf}
 
 \subcaption{\label{}\(\langle\xi\rangle_{0}^{30}\)}
 \end{minipage}%
@@ -679,7 +704,7 @@ Planck CamSpec chain.}
 
 \centering{
 
-\includegraphics[width=0.6\linewidth,height=\textheight,keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_mcmc/histograms/base_CamSpecHM_TT_lowl_lowE_hist_C180.pdf}
+\includegraphics[width=0.7\linewidth,height=\textheight,keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_mcmc/histograms/base_CamSpecHM_TT_lowl_lowE_hist_C180.pdf}
 
 }
 
@@ -736,6 +761,9 @@ Appendix\textasciitilde{}\ref{sec-appendix-tables}. The dependence of
 the results on the likelihood choice (CamSpec vs.~Plik) provides a
 useful cross-check, while the curvature-extended models test whether a
 departure from flatness could alleviate the observed tensions.
+
+As noted in \citep{Efstathiou_2010}, in the low-\(\ell\) regime the
+theoretical distribution of the statistics it has no
 
 \section{Conclusions}\label{sec-conclusions}
 
