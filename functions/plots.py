@@ -578,7 +578,7 @@ class CorrelationPlots:
                                               alpha=0.7, edgecolor='black',
                                               label='Theory Distribution')
             
-            max_n = n.max()
+            #max_n = n.max()
             
             # Compute percentiles
             perc = compute_percentiles(values)
@@ -754,7 +754,7 @@ class CorrelationPlots:
                            label='Simulation median' if i==0 else '')
         
         # Format y-tick labels with LaTeX
-        formatted_labels = [format_label_latex(l) for l in labels]
+        formatted_labels = [format_label_latex(la) for la in labels]
         
         ax.set_yticks(y)
         ax.set_yticklabels(formatted_labels)
@@ -886,7 +886,7 @@ class CorrelationPlots:
                 axes[1].scatter(val, i, color=self.colors['experimental'],
                               marker='|', s=200, linewidths=3)
         
-        formatted_forest_labels = [format_label_latex(l) for l in forest_labels]
+        formatted_forest_labels = [format_label_latex(la) for la in forest_labels]
         axes[1].set_yticks(y)
         axes[1].set_yticklabels(formatted_forest_labels, fontsize=9)
         axes[1].set_title('68% Credible Intervals')
@@ -896,7 +896,7 @@ class CorrelationPlots:
         
         # Panel 3: Cumulative mean convergence (first statistic)
         if len(labels) > 0:
-            first_label = next((l for l in labels if l in df.columns), None)
+            first_label = next((la for la in labels if la in df.columns), None)
             if first_label:
                 runs = df[first_label].dropna().values
                 if len(runs) > 0:
@@ -1147,7 +1147,7 @@ class CorrelationPlots:
         ell = self.DL.ell
         D_ell_exp = self.DL.D_ell
         
-        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(16, 6))
+        fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(8, 10))
         
         # Left panel: Power spectrum
         ax1.scatter(ell, D_ell_exp, s=5, c=self.colors['experimental'],

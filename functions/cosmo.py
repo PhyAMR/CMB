@@ -29,51 +29,62 @@ logger = logging.getLogger(__name__)
 # ============================================================================
 
 def _single_realization_worker(args):
-    """Worker function for a single simulation realization."""
-    (cl_map_row, ell, nside_in, fwhm_in, noise_Cl, mask, estimate_Cl, seed) = args
-    
+    """Worker function for a single simulation realization.
+
+    Forward model (matching the Planck measurement process):
+      1. synfast draws a_lm from C_ell_convolved = C_ell_th * b_ell^2,
+         then internally applies p_ell via pixwin=True, producing a map
+         with effective power C_ell_th * b_ell^2 * p_ell^2.
+      2. anafast recovers pseudo-C_ell still containing b_ell^2 * p_ell^2.
+      3. We deconvolve b_ell^2 * p_ell^2 to recover an estimate of C_ell_th,
+         matching the convention of the published Planck D_ell.
+    """
+    (cl_beam_conv, ell, nside_in, b_ell_sq, p_ell_sq,
+     noise_Cl, mask, estimate_Cl, seed) = args
+
     np.random.seed(seed)
-    
+
     ell_max = int(np.max(ell))
+
+    # Build full C_ell array (index = multipole, value = 0 outside ell range)
     full_cl = np.zeros(ell_max + 1)
-    full_cl[ell] = cl_map_row
-    
+    full_cl[ell] = cl_beam_conv   # already multiplied by b_ell^2
+
     if noise_Cl is not None:
         full_cl[ell] += noise_Cl
-    
-    try:
-        m = hp.synfast(
-            full_cl,
-            nside=nside_in,
-            lmax=ell_max,
-            pixwin=True,
-            fwhm=np.radians(fwhm_in / 60)
-        )
-    except TypeError:
-        m = hp.synfast(
-            full_cl,
-            nside=nside_in,
-            lmax=ell_max,
-            pixwin=True,
-            fwhm=np.radians(fwhm_in / 60)
-        )
-    
+
+    # Synthesise map: synfast applies p_ell internally via pixwin=True.
+    # fwhm=0 because the beam is already baked into cl_beam_conv.
+    m = hp.synfast(
+        full_cl,
+        nside=nside_in,
+        lmax=ell_max,
+        pixwin=True,
+        fwhm=0.0,
+    )
+
     if mask is not None:
-        # Calculate sky fraction (percentage of pixels not masked)
-        mask = hp.read_map(mask)
-        f_sky = np.mean(mask >= 0.9) 
-        
+        mask_map = hp.read_map(mask)
+        f_sky = np.mean(mask_map >= 0.9)
         m = hp.ma(m)
-        m.mask = mask < 0.9
+        m.mask = mask_map < 0.9
         m = m.filled(0)
     else:
         f_sky = 1.0
 
     if estimate_Cl:
-        cl_est = hp.anafast(m, lmax=ell_max)
-        # Correct for the loss of power due to the mask
-        return cl_est[ell] / f_sky
-    
+        cl_raw = hp.anafast(m, lmax=ell_max)
+
+        # Correct for sky fraction (= 1 when no mask)
+        cl_raw_corrected = cl_raw[ell] / f_sky
+
+        # Deconvolve beam and pixel window to recover C_ell_th estimate.
+        # This mirrors the Planck data reduction and ensures the simulated
+        # ensemble lives in the same space as the published D_ell values.
+        cl_deconv = cl_raw_corrected / (b_ell_sq * p_ell_sq)
+
+        return cl_deconv
+
     return m
 
 
@@ -81,60 +92,110 @@ def planck_style_pipeline_parallel(
     ell,
     D_ell_theory,
     nside_in=2048,
-    fwhm_in_arcmin=40.0,
+    fwhm_in_arcmin=0.0,
     noise_Cl=None,
     mask=None,
     estimate_Cl=True,
-    num_workers=None
+    num_workers=None,
 ):
-    """Run Planck-like simulation pipeline in parallel."""
+    """Run Planck-like simulation pipeline in parallel.
+
+    Each theoretical spectrum is passed through a forward model that
+    mimics the Planck measurement process:
+      - Beam convolution (Gaussian, controlled by fwhm_in_arcmin)
+      - HEALPix pixel window convolution (via hp.synfast pixwin=True)
+      - Full-sky map synthesis (hp.synfast)
+      - Pseudo-C_ell recovery (hp.anafast)
+      - f_sky correction for masking (if a mask is provided)
+      - Beam and pixel window deconvolution
+
+    The recovered D_ell therefore live in the same space as the
+    published Planck D_ell values and can be compared directly.
+
+    Parameters
+    ----------
+    ell : array-like of int
+        Multipole indices, e.g. np.arange(2, lmax+1).
+    D_ell_theory : ndarray, shape (n_sims, len(ell)) or (len(ell),)
+        Theoretical D_ell = ell*(ell+1)*C_ell/(2*pi).
+    nside_in : int
+        HEALPix resolution for map synthesis. Default 2048.
+    fwhm_in_arcmin : float
+        Gaussian beam FWHM in arcminutes. Set to 0.0 for no beam.
+    noise_Cl : array-like or None
+        Noise C_ell added at the ell values before synthesis.
+    mask : str or None
+        Path to a HEALPix mask FITS file. Pixels with value >= 0.9
+        are retained. None means full-sky.
+    estimate_Cl : bool
+        If True, return recovered deconvolved D_ell arrays.
+        If False, return synthesised maps.
+    num_workers : int or None
+        Parallel worker count. Defaults to cpu_count() - 1.
+
+    Returns
+    -------
+    ndarray, shape (n_sims, len(ell))
+        Recovered, deconvolved D_ell for each realisation.
+    """
     ell = np.asarray(ell, dtype=int)
-    
+
     if isinstance(D_ell_theory, (pd.Series, list, tuple)):
         D_ell_theory = np.asarray(list(D_ell_theory), dtype=float)
     else:
         D_ell_theory = np.asarray(D_ell_theory, dtype=float)
-    
+
     if D_ell_theory.ndim == 1:
         D_ell_theory = D_ell_theory.reshape(1, -1)
-    
+
     n_sims = D_ell_theory.shape[0]
-    logger.info(f"Running Planck pipeline on {n_sims} spectra")
-    
+    logger.info(f"Running Planck pipeline on {n_sims} spectra "
+                f"(fwhm={fwhm_in_arcmin:.1f}', nside={nside_in})")
+
     F = ell * (ell + 1) / (2 * np.pi)
-    C_ell = D_ell_theory / F
-    
-    sigma = np.radians(fwhm_in_arcmin / 60) / np.sqrt(8 * np.log(2))
-    b_ell = np.exp(-0.5 * ell * (ell + 1) * sigma**2)
-    p_ell = hp.pixwin(nside_in, lmax=int(np.max(ell)))[ell]
-    
-    Cl_to_simulate = C_ell * (b_ell**2) * (p_ell**2)
-    
+    C_ell = D_ell_theory / F           # shape (n_sims, len(ell))
+
+    # --- Beam transfer function ---
+    if fwhm_in_arcmin > 0.0:
+        sigma = np.radians(fwhm_in_arcmin / 60.0) / np.sqrt(8.0 * np.log(2))
+        b_ell_sq = np.exp(-ell * (ell + 1) * sigma**2)  # b_ell^2
+    else:
+        b_ell_sq = np.ones(len(ell))
+
+    # --- Pixel window function (same grid as synfast will use) ---
+    p_ell_sq = hp.pixwin(nside_in, lmax=int(np.max(ell)))[ell] ** 2
+
+    # Pre-multiply C_ell by b_ell^2 only. synfast will apply p_ell^2
+    # internally via pixwin=True.  We pass b_ell_sq and p_ell_sq to
+    # the worker so it can deconvolve both after anafast.
+    C_ell_beam_conv = C_ell * b_ell_sq   # shape (n_sims, len(ell))
+
     if num_workers is None:
-        num_workers = max(1, cpu_count() - 8)
-    
+        num_workers = max(1, cpu_count() - 1)
+
     logger.debug(f"Using {num_workers} parallel workers")
-    
+
     tasks = []
     for i in range(n_sims):
-        unique_seed = np.random.randint(0, 2**31 - 1)
+        seed = np.random.randint(0, 2**31 - 1)
         tasks.append((
-            Cl_to_simulate[i],
+            C_ell_beam_conv[i],
             ell,
             nside_in,
-            fwhm_in_arcmin,
+            b_ell_sq,
+            p_ell_sq,
             noise_Cl,
             mask,
             estimate_Cl,
-            unique_seed
+            seed,
         ))
-    
+
     with Pool(processes=num_workers) as pool:
         results = pool.map(_single_realization_worker, tasks)
-    
-    Cl_matrix = np.array(results)
+
+    Cl_matrix = np.array(results)          # shape (n_sims, len(ell))
     D_ell_out = Cl_matrix * F
-    
+
     return D_ell_out
 
 
