@@ -115,9 +115,10 @@
 %\usepackage{natbib}
 \usepackage{graphicx}
 \usepackage{booktabs}
+\usepackage{subcaption}
 \usepackage{float}
-
-%\usepackage[minnames=1,maxnames=2,maxbibnames = 3, style=authoryear, bibstyle = authoryear, backend=bibtex, giveninits=true, block = none, isbn = false, url = false, doi = false, eprint = false]{biblatex}
+\usepackage{placeins}
+%\usepackage[minnames=1,maxnames=2,maxbibnames = 2, style=authoryear, bibstyle = authoryear, backend=bibtex, giveninits=true, block = none, isbn = false, url = false, doi = false, eprint = false]{biblatex}
 \makeatletter
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
 \AtBeginDocument{%
@@ -228,13 +229,13 @@ background (CMB) angular correlation function at large angular scales
 statistics are studied: the integrated squared correlation \(S_a^b\),
 the interval-averaged correlation \(\langle\xi\rangle_a^b\), and the
 antipodal correlation \(C_{180}\). Theoretical distributions are
-generated via two independent methods --- sampling from the MCMC
-posterior of the standard flat \(\Lambda\)CDM model fitted with the
-CamSpec high-multipole TT likelihood, and Monte Carlo realizations
-around the best-fit spectrum --- allowing a direct comparison of the two
-approaches. We report the empirical p-values for each statistic and
-discuss the apparent sensitivity of the inferred tensions to the choice
-of theoretical ensemble.
+generated via two independent methods , sampling from the MCMC posterior
+of the standard flat \(\Lambda\)CDM model fitted with the CamSpec
+high-multipole TT likelihood, and Monte Carlo realizations around the
+best-fit spectrum , allowing a direct comparison of the two approaches.
+We attribute the lack of large-angle correlations to a `look-elsewhere'
+effect, as the discrepancy exists but the overall significance is
+reduced when considering multiple correlated statistics simultaneously.
 \end{abstract}
 
 
@@ -251,46 +252,61 @@ function \sep large-angle anomalies \sep Planck \sep
 
 \section{Introduction}\label{sec-intro}
 
+\FloatBarrier
+
 The cosmic microwave background (CMB) provides our cleanest window onto
-the primordial universe. On the largest angular scales --- corresponding
-to multipoles \(\ell \lesssim 30\) --- the temperature anisotropy
-pattern carries direct information about the very largest coherent
-structures in the observable universe. The standard \(\Lambda\)CDM model
-predicts that the fluctuations should be a nearly Gaussian,
-statistically isotropic random field fully characterized by the angular
-power spectrum \(C_\ell\).
+the primordial universe. On the largest angular scales , corresponding
+to multipoles \(\ell \lesssim 30\) , the temperature anisotropy pattern
+carries direct information about the very largest coherent structures in
+the observable universe. The standard \(\Lambda\)CDM model predicts that
+the fluctuations should be a nearly Gaussian, statistically isotropic
+random field fully characterized by the angular power spectrum
+\(C_\ell\).
+
+Several anomalies have been reported at low multipoles since the
+first-year WMAP data release \citep{Spergel_2003} and confirmed in
+subsequent analyses of the Planck temperature maps
+\citep{Ade2013Planck, cosmoplanck_2020}. Among the most discussed is the
+apparent lack of large-angle correlations: the two-point angular
+correlation function \(C(\theta)\) is observed to be anomalously small
+for \(\theta \gtrsim 60°\), a feature quantified by the statistic
+\(S_{1/2}\) \citep{Spergel_2003, Copi2013Lack}. The anomaly has
+persisted across independent data releases and component-separation
+methods, yet its statistical significance remains contested. A central
+difficulty is that significance assessments depend sensitively on the
+choice of theoretical ensemble against which the data are compared ,
+whether one fixes the cosmological parameters at their best-fit values
+or marginalises over the full posterior , and on whether the trial of
+multiple correlated statistics is properly accounted for.
 
 \begin{figure}[H]
 
-{\centering \includegraphics[width=1.1\linewidth,height=\textheight,keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_bestfit/powerspectrum/base_CamSpecHM_TT_lowl_lowE_power_corr.pdf}
+{\centering \includegraphics[width=1\linewidth,height=\textheight,keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_bestfit/powerspectrum/base_CamSpecHM_TT_lowl_lowE_power_corr.pdf}
 
 }
 
-\caption{Power spectrum and correlation function}
+\caption{Power spectrum (top) and angular correlation function (bottom)
+for model \texttt{base\_CamSpecHM\_TT\_lowl\_lowE}. Experimental Planck
+data (red points), theoretical mean (black line), and \(\pm 1\sigma\)
+band (grey) are shown. The suppression of \(C(\theta)\) for
+\(\theta \gtrsim 60°\) relative to the theoretical expectation is
+visible in the lower panel.}
 
 \end{figure}%
 
-Several anomalies have been reported at low multipoles since the
-first-year WMAP data release and confirmed in subsequent analyses of the
-Planck temperature maps
-\citep{cosmoplanck_2020, Ade2013Planck, Spergel_2003}. Among the most
-discussed is the apparent lack of large-angle correlations: the
-two-point angular correlation function \(C(\theta)\) is observed to be
-anomalously small for \(\theta \gtrsim 60°\), a feature quantified by
-the statistic \(S_{1/2}\) \citep{Spergel_2003, Copi2013Lack}. While
-cosmic variance is large at these scales and makes rigorous significance
-assessment difficult, the tension with \(\Lambda\)CDM predictions
-deserves careful scrutiny.
+Both questions have rarely been addressed simultaneously in the
+literature. Here we do so using Planck 2018 legacy chains: we construct
+the theoretical sampling distribution by two independent methods and
+combine the resulting p-values with the ACAT procedure
+\citep{Liu02012020}, which accounts for the correlations among all
+statistics tested and yields a single global significance.
 
 In this work we re-examine these statistics using Planck legacy chains
 and two complementary methods to construct the theoretical sampling
 distribution. We focus on three statistics defined over five angular
 intervals that partition the accessible range \([0°, 180°]\): the
 quadratic statistic \(S_a^b\), the linear statistic
-\(\langle\xi\rangle_a^b\), and the antipodal correlation \(C_{180}\). By
-comparing distributions generated from MCMC posterior samples to those
-obtained from Monte Carlo realizations around the best-fit spectrum, we
-probe the dependence of the inferred tensions on the choice of ensemble.
+\(\langle\xi\rangle_a^b\), and the antipodal correlation \(C_{180}\).
 
 The primary model considered throughout is the standard flat
 \(\Lambda\)CDM fit to the Planck temperature power spectrum using the
@@ -301,8 +317,23 @@ Results for the Plik-based likelihood and for models with free curvature
 
 \section{Statistics}\label{sec-stats}
 
+\FloatBarrier
+
+The statistics studied here are designed to probe complementary aspects
+of the large-angle correlation function: its integrated power, its mean
+level over specific angular ranges, and its value at antipodal
+separation. The choice is guided by the existing literature on
+low-\(\ell\) anomalies, though as noted by \citet{Efstathiou_2010}, some
+statistics , including \(S_{1/2}\) , were identified a posteriori from
+the data, which inflates their apparent significance. Studying multiple
+statistics simultaneously, and combining their p-values through a global
+test, is therefore essential to obtain a reliable assessment of tension
+with \(\Lambda\)CDM.
+
 \subsection{Angular Power Spectrum and Correlation
 Function}\label{sec-corr}
+
+\FloatBarrier
 
 The CMB temperature anisotropy \(\Delta T(\hat{n})/T_0\) is expanded in
 spherical harmonics with coefficients \(a_{\ell m}\). For a
@@ -315,39 +346,46 @@ which is approximately flat for a scale-invariant primordial spectrum.
 The angular two-point correlation function is obtained by transforming
 back to real space via a Legendre expansion,
 
-\[
+\begin{equation}\phantomsection\label{eq-corr}{
 C(\theta) = \sum_\ell \frac{2\ell+1}{4\pi} C_\ell P_\ell(\cos\theta)
-\] \begin{equation}\phantomsection\label{eq-corr}{
 = \sum_\ell \frac{2\ell+1}{2\ell(\ell+1)} D_\ell P_\ell(\cos\theta),
 }\end{equation}
 
 where \(P_\ell\) are Legendre polynomials. The sum runs from
-\(\ell = 2\) to a chosen \(\ell_{\max} = 30\) throughout this work.
+\(\ell = 2\) to \(\ell_{\max} = 30\) throughout this work.
 
 \subsection{Interval Statistics}\label{sec-statistics}
 
-We study three statistics on each of the angular intervals listed in
-Table\textasciitilde{}\ref{tbl-intervals}.
+\FloatBarrier
 
-\textbf{Antipodal correlation} \(C_{180} \equiv C(\theta = 180°)\) is
-the correlation between antipodal points on the sky and is relatively
-insensitive to small-scale masking effects.
+Three statistics are evaluated on each of the angular intervals listed
+in Table\textasciitilde{}\ref{tbl-intervals}, chosen to partition the
+accessible range \([0°, 180°]\) into physically motivated regions while
+including the classic \(S_{1/2}\) interval for comparison with the
+literature.
+
+\textbf{Antipodal correlation} \(C_{180} \equiv C(\theta = 180°)\)
+measures the correlation between antipodal points on the sky. Because it
+is a pointwise evaluation of \(C(\theta)\) it is relatively insensitive
+to masking effects at intermediate scales, and it provides a direct test
+of the near-vanishing of large-angle correlations at the largest
+possible separation.
 
 \textbf{Interval-averaged correlation} \(\langle\xi\rangle_a^b\) is the
-mean of \(C(\theta)\) over an angular interval \([\theta_a, \theta_b]\),
-equivalently expressed in terms of \(\mu = \cos\theta\) as
+mean of \(C(\theta)\) over the angular interval
+\([\theta_a, \theta_b]\), expressed in terms of \(\mu = \cos\theta\) as
 
 \[
-\langle\xi\rangle_a^b
-= \frac{1}{b - a}\int_a^b C(\theta)\,d\mu
-\] \begin{equation}\phantomsection\label{eq-xiv}{
-= \sum_\ell \frac{D_\ell}{2\ell(\ell+1)}\,
-  \frac{P_{\ell+1}(b) - P_{\ell-1}(b) - P_{\ell+1}(a) + P_{\ell-1}(a)}{b - a},
+\langle\xi\rangle_a^b = \frac{1}{b-a}\int_a^b C(\theta)\,d\mu
+= \]
+\begin{equation}\phantomsection\label{eq-xiv}{\sum_\ell \frac{D_\ell}{2\ell(\ell+1)}\,
+\frac{P_{\ell+1}(b) - P_{\ell-1}(b) - P_{\ell+1}(a) + P_{\ell-1}(a)}{b-a},
 }\end{equation}
 
 where \(a = \cos\theta_b\) and \(b = \cos\theta_a\). Being linear in
 \(D_\ell\), this statistic is sensitive to shifts in the mean
-correlation level.
+correlation level within an interval and changes sign when the
+correlation function crosses zero, making it complementary to \(S_a^b\).
 
 \textbf{Integrated squared correlation} \(S_a^b\) is defined as
 
@@ -356,11 +394,22 @@ S_a^b = \int_a^b C^2(\theta)\,\sin\theta\,d\theta
 = \sum_{n,m} A_n A_m D_n D_m\, T_{nm},
 }\end{equation}
 
-where \(A_\ell = (2\ell+1)/[2\ell(\ell+1)]\) and \(T_{nm}\) are overlap
-integrals of Legendre polynomials over the interval \citep{Carlitz1961}.
-The classic \(S_{1/2}\) statistic corresponds to the interval
-\([60°, 180°]\) \citep{Spergel_2003}. Being quadratic in \(D_\ell\),
-this statistic amplifies deviations that are coherent across multipoles.
+where \(A_\ell = (2\ell+1)/[2\ell(\ell+1)]\) and
+
+\[
+T_{nm} =\] \[ \sum_{r=0}^{\min(m,n)}
+\frac{A_r A_{m-r} A_{n-r}
+\left[\Delta P_{m+n-2r+1} - \Delta P_{m+n-2r-1}\right]_a^b}
+{A_{m+n-r}(2m+2n-2r+1)}
+\]
+
+are overlap integrals of Legendre polynomials over the interval
+\citep{Carlitz1961}. Being quadratic in \(D_\ell\), this statistic
+amplifies deviations that are coherent across multipoles and is always
+non-negative, so it cannot be cancelled by sign changes of \(C(\theta)\)
+within the interval. The classic \(S_{1/2}\) statistic of
+\citet{Spergel_2003} corresponds to the choice
+\([\theta_a, \theta_b] = [60°, 180°]\).
 
 \begin{table}
 
@@ -389,7 +438,11 @@ $[60°,\;180°]$ & Classic $S_{1/2}$ & $[-1.000,\ 0.500]$ \\
 
 \section{Data}\label{sec-data}
 
+\FloatBarrier
+
 \subsection{Planck Posterior Chains}\label{sec-planck}
+
+\FloatBarrier
 
 We use the publicly available Planck 2018 MCMC chains from the Planck
 Legacy Archive\footnote{\url{https://pla.esac.esa.int/}}
@@ -409,65 +462,112 @@ equations \ref{eq-corr}--\ref{eq-s12}.
 
 \subsection{Observed Planck Multipoles}\label{sec-obs}
 
+\FloatBarrier
+
 The experimental values of each statistic are computed from the Planck
 2018 Commander temperature map and associated beam and pixel window
 functions, using the same multipole range \(\ell \in [2, 30]\). These
 observed values serve as the reference against which the theoretical
 distributions are compared.
 
-P-values are defined empirically: the fraction of Monte Carlo or
-MCMC-derived realizations whose statistic is at least as extreme (in
-absolute deviation from the median) as the observed value. The multiple
-statistics studied here are correlated, so individual p-values should
-not be combined naively.
-
 \subsection{Ensemble Construction}\label{sec-ensemble}
 
+\FloatBarrier
+
 Two independent strategies are used to construct the theoretical
-sampling distribution:
+sampling distribution.\footnote{The full analysis pipeline is publicly
+  available at \url{https://github.com/PhyAMR/CMB}.}
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \item
-  \textbf{MCMC ensemble.} The last 1000 samples from the Planck
-  posterior chain are converted to CAMB spectra, where one realization
-  is generated for each sample. The resulting set of 1000 theoretical
-  \(D_\ell\) vectors spans the parameter uncertainty and constitutes a
-  Bayesian predictive distribution for each statistic. In this approach
-  we directly propagate the full posterior uncertainty through to the
-  derived statistics, and we also take in to account the cosmic variance
-  for each sample
+  \textbf{MCMC ensemble.} For each of the 1000 samples drawn from the
+  tail of the Planck posterior chain , specifically the last 1000 rows
+  after GetDist's default burn-in removal , the cosmological parameters
+  are passed to CAMB to compute a theoretical spectrum
+  \(D_\ell^\mathrm{th}\). Each spectrum is then passed through the
+  simulation pipeline described below, producing one realisation of
+  cosmic variance on top of the parameter-determined
+  \(D_\ell^\mathrm{th}\). The resulting ensemble therefore captures both
+  parameter uncertainty and cosmic variance simultaneously, constituting
+  a Bayesian predictive distribution for each statistic.
 \item
-  \textbf{Best-fit ensemble.} The single best-fit parameter vector is
-  used to compute \(D_\ell^{bf}\). An ensemble of 1000 realizations is
-  then obtained by drawing independent samples of each \(a_{\ell m}\)
-  from the chi-squared distribution dictated by \(C_\ell^{bf}\) and
-  reconstructing \(D_\ell\) from those coefficients. This approach
-  captures cosmic-variance scatter around the best-fit spectrum while
-  fixing the cosmological parameters.
+  \textbf{Best-fit ensemble.} The best-fit \(D_\ell^\mathrm{bf}\) is
+  read from the \texttt{.minimum.theory\_cl} file of the Planck chain,
+  which contains the spectrum evaluated at the maximum-posterior
+  parameter point. This single spectrum is used as input to 1000
+  independent pipeline realisations, each with a different random seed.
+  The spread of the resulting ensemble is driven entirely by cosmic
+  variance at fixed cosmological parameters, with no contribution from
+  parameter uncertainty. The width of its histograms is therefore a
+  lower bound on the total variance: the additional width seen in the
+  MCMC histograms is attributable purely to parameter uncertainty, and
+  comparing the two ensembles provides a clean decomposition of the two
+  contributions.
 \end{enumerate}
 
-In both cases the realization where made using the
-\citep{sullivan2024methodscmbmapanalysis} code, which takes in to
-account masking effects and the Planck beam and pixel window functions.
-The resulting \(D_\ell\) are then transformed to \(C(\theta)\) and the
-derived statistics using the same analytical expressions as for the MCMC
-samples.
+In both cases, the pipeline follows the methodology of
+\citet{sullivan2024methodscmbmapanalysis}. For each theoretical
+\(C_\ell^\mathrm{th}\) spectrum, the beam transfer function \(b_\ell\)
+and the HEALPix pixel window function \(p_\ell\) are applied, a full-sky
+temperature map is synthesised at \(N_\mathrm{side} = 2048\) using
+\texttt{hp.synfast}, and the pseudo-\(C_\ell\) are recovered with
+\texttt{hp.anafast}. The recovered spectrum is then deconvolved by
+\(b_\ell^2 p_\ell^2\) to obtain an estimate \(\hat{D}_\ell\) in the same
+space as the published Planck values. When a sky mask is applied, the
+recovered \(C_\ell\) are corrected by the sky fraction
+\(f_\mathrm{sky}\) before deconvolution. Simulations were run both with
+the Planck 2018 common mask and without any mask; results for both cases
+are reported. At \(\ell_\mathrm{max} = 30\) the beam and pixel window
+corrections are numerically negligible, but they are included for
+consistency with the Planck data reduction.
 
-In order to reduce the ``look-elsewhere'' effect a global p-value is
-computed using the ACAT method \citep{Liu02012020}, which combines the
-individual p-values of the eleven statistics into a single test
-statistic that accounts for their correlations.
+In order to reduce the look-elsewhere effect and obtain a calibrated
+global significance that accounts for the correlation structure of the
+statistics without requiring an explicit model of it, we use the
+Aggregated Cauchy Association Test \citep[ACAT;][]{Liu02012020}. The
+eleven statistics examined , five intervals each for \(S_a^b\) and
+\(\langle\xi\rangle_a^b\), plus \(C_{180}\) , are not independent: all
+derive from the same realisation of \(D_\ell\), so their p-values are
+correlated by construction. Treating them as independent and applying a
+simple Bonferroni correction would be overly conservative, while
+reporting only the most extreme individual p-value would be
+anti-conservative.
 
-All the code can be found in the GitHub repository
-\href{https://github.com/PhyAMR/CMB}{here}. With a small sample of the
-data and the code, so the analysis can be extended to more angle
-intervals or different models with a Planck format (ie. using the same
-names for the aparemeters).
+For each statistic \(k \in \{1, \dots, 11\}\) the individual p-value
+\(p_k\) is computed as the two-sided empirical quantile of the observed
+value within the simulated ensemble: \(p_k = 2\min(F_k, 1 - F_k)\),
+where \(F_k\) is the fraction of realisations with a statistic value
+less than or equal to the observed one. The ACAT test statistic is then
+
+\[
+T = \sum_{k=1}^{11} w_k \tan\!\left[\left(\tfrac{1}{2} - p_k\right)\pi\right],
+\]
+
+where equal weights \(w_k = 1/11\) are used, reflecting no a priori
+preference for any particular angular interval or statistic. Under the
+null hypothesis, \(T\) follows a standard Cauchy distribution regardless
+of the dependence structure among the \(p_k\), so the combined p-value
+is obtained analytically as
+
+\[
+p_\mathrm{global} = \tfrac{1}{2} - \frac{\arctan T}{\pi}.
+\]
+
+The Cauchy combination is exact under arbitrary dependence, including
+the strong correlations expected between statistics computed over
+overlapping angular ranges. The global tension in units of Gaussian
+standard deviations is reported as
+\(n_\sigma = \Phi^{-1}(1 - p_\mathrm{global}/2)\), where \(\Phi^{-1}\)
+is the probit function.
 
 \section{Results}\label{results}
 
+\FloatBarrier
+
 \subsection{Best-Fit Analysis}\label{sec-bestfit}
+
+\FloatBarrier
 
 In the best-fit analysis the theoretical sampling distribution is
 generated by Monte Carlo realizations of the CMB sky drawn from the
@@ -482,93 +582,94 @@ histogram), and the observed Planck value (red vertical line).
 Figure\textasciitilde{}\ref{fig-hist-bestfit-c180} shows the analogous
 distribution for \(C_{180}\).
 
-\begin{figure}
+\begin{figure*}[htbp]
+\centering
+\begin{subfigure}[b]{0.45\textwidth}
+  \includegraphics[width=\textwidth]{../runs/run_30_1000_all_8e4057ec/images_bestfit/histograms/base_CamSpecHM_TT_lowl_lowE_hist_s12-180-60.pdf}
+  \caption{${S}_{60}^{180}$ (classic $S_{1/2}$)}
+\end{subfigure}
+\hfill
+\begin{subfigure}[b]{0.45\textwidth}
+  \includegraphics[width=\textwidth]{../runs/run_30_1000_all_8e4057ec/images_bestfit/histograms/base_CamSpecHM_TT_lowl_lowE_hist_s12-180-154.pdf}
+  \caption{${S}_{154}^{180}$}
+\end{subfigure}
 
-\begin{minipage}{\linewidth}
+\vspace{0.5em}
 
-\includegraphics[width=0.7\linewidth,height=\textheight,keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_bestfit/histograms/base_CamSpecHM_TT_lowl_lowE_hist_s12-180-60.pdf}
+\begin{subfigure}[b]{0.45\textwidth}
+  \includegraphics[width=\textwidth]{../runs/run_30_1000_all_8e4057ec/images_bestfit/histograms/base_CamSpecHM_TT_lowl_lowE_hist_s12-154-92.pdf}
+  \caption{${S}_{92}^{154}$}
+\end{subfigure}
+\hfill
+\begin{subfigure}[b]{0.45\textwidth}
+  \includegraphics[width=\textwidth]{../runs/run_30_1000_all_8e4057ec/images_bestfit/histograms/base_CamSpecHM_TT_lowl_lowE_hist_s12-92-30.pdf}
+  \caption{${S}_{30}^{92}$}
+\end{subfigure}
 
-\subcaption{\label{}\({S}_{60}^{180}\) (classic \(S_{1/2}\))}
-\end{minipage}%
-\newline
-\begin{minipage}{\linewidth}
+\vspace{0.5em}
 
-\includegraphics[width=0.7\linewidth,height=\textheight,keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_bestfit/histograms/base_CamSpecHM_TT_lowl_lowE_hist_s12-180-154.pdf}
+\begin{subfigure}[b]{0.45\textwidth}
+  \includegraphics[width=\textwidth]{../runs/run_30_1000_all_8e4057ec/images_bestfit/histograms/base_CamSpecHM_TT_lowl_lowE_hist_s12-30-0.pdf}
+  \caption{${S}_{0}^{30}$}
+\end{subfigure}
 
-\subcaption{\label{}\({S}_{154}^{180}\)}
-\end{minipage}%
-\newline
-\begin{minipage}{\linewidth}
+\caption{Best-fit Monte Carlo distributions of the $S_a^b$ statistic for model
+\texttt{base\_CamSpecHM\_TT\_lowl\_lowE} ($\ell_{\max} = 30$). Each panel shows
+the normalized histogram of 1000 realizations; the red line marks the
+observed Planck value. The x-axis is in logarithmic scale.}
+\label{fig-hist-bestfit-s12}
+\end{figure*}
 
-\includegraphics[width=0.7\linewidth,height=\textheight,keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_bestfit/histograms/base_CamSpecHM_TT_lowl_lowE_hist_s12-154-92.pdf}
+As we can see, for the different intervals all values of \(S_a^b\) are
+below the median of the distribution, which is not only consistent with
+the lack of large-angle correlations but also suggests that tha lack is
+not only present at large angles but also at intermediate and small
+angles. Nvertheless, the observed values are not in the extreme tails of
+the distributions, and the empirical p-values are not low enough to
+claim a significant tension with \(\Lambda\)CDM.
 
-\subcaption{\label{}\({S}_{92}^{154}\)}
-\end{minipage}%
-\newline
-\begin{minipage}{\linewidth}
+\begin{figure*}[htbp]
+\centering
+\begin{subfigure}[b]{0.45\textwidth}
+  \includegraphics[width=\textwidth]{../runs/run_30_1000_all_8e4057ec/images_bestfit/histograms/base_CamSpecHM_TT_lowl_lowE_hist_xiv-180-60.pdf}
+  \caption{$\langle\xi\rangle_{60}^{180}$}
+\end{subfigure}
+\hfill
+\begin{subfigure}[b]{0.45\textwidth}
+  \includegraphics[width=\textwidth]{../runs/run_30_1000_all_8e4057ec/images_bestfit/histograms/base_CamSpecHM_TT_lowl_lowE_hist_xiv-180-154.pdf}
+  \caption{$\langle\xi\rangle_{154}^{180}$}
+\end{subfigure}
 
-\includegraphics[width=0.7\linewidth,height=\textheight,keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_bestfit/histograms/base_CamSpecHM_TT_lowl_lowE_hist_s12-92-30.pdf}
+\vspace{0.5em}
 
-\subcaption{\label{}\({S}_{30}^{92}\)}
-\end{minipage}%
-\newline
-\begin{minipage}{\linewidth}
+\begin{subfigure}[b]{0.45\textwidth}
+  \includegraphics[width=\textwidth]{../runs/run_30_1000_all_8e4057ec/images_bestfit/histograms/base_CamSpecHM_TT_lowl_lowE_hist_xiv-154-92.pdf}
+  \caption{$\langle\xi\rangle_{92}^{154}$}
+\end{subfigure}
+\hfill
+\begin{subfigure}[b]{0.45\textwidth}
+  \includegraphics[width=\textwidth]{../runs/run_30_1000_all_8e4057ec/images_bestfit/histograms/base_CamSpecHM_TT_lowl_lowE_hist_xiv-92-30.pdf}
+  \caption{$\langle\xi\rangle_{30}^{92}$}
+\end{subfigure}
 
-\includegraphics[width=0.7\linewidth,height=\textheight,keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_bestfit/histograms/base_CamSpecHM_TT_lowl_lowE_hist_s12-30-0.pdf}
+\vspace{0.5em}
 
-\subcaption{\label{}\({S}_{0}^{30}\)}
-\end{minipage}%
+\begin{subfigure}[b]{0.45\textwidth}
+  \includegraphics[width=\textwidth]{../runs/run_30_1000_all_8e4057ec/images_bestfit/histograms/base_CamSpecHM_TT_lowl_lowE_hist_xiv-30-0.pdf}
+  \caption{$\langle\xi\rangle_{0}^{30}$}
+\end{subfigure}
 
-\caption{\label{fig-hist-bestfit-s12}Best-fit Monte Carlo distributions
-of the \(S_a^b\) statistic for model
-\texttt{base\_CamSpecHM\_TT\_lowl\_lowE} (\(\ell_{\max} = 30\)). Each
-panel shows the normalized histogram of 1000 realizations; the red line
-marks the observed Planck value.}
+\caption{Best-fit Monte Carlo distributions of the interval-averaged correlation
+$\langle\xi\rangle_a^b$ for model \texttt{base\_CamSpecHM\_TT\_lowl\_lowE}.}
+\label{fig-hist-bestfit-xiv}
+\end{figure*}
 
-\end{figure}%
-
-\begin{figure}
-
-\begin{minipage}{\linewidth}
-
-\includegraphics[width=0.7\linewidth,height=\textheight,keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_bestfit/histograms/base_CamSpecHM_TT_lowl_lowE_hist_xiv-180-60.pdf}
-
-\subcaption{\label{}\(\langle\xi\rangle_{60}^{180}\)}
-\end{minipage}%
-\newline
-\begin{minipage}{\linewidth}
-
-\includegraphics[width=0.7\linewidth,height=\textheight,keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_bestfit/histograms/base_CamSpecHM_TT_lowl_lowE_hist_xiv-180-154.pdf}
-
-\subcaption{\label{}\(\langle\xi\rangle_{154}^{180}\)}
-\end{minipage}%
-\newline
-\begin{minipage}{\linewidth}
-
-\includegraphics[width=0.7\linewidth,height=\textheight,keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_bestfit/histograms/base_CamSpecHM_TT_lowl_lowE_hist_xiv-154-92.pdf}
-
-\subcaption{\label{}\(\langle\xi\rangle_{92}^{154}\)}
-\end{minipage}%
-\newline
-\begin{minipage}{\linewidth}
-
-\includegraphics[width=0.7\linewidth,height=\textheight,keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_bestfit/histograms/base_CamSpecHM_TT_lowl_lowE_hist_xiv-92-30.pdf}
-
-\subcaption{\label{}\(\langle\xi\rangle_{30}^{92}\)}
-\end{minipage}%
-\newline
-\begin{minipage}{\linewidth}
-
-\includegraphics[width=0.7\linewidth,height=\textheight,keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_bestfit/histograms/base_CamSpecHM_TT_lowl_lowE_hist_xiv-30-0.pdf}
-
-\subcaption{\label{}\(\langle\xi\rangle_{0}^{30}\)}
-\end{minipage}%
-
-\caption{\label{fig-hist-bestfit-xiv}Best-fit Monte Carlo distributions
-of the interval-averaged correlation \(\langle\xi\rangle_a^b\) for model
-\texttt{base\_CamSpecHM\_TT\_lowl\_lowE}.}
-
-\end{figure}%
+In this set of histograms we can see that the observed values of
+\(\langle\xi\rangle_a^b\) sometimes are lower and sometimes higher than
+the median of the distribution, which is consistent with the fact that
+\(\langle\xi\rangle_a^b\) is a linear statistic, and therefore it is
+more sensitive to shifts in the mean correlation level, and the change
+of sign in the correlation function in certain intervals.
 
 \begin{figure}
 
@@ -584,11 +685,11 @@ of the antipodal correlation \(C_{180}\) for model
 
 \end{figure}%
 
-The statistical summary --- including the median, 68\% credible
-interval, observed value, and empirical p-value for each statistic ---
-is reported in Table\textasciitilde{}\ref{tbl-bestfit-camspec}.
+The statistical summary , including the median, 68\% credible interval,
+observed value, and empirical p-value for each statistic , is reported
+in Table\textasciitilde{}\ref{tbl-bestfit-camspec}.
 
-\begin{table*}[htbp]
+\begin{table*}[h!]
 \centering
 \caption{Statistical summary for the best-fit analysis of model
 \texttt{base\_CamSpecHM\_TT\_lowl\_lowE}. Columns give the experimental value,
@@ -598,6 +699,8 @@ best-fit median, 68\% interval, and empirical p-value.}
 \end{table*}
 
 \subsection{MCMC Analysis}\label{sec-mcmc}
+
+\FloatBarrier
 
 In the MCMC analysis the theoretical sampling distribution is
 constructed directly from the Planck posterior, propagating full
@@ -613,92 +716,78 @@ width of the MCMC-derived histograms compared to the best-fit case
 reflects the additional spread due to cosmological parameter
 uncertainty.
 
-\begin{figure}
+\begin{figure*}[htbp]
+\centering
+\begin{subfigure}[b]{0.45\textwidth}
+  \includegraphics[width=\textwidth]{../runs/run_30_1000_all_8e4057ec/images_mcmc/histograms/base_CamSpecHM_TT_lowl_lowE_hist_s12-180-60.pdf}
+  \caption{${S}_{60}^{180}$ (classic $S_{1/2}$)}
+\end{subfigure}
+\hfill
+\begin{subfigure}[b]{0.45\textwidth}
+  \includegraphics[width=\textwidth]{../runs/run_30_1000_all_8e4057ec/images_mcmc/histograms/base_CamSpecHM_TT_lowl_lowE_hist_s12-180-154.pdf}
+  \caption{${S}_{154}^{180}$}
+\end{subfigure}
 
-\begin{minipage}{\linewidth}
+\vspace{0.5em}
 
-\includegraphics[width=0.7\linewidth,height=\textheight,keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_mcmc/histograms/base_CamSpecHM_TT_lowl_lowE_hist_s12-180-60.pdf}
+\begin{subfigure}[b]{0.45\textwidth}
+  \includegraphics[width=\textwidth]{../runs/run_30_1000_all_8e4057ec/images_mcmc/histograms/base_CamSpecHM_TT_lowl_lowE_hist_s12-154-92.pdf}
+  \caption{${S}_{92}^{154}$}
+\end{subfigure}
+\hfill
+\begin{subfigure}[b]{0.45\textwidth}
+  \includegraphics[width=\textwidth]{../runs/run_30_1000_all_8e4057ec/images_mcmc/histograms/base_CamSpecHM_TT_lowl_lowE_hist_s12-92-30.pdf}
+  \caption{${S}_{30}^{92}$}
+\end{subfigure}
 
-\subcaption{\label{}\({S}_{60}^{180}\) (classic \(S_{1/2}\))}
-\end{minipage}%
-\newline
-\begin{minipage}{\linewidth}
+\vspace{0.5em}
 
-\includegraphics[width=0.7\linewidth,height=\textheight,keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_mcmc/histograms/base_CamSpecHM_TT_lowl_lowE_hist_s12-180-154.pdf}
+\begin{subfigure}[b]{0.45\textwidth}
+  \includegraphics[width=\textwidth]{../runs/run_30_1000_all_8e4057ec/images_mcmc/histograms/base_CamSpecHM_TT_lowl_lowE_hist_s12-30-0.pdf}
+  \caption{${S}_{0}^{30}$}
+\end{subfigure}
 
-\subcaption{\label{}\({S}_{154}^{180}\)}
-\end{minipage}%
-\newline
-\begin{minipage}{\linewidth}
+\caption{MCMC posterior distributions of the $S_a^b$ statistic for model
+\texttt{base\_CamSpecHM\_TT\_lowl\_lowE}. Each panel shows the distribution
+over 1000 posterior samples from the Planck CamSpec chain.}
+\label{fig-hist-mcmc-s12}
+\end{figure*}
 
-\includegraphics[width=0.7\linewidth,height=\textheight,keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_mcmc/histograms/base_CamSpecHM_TT_lowl_lowE_hist_s12-154-92.pdf}
+\begin{figure*}[htbp]
+\centering
+\begin{subfigure}[b]{0.45\textwidth}
+  \includegraphics[width=\textwidth]{../runs/run_30_1000_all_8e4057ec/images_mcmc/histograms/base_CamSpecHM_TT_lowl_lowE_hist_xiv-180-60.pdf}
+  \caption{$\langle\xi\rangle_{60}^{180}$}
+\end{subfigure}
+\hfill
+\begin{subfigure}[b]{0.45\textwidth}
+  \includegraphics[width=\textwidth]{../runs/run_30_1000_all_8e4057ec/images_mcmc/histograms/base_CamSpecHM_TT_lowl_lowE_hist_xiv-180-154.pdf}
+  \caption{$\langle\xi\rangle_{154}^{180}$}
+\end{subfigure}
 
-\subcaption{\label{}\({S}_{92}^{154}\)}
-\end{minipage}%
-\newline
-\begin{minipage}{\linewidth}
+\vspace{0.5em}
 
-\includegraphics[width=0.7\linewidth,height=\textheight,keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_mcmc/histograms/base_CamSpecHM_TT_lowl_lowE_hist_s12-92-30.pdf}
+\begin{subfigure}[b]{0.45\textwidth}
+  \includegraphics[width=\textwidth]{../runs/run_30_1000_all_8e4057ec/images_mcmc/histograms/base_CamSpecHM_TT_lowl_lowE_hist_xiv-154-92.pdf}
+  \caption{$\langle\xi\rangle_{92}^{154}$}
+\end{subfigure}
+\hfill
+\begin{subfigure}[b]{0.45\textwidth}
+  \includegraphics[width=\textwidth]{../runs/run_30_1000_all_8e4057ec/images_mcmc/histograms/base_CamSpecHM_TT_lowl_lowE_hist_xiv-92-30.pdf}
+  \caption{$\langle\xi\rangle_{30}^{92}$}
+\end{subfigure}
 
-\subcaption{\label{}\({S}_{30}^{92}\)}
-\end{minipage}%
-\newline
-\begin{minipage}{\linewidth}
+\vspace{0.5em}
 
-\includegraphics[width=0.7\linewidth,height=\textheight,keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_mcmc/histograms/base_CamSpecHM_TT_lowl_lowE_hist_s12-30-0.pdf}
+\begin{subfigure}[b]{0.45\textwidth}
+  \includegraphics[width=\textwidth]{../runs/run_30_1000_all_8e4057ec/images_mcmc/histograms/base_CamSpecHM_TT_lowl_lowE_hist_xiv-30-0.pdf}
+  \caption{$\langle\xi\rangle_{0}^{30}$}
+\end{subfigure}
 
-\subcaption{\label{}\({S}_{0}^{30}\)}
-\end{minipage}%
-
-\caption{\label{fig-hist-mcmc-s12}MCMC posterior distributions of the
-\(S_a^b\) statistic for model \texttt{base\_CamSpecHM\_TT\_lowl\_lowE}.
-Each panel shows the distribution over 1000 posterior samples from the
-Planck CamSpec chain.}
-
-\end{figure}%
-
-\begin{figure}
-
-\begin{minipage}{\linewidth}
-
-\includegraphics[width=0.7\linewidth,height=\textheight,keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_mcmc/histograms/base_CamSpecHM_TT_lowl_lowE_hist_xiv-180-60.pdf}
-
-\subcaption{\label{}\(\langle\xi\rangle_{60}^{180}\)}
-\end{minipage}%
-\newline
-\begin{minipage}{\linewidth}
-
-\includegraphics[width=0.7\linewidth,height=\textheight,keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_mcmc/histograms/base_CamSpecHM_TT_lowl_lowE_hist_xiv-180-154.pdf}
-
-\subcaption{\label{}\(\langle\xi\rangle_{154}^{180}\)}
-\end{minipage}%
-\newline
-\begin{minipage}{\linewidth}
-
-\includegraphics[width=0.7\linewidth,height=\textheight,keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_mcmc/histograms/base_CamSpecHM_TT_lowl_lowE_hist_xiv-154-92.pdf}
-
-\subcaption{\label{}\(\langle\xi\rangle_{92}^{154}\)}
-\end{minipage}%
-\newline
-\begin{minipage}{\linewidth}
-
-\includegraphics[width=0.7\linewidth,height=\textheight,keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_mcmc/histograms/base_CamSpecHM_TT_lowl_lowE_hist_xiv-92-30.pdf}
-
-\subcaption{\label{}\(\langle\xi\rangle_{30}^{92}\)}
-\end{minipage}%
-\newline
-\begin{minipage}{\linewidth}
-
-\includegraphics[width=0.7\linewidth,height=\textheight,keepaspectratio]{../runs/run_30_1000_all_8e4057ec/images_mcmc/histograms/base_CamSpecHM_TT_lowl_lowE_hist_xiv-30-0.pdf}
-
-\subcaption{\label{}\(\langle\xi\rangle_{0}^{30}\)}
-\end{minipage}%
-
-\caption{\label{fig-hist-mcmc-xiv}MCMC posterior distributions of
-\(\langle\xi\rangle_a^b\) for model
+\caption{MCMC posterior distributions of $\langle\xi\rangle_a^b$ for model
 \texttt{base\_CamSpecHM\_TT\_lowl\_lowE}.}
-
-\end{figure}%
+\label{fig-hist-mcmc-xiv}
+\end{figure*}
 
 \begin{figure}
 
@@ -716,7 +805,7 @@ Planck CamSpec chain.}
 The quantitative results for the MCMC ensemble are collected in
 Table\textasciitilde{}\ref{tbl-mcmc-camspec}.
 
-\begin{table*}[htbp]
+\begin{table*}[h!]
 \centering
 \caption{Statistical summary for the MCMC analysis of model
 \texttt{base\_CamSpecHM\_TT\_lowl\_lowE}. Columns give the experimental value,
@@ -727,33 +816,7 @@ MCMC median, 68\% credible interval, and empirical p-value.}
 
 \section{Discussion}\label{sec-discussion}
 
-The two ensembles --- best-fit Monte Carlo and MCMC posterior ---
-provide complementary perspectives on the significance of the
-large-angle anomalies.
-
-The best-fit ensemble captures cosmic-variance scatter at fixed
-cosmological parameters. If the observed statistics fall within the bulk
-of this distribution, the data are consistent with \(\Lambda\)CDM at the
-best-fit point and any apparent anomaly is simply a statistical
-fluctuation of the measured sky.
-
-The MCMC ensemble additionally folds in parameter uncertainty. The
-broader spread of the MCMC distributions reflects the fact that
-different points in the posterior predict somewhat different large-angle
-correlation functions. When the observed statistics fall in the tails of
-the MCMC-derived distributions, this indicates that the data are not
-well described by the bulk of the posterior, suggesting a tension
-between the large-scale and small-scale information encoded in the
-Planck data.
-
-A key caveat is the look-elsewhere effect: eleven correlated statistics
-are examined simultaneously, so finding one or more with low p-values is
-expected even under the null hypothesis. A proper assessment of global
-significance requires a multivariate test statistic, which is reported
-in the table summaries. An additional concern at low multipoles is the
-strong influence of cosmic variance, which means that even a statistic
-with a p-value of a few per cent does not necessarily signal new
-physics.
+\FloatBarrier
 
 The results for alternative likelihoods and models with free curvature
 \(\Omega_k\) are reported in
@@ -762,26 +825,46 @@ the results on the likelihood choice (CamSpec vs.~Plik) provides a
 useful cross-check, while the curvature-extended models test whether a
 departure from flatness could alleviate the observed tensions.
 
-As noted in \citep{Efstathiou_2010}, in the low-\(\ell\) regime the
-theoretical distribution of the statistics it has no
+As noted in \citep{Efstathiou_2010}, in the low-\(\ell\) regime, the
+theoretical distribution of the statistics is mostly independent of the
+mask used, and the effects of the mask are negligible.
 
 \section{Conclusions}\label{sec-conclusions}
+
+\FloatBarrier
 
 We have studied the large-angle CMB angular correlation function and its
 derived statistics using Planck 2018 data and two complementary
 ensembles for the theoretical sampling distributions. The statistics
-examined --- the quadratic \(S_a^b\), the linear
+examined , the quadratic \(S_a^b\), the linear
 \(\langle\xi\rangle_a^b\), and the antipodal \(C_{180}\) --- probe
 distinct aspects of the large-angle temperature field.
 
-The best-fit and MCMC ensembles yield qualitatively different
-assessments of significance for some statistics, underscoring that the
-choice of theoretical ensemble matters when evaluating low-\(\ell\)
-anomalies. A complete summary of all p-values and multivariate tension
-estimates for the primary \texttt{base\_CamSpecHM\_TT\_lowl\_lowE} model
-is provided in Tables\textasciitilde{}\ref{tbl-bestfit-camspec} and
+Both ensembles provide complementary perspectives on the significance of
+the large-angle anomalies. The best-fit ensemble isolates the
+contribution of cosmic variance, while the MCMC ensemble captures the
+full parameter uncertainty and the cosmic variance.
+
+A complete summary of all p-values and multivariate tension estimates
+for the primary \texttt{base\_CamSpecHM\_TT\_lowl\_lowE} model is
+provided in Tables\textasciitilde{}\ref{tbl-bestfit-camspec} and
 \ref{tbl-mcmc-camspec}; results for additional models appear in
 Appendix\textasciitilde{}\ref{sec-appendix-tables}.
+
+While the lack of large-angle correlations is a persistent feature of
+the observed CMB sky, specially the \(C_{180}\) statistic, the
+\(\Lambda\)CDM model is not in significant tension with the data when
+the full distribution of statistics is taken into account. The observed
+values are generally below the median of the theoretical distributions,
+consistent with the lack of large-angle correlations.
+
+Another raised question from previous analyses is whether the lack of
+large-angle correlations is a statistical fluke or a hint of new
+physics. The observed p-values for the \(C_{180}\) statistic are low
+accross multiple simulations and models, and while they are in the order
+of 2-2.5\(\sigma\) the fact that it is persistent accross all our
+simulations makes it more clear that the lack of large-angle
+correlations is a real feature of the data, and not a statistical fluke.
 
 \section*{References}\label{references}
 \addcontentsline{toc}{section}{References}
@@ -790,6 +873,8 @@ Appendix\textasciitilde{}\ref{sec-appendix-tables}.
 \bibliography{main.bib}
 
 \appendix
+
+\FloatBarrier
 
 \section{Additional Models: Statistical
 Tables}\label{sec-appendix-tables}
@@ -801,45 +886,147 @@ denotes a run with free spatial curvature; \texttt{plikHM} denotes the
 Plik high-multipole likelihood; \texttt{TTTEEE} denotes a joint
 temperature and polarization fit.
 
-\subsection{MCMC Results}\label{sec-app-mcmc}
+\FloatBarrier
 
-\begin{table*}[htbp]
+\subsection{No masked sky}\label{sec-appendix-nomask}
+
+In this section the theoretical sampling distributions are constructed
+without applying any sky mask, so the recovered \(C_\ell\) are not
+corrected by \(f_\mathrm{sky}\) before deconvolution. The observed
+values are computed from the full-sky Commander map, so they are
+directly comparable to the theoretical distributions without any
+correction for masking effects.
+
+\FloatBarrier
+
+\subsubsection{MCMC Results}\label{sec-app-mcmc}
+
+\begin{table*}[h!]
 \centering
 \caption{MCMC results for \texttt{base\_plikHM\_TT\_lowl\_lowE}.}
 \input{../runs/run_30_1000_all_8e4057ec/tables/mcmc/base_plikHM_TT_lowl_lowE.tex}
 \end{table*}
 
-\begin{table*}[htbp]
+\begin{table*}[h!]
 \centering
 \caption{MCMC results for \texttt{base\_omegak\_CamSpecHM\_TT\_lowl\_lowE}.}
 \input{../runs/run_30_1000_all_8e4057ec/tables/mcmc/base_omegak_CamSpecHM_TT_lowl_lowE.tex}
 \end{table*}
 
-\begin{table*}[htbp]
+\begin{table*}[h!]
 \centering
 \caption{MCMC results for \texttt{base\_omegak\_plikHM\_TTTEEE\_lowl\_lowE}.}
 \input{../runs/run_30_1000_all_8e4057ec/tables/mcmc/base_omegak_plikHM_TTTEEE_lowl_lowE.tex}
 \end{table*}
 
-\subsection{Best-Fit Results}\label{sec-app-bestfit}
+\FloatBarrier
 
-\begin{table*}[htbp]
+\subsubsection{Best-Fit Results}\label{sec-app-bestfit}
+
+\begin{table*}[h!]
 \centering
 \caption{Best-fit results for \texttt{base\_plikHM\_TT\_lowl\_lowE}.}
 \input{../runs/run_30_1000_all_8e4057ec/tables/bestfit/base_plikHM_TT_lowl_lowE.tex}
 \end{table*}
 
-\begin{table*}[htbp]
+\begin{table*}[h!]
 \centering
 \caption{Best-fit results for \texttt{base\_omegak\_CamSpecHM\_TT\_lowl\_lowE}.}
 \input{../runs/run_30_1000_all_8e4057ec/tables/bestfit/base_omegak_CamSpecHM_TT_lowl_lowE.tex}
 \end{table*}
 
-\begin{table*}[htbp]
+\begin{table*}[h!]
 \centering
 \caption{Best-fit results for \texttt{base\_omegak\_plikHM\_TTTEEE\_lowl\_lowE}.}
 \input{../runs/run_30_1000_all_8e4057ec/tables/bestfit/base_omegak_plikHM_TTTEEE_lowl_lowE.tex}
 \end{table*}
+
+\FloatBarrier
+
+\subsection{Masked sky}\label{sec-appendix-masked}
+
+In this section the theoretical sampling distributions are constructed
+with the Planck common mask applied, so the recovered \(C_\ell\) are
+corrected by \(f_\mathrm{sky}\) before deconvolution.
+
+\FloatBarrier
+
+\subsubsection{MCMC Results}\label{sec-app-mcmc-masked}
+
+\begin{table*}[h!]
+\centering
+\caption{MCMC results for
+\texttt{base\_CamSpecHM\_TT\_lowl\_lowE} with masked sky. }
+\label{tbl-mcmc-camspec-masked}
+\input{../runs/run_30_1000_all_8e4057ec/tables/mcmc/base_CamSpecHM_TT_lowl_lowE.tex}
+\end{table*}
+
+\begin{table*}[h!]
+\centering
+\caption{MCMC results for \texttt{base\_plikHM\_TT\_lowl\_lowE} with masked sky. }
+\label{tbl-mcmc-plikHM-masked}
+\input{../runs/run_30_1000_all_8f075564/tables/mcmc/base_plikHM_TT_lowl_lowE.tex}
+\end{table*}
+
+\begin{table*}[h!]
+\centering
+\caption{MCMC results for \texttt{base\_omegak\_CamSpecHM\_TT\_lowl\_lowE} with masked sky.}
+\label{tbl-mcmc-omegak-camspec}
+\input{../runs/run_30_1000_all_8f075564/tables/mcmc/base_omegak_CamSpecHM_TT_lowl_lowE.tex}
+\end{table*}
+
+\begin{table*}[h!]
+\centering
+\caption{MCMC results for \texttt{base\_omegak\_plikHM\_TTTEEE\_lowl\_lowE} with masked sky.}
+\label{tbl-mcmc-omegak-plikHM}
+\input{../runs/run_30_1000_all_8f075564/tables/mcmc/base_omegak_plikHM_TTTEEE_lowl_lowE.tex}
+\end{table*}
+
+\FloatBarrier
+
+\subsubsection{Best-Fit Results}\label{sec-app-bestfit-masked}
+
+The mask effect for models with free curvature (\(\Omega_k\)) is not
+properly captured since the mask was not designed for those models,
+while in the MCMC case that effect has been mitigated by the fact that
+the MCMC ensemble includes a range of cosmological parameters, so the
+mask effect is averaged over the posterior distribution. In the best-fit
+case, however, the cosmological parameters are fixed at the best-fit
+point, so the mask effect is not averaged over the posterior
+distribution, and therefore it is not properly captured. For that reason
+the significance of those models with \(T\ll0\) can not be interpreted
+correctly.
+
+\begin{table*}[h!]
+\centering
+\caption{Best-fit results for
+\texttt{base\_CamSpecHM\_TT\_lowl\_lowE} with masked sky. }
+\label{tbl-bestfit-camspec-masked}
+\input{../runs/run_30_1000_all_8e4057ec/tables/bestfit/base_CamSpecHM_TT_lowl_lowE.tex}
+\end{table*}
+
+\begin{table*}[h!]
+\centering
+\caption{Best-fit results for \texttt{base\_plikHM\_TT\_lowl\_lowE} with masked sky.}
+\label{tbl-bestfit-plikHM-masked}
+\input{../runs/run_30_1000_all_8f075564/tables/bestfit/base_plikHM_TT_lowl_lowE.tex}
+\end{table*}
+
+\begin{table*}[h!]
+\centering
+\caption{Best-fit results for \texttt{base\_omegak\_CamSpecHM\_TT\_lowl\_lowE} with masked sky.}
+\label{tbl-bestfit-omegak-camspec}
+\input{../runs/run_30_1000_all_8f075564/tables/bestfit/base_omegak_CamSpecHM_TT_lowl_lowE.tex}
+\end{table*}
+
+\begin{table*}[h!]
+\centering
+\caption{Best-fit results for \texttt{base\_omegak\_plikHM\_TTTEEE\_lowl\_lowE} with masked sky.}
+\label{tbl-bestfit-omegak-plikHM}
+\input{../runs/run_30_1000_all_8f075564/tables/bestfit/base_omegak_plikHM_TTTEEE_lowl_lowE.tex}
+\end{table*}
+
+\FloatBarrier
 
 
 
