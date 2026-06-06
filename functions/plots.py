@@ -23,7 +23,8 @@ from matplotlib.patches import Rectangle
 import re
 #from scipy import stats
 
-from .unified_stats import compute_percentiles_unified, compute_pvalue_unified
+from .unified_stats import compute_percentiles_unified, compute_pvalue_unified, sigma_label
+from .plot_style import apply_style, COLORS
 
 
 logger = logging.getLogger(__name__)
@@ -434,36 +435,25 @@ class CorrelationPlots:
         """
         self.DL = DL
         self.output_dir = output_dir
-        
+
+        # Base palette from plot_style; caller may override individual keys.
         self.colors = {
-            'experimental': 'red',
-            'simulation': 'blue',
-            'theory': 'black'
+            'experimental': COLORS['experimental'],
+            'simulation':   COLORS['theory_fill'],
+            'theory':       COLORS['theory'],
         }
-        
         if colors:
             self.colors.update(colors)
-        
+
         self.mode = mode
         self.use_sim = use_sim
-        
-        self._apply_style()
-    
+
+        apply_style()
+
     @staticmethod
     def _apply_style():
-        """Set matplotlib style for article-quality plots."""
-        plt.style.use('seaborn-v0_8-paper')
-        plt.rcParams.update({
-            'font.family': 'serif',
-            'font.size': 12,
-            'text.usetex': False,
-            'axes.labelsize': 14,
-            'axes.titlesize': 14,
-            'xtick.labelsize': 12,
-            'ytick.labelsize': 12,
-            'legend.fontsize': 10,
-            'figure.titlesize': 16
-        })
+        """Delegate to the centralised plot_style module."""
+        apply_style()
     
     # Helper Methods
     
@@ -472,26 +462,28 @@ class CorrelationPlots:
                                   model_mean, model_std,
                                   data_color, model_color,
                                   data_symbol, model_label):
-        """Plot interval band for a single statistic."""
+        """Plot interval band for a single statistic.
+        
+        Experimental errors are not shown; only the observed mean is drawn.
+        """
         a, b = interval
         theta_a_deg = np.arccos(a) * 180 / np.pi
         theta_b_deg = np.arccos(b) * 180 / np.pi
-        
-        # Data interval
-        ax.fill_between([theta_a_deg, theta_b_deg],
-                         [data_mean - data_err], [data_mean + data_err],
-                         alpha=0.4, color=data_color)
+
+        # Observed value — single dashed line, no error band
         ax.plot([theta_a_deg, theta_b_deg],
-                [data_mean, data_mean], ls='-.', alpha=0.8, color=data_color,
-                label=rf'${data_symbol}_{{{round(theta_a_deg)}}}^{{{round(theta_b_deg)}}}$: {data_mean:.2f} ± {data_err:.2f}')
-        
-        # Model interval
+                [data_mean, data_mean], ls='--', alpha=0.9, color=data_color,
+                linewidth=1.8,
+                label=rf'${data_symbol}_{{{round(theta_a_deg)}}}^{{{round(theta_b_deg)}}}$: {data_mean:.2f}')
+
+        # Model 68 % band + median
         ax.fill_between([theta_a_deg, theta_b_deg],
                          [model_mean - model_std], [model_mean + model_std],
-                         alpha=0.4, color=model_color)
+                         alpha=0.35, color=model_color)
         ax.plot([theta_a_deg, theta_b_deg],
                 [model_mean, model_mean], ls='-.', alpha=0.8, color=model_color,
-                label=f'{model_label}: {model_mean:.2f} ± {model_std:.2f}')
+                linewidth=1.8,
+                label=f'{model_label}: {model_mean:.2f}')
     
     @staticmethod
     def _add_dist_overlay(ax, mean, std, max_n, color, label):
@@ -546,10 +538,13 @@ class CorrelationPlots:
     # ========================================================================
     
     def create_individual_histograms(self, df, labels, comparison_data=None,
-                                     bins=100, base_name='stat', file_format='pdf'):
+                                     bins=25, base_name='stat', file_format='pdf'):
         """
         Create individual histogram for each statistic with unified p-values.
-        
+
+        Experimental errors are never shown; only the observed value is marked.
+        The p-value in the title uses sigma notation.
+
         Args:
             df (DataFrame): Data with statistics
             labels (list): List of statistic labels
@@ -558,96 +553,84 @@ class CorrelationPlots:
             base_name (str): Base name for output files
             file_format (str): File format ('pdf' or 'png')
         """
+        from .plot_style import COLORS as _C
         exp_data, sim_data, theory_data, _ = self._prepare_comparison_data(comparison_data)
-        
+
         for label in labels:
             if label not in df.columns:
                 continue
-            
-            # Create individual figure
-            fig, ax = plt.subplots(figsize=(8, 6))
-            
+
             values = df[label].dropna().values
             if len(values) == 0:
-                plt.close()
                 continue
-            
-            # Plot histogram
-            n, bins_edges, patches = ax.hist(values, bins=bins, 
-                                              color=self.colors['theory'],
-                                              alpha=0.7, edgecolor='black',
-                                              label='Theory Distribution')
-            
-            #max_n = n.max()
-            
-            # Compute percentiles
+
+            fig, ax = plt.subplots(figsize=(9.5, 6.5))
+
+            # Histogram bars
+            ax.hist(values, bins=bins,
+                    color=_C['theory_fill'], alpha=0.85,
+                    edgecolor='#1A252F', linewidth=0.8, rwidth=0.95,
+                    label='Theory Distribution', zorder=2)
+
+            # Percentiles
             perc = compute_percentiles(values)
             p16, p50, p84 = perc['p16'], perc['p50'], perc['p84']
-            
-            # Add percentile-based visualization
-            ax.axvline(p50, color=self.colors['theory'], linestyle='-', linewidth=2,
-                       label=f'Median: {p50:.4f}')
-            ax.axvspan(p16, p84, color=self.colors['theory'], alpha=0.2,
+
+            ax.axvspan(p16, p84, color=_C['ci_band'], alpha=0.35, zorder=1,
                        label=f'68% CI: [{p16:.4f}, {p84:.4f}]')
-            
+            ax.axvline(p50, color=_C['theory'], linestyle='-', linewidth=2.2,
+                       zorder=4, label=f'Median: {p50:.4f}')
+
             p_value = np.nan
-            
-            
-            # Add experimental value and compute p-value
+
+            # Observed value — no error
             if exp_data and isinstance(exp_data, dict) and label in exp_data:
-                exp_val, exp_err = exp_data[label]
-                ax.axvline(exp_val, color=self.colors['experimental'],
-                          linestyle='--', linewidth=2,
-                          label=f'Experimental: {exp_val:.4f}')
-                # Add error band
-                #ax.axvspan(exp_val - exp_err, exp_val + exp_err,
-                #          color=self.colors['experimental'], alpha=0.2,
-                #          label=f'Exp. error: ±{exp_err:.4f}')
-                
-                # Compute p-value using unified method
-                pval_info = compute_pvalue_from_percentiles(exp_val,p16, p50, p84, values)
+                exp_val = exp_data[label][0]   # discard error
+                ax.axvline(exp_val, color=_C['experimental'],
+                           linestyle='--', linewidth=2.2, zorder=5,
+                           label=f'Experimental: {exp_val:.4f}')
+                pval_info = compute_pvalue_from_percentiles(
+                    exp_val, p16, p50, p84, values
+                )
                 p_value = pval_info['pvalue']
-            
-            # Add simulation overlay if available
+
+            # Simulation median overlay
             if self.use_sim and sim_data is not None and label in sim_data.columns:
                 sim_vals = sim_data[label].dropna().values
                 if len(sim_vals) > 0:
-                    sim_perc = compute_percentiles(sim_vals)
-                    sim_p50 = sim_perc['p50']
-                    ax.axvline(sim_p50, color=self.colors['simulation'], 
-                              linestyle=':', linewidth=2,
-                              label=f'Simulation median: {sim_p50:.4f}')
-            
-            # Format label with LaTeX
-            formatted_label = format_label_latex(label)
-            
-            # Format title with p-value
-            if not np.isnan(p_value):
-                p_label = f"p-val = {p_value:.3f}"
-            else:
-                p_label = "p-val: N/A"
-            if label.startswith('s12'):
-                ax.set_xscale('log')
+                    sim_p50 = compute_percentiles(sim_vals)['p50']
+                    ax.axvline(sim_p50, color=_C['theory_fill'],
+                               linestyle=':', linewidth=2.0, zorder=3,
+                               label=f'Simulation median: {sim_p50:.4f}')
 
-            ax.set_xlabel(formatted_label, fontsize=14)
-            ax.set_ylabel('Frequency', fontsize=14)
-            ax.set_title(f'Distribution: {formatted_label}\n{p_label}', fontsize=14)
-            ax.legend(loc='best', fontsize=9)
-            ax.grid(True, alpha=0.3)
-            
+            formatted_label = format_label_latex(label)
+
+            # Title with sigma notation.
+            # sigma_label() already returns a $...$-wrapped string, so embed
+            # it directly — no additional $ delimiters around it.
+            if not np.isnan(p_value):
+                p_label = f'p = {sigma_label(p_value)}'
+            else:
+                p_label = 'p = N/A'
+
+            ax.set_xlabel(formatted_label)
+            ax.set_ylabel('Frequency')
+            ax.set_title(f'Distribution: {formatted_label}\n{p_label}')
+            ax.legend(loc='best')
             plt.tight_layout()
-            
-            # Save individual file
+
             safe_label = label.replace('_', '-')
             filename = f"{base_name}_hist_{safe_label}.{file_format}"
-            
+
             if self.output_dir:
-                save_path = _build_output_path(self.output_dir, 'histograms', filename, self.mode)
+                save_path = _build_output_path(
+                    self.output_dir, 'histograms', filename, self.mode
+                )
             else:
                 save_path = filename
-            
+
             _save_or_show_plot(save_path)
-        
+
         logger.info(f"✓ Individual histograms saved for {len(labels)} statistics")
     
     # ========================================================================
@@ -731,13 +714,12 @@ class CorrelationPlots:
                     ax.plot(p50, i, 'o', color=self.colors['theory'],
                            markersize=8, label='Theory median' if i==0 else '')
             
-            # Overlay experimental
+            # Overlay experimental — observed value only, no error bar
             if exp_data and isinstance(exp_data, dict) and label in exp_data:
-                val, err = exp_data[label]
-                ax.errorbar(val, i, xerr=err, fmt='|',
-                           color=self.colors['experimental'],
-                           markersize=15, markeredgewidth=2, capsize=5,
-                           label='Experimental' if i==0 else '')
+                val = exp_data[label][0]   # discard error
+                ax.scatter(val, i, color=self.colors['experimental'],
+                           marker='|', s=200, linewidths=3,
+                           label='Experimental' if i == 0 else '')
             
             # Overlay simulation
             if sim_data is not None and label in sim_data.columns:
@@ -880,11 +862,11 @@ class CorrelationPlots:
                     axes[1].plot(p50, i, 'o', color=self.colors['theory'],
                                markersize=6)
             
-            # Overlay experimental
+            # Overlay experimental — observed value only
             if exp_data and isinstance(exp_data, dict) and label in exp_data:
-                val, _ = exp_data[label]
+                val = exp_data[label][0]   # discard error
                 axes[1].scatter(val, i, color=self.colors['experimental'],
-                              marker='|', s=200, linewidths=3)
+                                marker='|', s=200, linewidths=3)
         
         formatted_forest_labels = [format_label_latex(la) for la in forest_labels]
         axes[1].set_yticks(y)
@@ -913,12 +895,12 @@ class CorrelationPlots:
                     axes[2].axhline(p50, color=self.colors['theory'],
                                    linestyle='--', label='Median')
                     
-                    # Overlay experimental
+                    # Overlay experimental — observed value only
                     if exp_data and isinstance(exp_data, dict) and first_label in exp_data:
-                        val, _ = exp_data[first_label]
+                        val = exp_data[first_label][0]   # discard error
                         axes[2].axhline(val, color=self.colors['experimental'],
-                                       linestyle='--', linewidth=2,
-                                       label='Experimental')
+                                        linestyle='--', linewidth=2,
+                                        label='Experimental')
                     
                     formatted_first = format_label_latex(first_label)
                     axes[2].set_title(f'Convergence: {formatted_first}')
@@ -982,9 +964,9 @@ class CorrelationPlots:
             
             # Overlay experimental
             if exp_data and isinstance(exp_data, dict) and label in exp_data:
-                val, _ = exp_data[label]
+                val = exp_data[label][0]   # discard error
                 axes[i].axhline(val, color=self.colors['experimental'],
-                              linestyle='--', label='Experimental', linewidth=2)
+                                linestyle='--', label='Experimental', linewidth=2)
             
             # Overlay theory
             if theory_data is not None and label in theory_data.columns:
@@ -1044,14 +1026,14 @@ class CorrelationPlots:
         
         # Overlay xivar intervals
         for (a, b), col in zip(intervals, xivar_df.columns):
-            mean_exp, err_exp = self.DL.get_xivar(a, b)
+            mean_exp, _ = self.DL.get_xivar(a, b)   # error discarded
             arr = xivar_df[col].dropna().values
             perc = compute_percentiles(arr)
             mean_th = perc['p50']
             std_th = (perc['p84'] - perc['p16']) / 2
-            
+
             self._plot_statistic_interval(
-                ax, (a, b), mean_exp, err_exp, mean_th, std_th,
+                ax, (a, b), mean_exp, None, mean_th, std_th,
                 self.colors['experimental'], self.colors['theory'],
                 r'\xi', col
             )
@@ -1099,17 +1081,17 @@ class CorrelationPlots:
         # Overlay S12 intervals
         for (a, b), col in zip(intervals, s12_df.columns):
             try:
-                mean_exp, err_exp = self.DL.get_s12(a, b)
+                mean_exp, _ = self.DL.get_s12(a, b)   # error discarded
             except FileNotFoundError:
                 continue
-            
+
             arr = s12_df[col].dropna().values
             perc = compute_percentiles(arr)
             mean_th = perc['p50']
             std_th = (perc['p84'] - perc['p16']) / 2
-            
+
             self._plot_statistic_interval(
-                ax, (a, b), mean_exp, err_exp, mean_th, std_th,
+                ax, (a, b), mean_exp, None, mean_th, std_th,
                 self.colors['experimental'], self.colors['theory'],
                 'S', col
             )

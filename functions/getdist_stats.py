@@ -1,3 +1,17 @@
+"""
+GetDist-based statistics calculator for MCMC posteriors.
+
+Key principles
+--------------
+- Uses percentiles exclusively (never means or std for characterising the
+  theoretical distribution).
+- Experimental *errors* are never used.  The observed scalar value alone is
+  compared to the empirical distribution.
+- Individual p-values in tables are rendered with sigma notation via
+  unified_stats.sigma_label().
+- The global matplotlib style is inherited from unified_stats (imported below).
+"""
+
 import numpy as np
 import pandas as pd
 import os
@@ -6,656 +20,509 @@ from getdist import mcsamples, loadMCSamples
 from getdist.types import ResultTable, NoLineTableFormatter
 from scipy import stats
 
-from .unified_stats import compute_percentiles_unified, compute_pvalue_unified
-
-"""
-GetDist-based statistics calculator for MCMC posteriors.
-
-This module provides functions to compute percentiles and p-values
-using GetDist library, which properly accounts for MCMC weights and
-burn-in when computing posterior statistics.
-
-Key features:
-- Uses percentiles exclusively (never means or std)
-- Supports adding derived parameters to MCMC chains (properly filtered)
-- Generates LaTeX tables using GetDist's ResultTable
-"""
-
-"""
-GetDist-based statistics calculator for MCMC posteriors.
-
-This module provides functions to compute percentiles and p-values
-using GetDist library, which properly accounts for MCMC weights and
-burn-in when computing posterior statistics.
-
-Key features:
-- Uses percentiles exclusively (never means or std)
-- Supports adding derived parameters to MCMC chains (properly filtered)
-- Generates LaTeX tables using GetDist's ResultTable
-"""
-
-
+from .unified_stats import (
+    compute_percentiles_unified,
+    compute_pvalue_unified,
+    sigma_label,
+)
 
 logger = logging.getLogger(__name__)
 
 
-def load_statistics_as_mcsamples(run_dir, model_name, mode='mcmc', root_dir=None):
+# ---------------------------------------------------------------------------
+# Label formatting
+# ---------------------------------------------------------------------------
+
+def _format_label_for_getdist(param_name: str) -> str:
     """
-    Load statistics from run directory as GetDist MCSamples object.
-    
-    This allows proper computation of posteriors with weights and
-    generation of LaTeX tables.
-    
+    Format a parameter name as a LaTeX label for GetDist / table display.
+
+    Examples
+    --------
+    ``'xiv_180_60'``  →  ``r'$\\xi_{180,60}$'``
+    ``'s12_180_60'``  →  ``r'$S_{180,60}$'``
+    ``'C180'``        →  ``r'$C_{180}$'``
+    """
+    if param_name == "C180":
+        return r"$C_{180}$"
+
+    if param_name.startswith("xiv_"):
+        parts = param_name.split("_")
+        if len(parts) == 3:
+            return rf"$\xi_{{{parts[1]},{parts[2]}}}$"
+
+    if param_name.startswith("s12_"):
+        parts = param_name.split("_")
+        if len(parts) == 3:
+            return rf"$S_{{{parts[1]},{parts[2]}}}$"
+
+    return param_name
+
+
+# ---------------------------------------------------------------------------
+# Load statistics as MCSamples
+# ---------------------------------------------------------------------------
+
+def load_statistics_as_mcsamples(run_dir, model_name, mode="mcmc",
+                                  root_dir=None):
+    """
+    Load statistics from a run directory as a GetDist ``MCSamples`` object.
+
     Parameters
     ----------
     run_dir : str
-        Base run directory
     model_name : str
-        Model name (subdirectory name)
     mode : str
-        'mcmc' or 'bestfit'
-    
+        ``'mcmc'`` or ``'bestfit'``.
+    root_dir : str, optional
+        If provided, attempt to load a chain file directly from this path.
+
     Returns
     -------
     MCSamples or None
-        GetDist samples object with statistics as derived parameters
     """
-    model_dir = os.path.join(run_dir, f'theory_{mode}', model_name)
-    
+    model_dir = os.path.join(run_dir, f"theory_{mode}", model_name)
+
     if not os.path.exists(model_dir):
         logger.warning(f"Model directory not found: {model_dir}")
         return None
-    
-    # Check if chain file exists (saved by cosmo_improved)
-    #chain_file = os.path.join(model_dir, f'{model_name}_chain.txt')
-    paramnames_file = os.path.join(model_dir, f'{model_name}.paramnames')
-    
-    if os.path.exists(root_dir) and os.path.exists(paramnames_file):
+
+    paramnames_file = os.path.join(model_dir, f"{model_name}.paramnames")
+
+    if root_dir and os.path.exists(root_dir) and os.path.exists(paramnames_file):
         try:
-            # Load as MCSamples from chain files
-            samples = loadMCSamples(root_dir,
-                settings={'ignore_rows': 0}  # No burn-in, already processed
+            samples = loadMCSamples(root_dir, settings={"ignore_rows": 0})
+            logger.info(
+                f"Loaded {samples.numrows} samples for {model_name} from "
+                "chain files"
             )
-            logger.info(f"Loaded {samples.numrows} samples for {model_name} from chain files")
             return samples
-        except Exception as e:
-            logger.warning(f"Could not load chain file: {e}")
-    
-    # Fallback: Load from .npy files and create MCSamples
+        except Exception as exc:
+            logger.warning(f"Could not load chain file: {exc}")
+
+    # Fallback: build MCSamples from .txt statistics files
     try:
-        # Load scalar columns
-        cols_path = os.path.join(model_dir, 'columns.txt')
+        cols_path = os.path.join(model_dir, "columns.txt")
         if not os.path.exists(cols_path):
             return None
-        
-        with open(cols_path, 'r') as f:
+
+        with open(cols_path) as f:
             scalar_cols = [line.strip() for line in f if line.strip()]
-        
-        # Load statistics
+
         data = {}
-        
-        # S12 statistics
-        s_path = os.path.join(model_dir, 'S_statistics.txt')
+
+        s_path = os.path.join(model_dir, "S_statistics.txt")
         if os.path.exists(s_path):
             S_mat = np.loadtxt(s_path)
             if S_mat.ndim == 1:
                 S_mat = S_mat[:, None]
-            s_cols = [c for c in scalar_cols if c.startswith('s12_')]
+            s_cols = [c for c in scalar_cols if c.startswith("s12_")]
             for i, col in enumerate(s_cols):
                 if i < S_mat.shape[1]:
                     data[col] = S_mat[:, i]
-        
-        # xivar statistics
-        xiv_path = os.path.join(model_dir, 'xiv_statistic.txt')
+
+        xiv_path = os.path.join(model_dir, "xiv_statistic.txt")
         if os.path.exists(xiv_path):
             xiv_mat = np.loadtxt(xiv_path)
             if xiv_mat.ndim == 1:
                 xiv_mat = xiv_mat[:, None]
-            xiv_cols = [c for c in scalar_cols if c.startswith('xiv_')]
+            xiv_cols = [c for c in scalar_cols if c.startswith("xiv_")]
             for i, col in enumerate(xiv_cols):
                 if i < xiv_mat.shape[1]:
                     data[col] = xiv_mat[:, i]
-        
-        # C180 statistic
-        c180_path = os.path.join(model_dir, 'C180_statistics.txt')
+
+        c180_path = os.path.join(model_dir, "C180_statistics.txt")
         if os.path.exists(c180_path):
-            c180_vec = np.loadtxt(c180_path)
-            data['C180'] = np.atleast_1d(c180_vec)
-        
+            data["C180"] = np.atleast_1d(np.loadtxt(c180_path))
+
         if not data:
             return None
-        
-        df = pd.DataFrame(data)
-        n_samples = len(df)
+
+        df            = pd.DataFrame(data)
         samples_array = df.values
-        
-        # Create parameter names with LaTeX labels
-        names = list(df.columns)
-        labels = [_format_label_for_getdist(n) for n in names]
-        
-        # Create MCSamples with equal weights
-        weights = np.ones(n_samples)
-        
+        names         = list(df.columns)
+        labels        = [_format_label_for_getdist(n) for n in names]
+
         samples = mcsamples.MCSamples(
             samples=samples_array,
-            weights=weights,
+            weights=np.ones(len(df)),
             names=names,
             labels=labels,
-            label=model_name
+            label=model_name,
         )
-        
-        logger.info(f"Created MCSamples with {n_samples} samples for {model_name}")
+        logger.info(
+            f"Created MCSamples with {len(df)} samples for {model_name}"
+        )
         return samples
-        
-    except Exception as e:
-        logger.exception(f"Error creating MCSamples: {e}")
+
+    except Exception as exc:
+        logger.exception(f"Error creating MCSamples: {exc}")
         return None
 
 
-def _format_label_for_getdist(param_name):
-    """
-    Format parameter name as LaTeX label for GetDist.
-    
-    Parameters
-    ----------
-    param_name : str
-        Parameter name (e.g., 'xiv_60_30', 's12_60_30', 'C180')
-    
-    Returns
-    -------
-    str
-        LaTeX formatted label
-    """
-    if param_name == 'C180':
-        return r'$C_{180}$'
-    
-    # xivar: xiv_60_30 -> $\xi_{60,30}$
-    if param_name.startswith('xiv_'):
-        parts = param_name.split('_')
-        if len(parts) == 3:
-            return rf'$\xi_{{{parts[1]},{parts[2]}}}$'
-    
-    # S12: s12_60_30 -> $S_{60,30}$
-    if param_name.startswith('s12_'):
-        parts = param_name.split('_')
-        if len(parts) == 3:
-            return rf'$S_{{{parts[1]},{parts[2]}}}$'
-    
-    return param_name
-
+# ---------------------------------------------------------------------------
+# Derived-parameter injection
+# ---------------------------------------------------------------------------
 
 def add_derived_parameters(samples, derived_df, n_final_samples=None):
     """
-    Add derived parameters to MCMC samples with proper filtering.
-    
-    This method properly handles:
-    - Filtering samples to match derived parameter data
-    - Burning in samples correctly
-    - Adding multiple derived parameters
-    
+    Add derived parameters to an MCMC ``MCSamples`` object.
+
     Parameters
     ----------
     samples : MCSamples
-        GetDist samples object (loaded from chain files)
     derived_df : pd.DataFrame
-        DataFrame with derived parameter values (one column per parameter)
+        One column per derived parameter.
     n_final_samples : int, optional
-        Number of final samples to keep. If None, uses all available.
-    
+        Number of tail samples to keep.  Defaults to ``len(derived_df)``.
+
     Returns
     -------
     MCSamples
-        Same object with derived parameters added
     """
     if samples is None or derived_df is None:
-        logger.warning("Cannot add derived parameters: samples or derived_df is None")
+        logger.warning(
+            "Cannot add derived parameters: samples or derived_df is None"
+        )
         return samples
-    
+
     try:
-        total_rows_after_burn_in = samples.numrows
-        df_data = derived_df
-        
-        # Determine number of final samples to use
-        if n_final_samples is None:
-            N_final_samples = df_data.shape[0]
-        else:
-            N_final_samples = n_final_samples
-        
-        # Check if chain is shorter than target
-        if total_rows_after_burn_in < N_final_samples:
-            N_final_samples = total_rows_after_burn_in
-            start_index = 0
-            logger.warning(
-                f"Chain shorter than target. "
-                f"Using {N_final_samples} rows out of {total_rows_after_burn_in}."
-            )
-        else:
-            # Use the last N_final_samples samples
-            start_index = total_rows_after_burn_in - N_final_samples
-        
-        # Filter samples to keep only the relevant rows
-        indices_to_keep = np.arange(start_index, total_rows_after_burn_in)
-        samples.filter(indices_to_keep)
-        
-        logger.info(f"Filtered samples: kept rows {start_index} to {total_rows_after_burn_in}")
-        
-        # Add each derived parameter as a column
-        for param_name in df_data.columns:
+        total = samples.numrows
+        N     = min(
+            derived_df.shape[0] if n_final_samples is None else n_final_samples,
+            total,
+        )
+        start = total - N
+        samples.filter(np.arange(start, total))
+        logger.info(f"Filtered samples: kept rows {start}–{total}")
+
+        for param_name in derived_df.columns:
             try:
-                # Get the parameter values for the selected rows
-                param_values = df_data[param_name].values[:N_final_samples]
-                
-                # Format label for LaTeX
-                param_label = _format_label_for_getdist(param_name)
-                
-                # Add as derived parameter
                 samples.addDerived(
-                    param_values,
+                    derived_df[param_name].values[:N],
                     name=param_name,
-                    label=param_label,
-                    comment=f'Derived: {param_name}'
+                    label=_format_label_for_getdist(param_name),
+                    comment=f"Derived: {param_name}",
                 )
-                
                 logger.info(f"Added derived parameter: {param_name}")
-            
-            except Exception as e:
-                logger.warning(f"Could not add derived parameter {param_name}: {e}")
-                continue
-        
+            except Exception as exc:
+                logger.warning(
+                    f"Could not add derived parameter {param_name}: {exc}"
+                )
+
         return samples
-    
-    except Exception as e:
-        logger.exception(f"Error adding derived parameters: {e}")
+
+    except Exception as exc:
+        logger.exception(f"Error adding derived parameters: {exc}")
         return samples
 
 
-def compute_percentiles_getdist(samples, param_name, percentiles=(16, 50, 84)):
+# ---------------------------------------------------------------------------
+# Percentile helpers
+# ---------------------------------------------------------------------------
+
+def compute_percentiles_getdist(samples, param_name,
+                                 percentiles=(16, 50, 84)):
     """
-    Compute percentiles using GetDist (accounts for weights).
-    
+    Compute weight-aware percentiles for a single parameter.
+
     Parameters
     ----------
     samples : MCSamples
-        GetDist samples object
     param_name : str
-        Parameter name
     percentiles : tuple
-        Percentiles to compute (default: (16, 50, 84) for 68% credible interval)
-    
+
     Returns
     -------
-    dict
-        {'p16': value, 'p50': value, 'p84': value}
+    dict or None
+        ``{'p16': val, 'p50': val, 'p84': val}``
     """
     if samples is None:
         return None
-    
     try:
-        # Get parameter values
         param_values = getattr(samples.getParams(), param_name, None)
-        weights = samples.weights
-        
-        # Sort by parameter values
-        sorted_idx = np.argsort(param_values)
-        sorted_vals = param_values[sorted_idx]
-        sorted_weights = weights[sorted_idx]
-        
-        # Compute weighted cumulative sum
-        cumsum_weights = np.cumsum(sorted_weights)
-        cumsum_weights = cumsum_weights / cumsum_weights[-1]  # Normalize to [0, 1]
-        
-        # Compute percentiles
+        if param_values is None:
+            return None
+        weights      = np.asarray(samples.weights, dtype=float)
+        sorted_idx   = np.argsort(param_values)
+        sorted_vals  = param_values[sorted_idx]
+        sorted_w     = weights[sorted_idx]
+        cumsum_norm  = np.cumsum(sorted_w) / sorted_w.sum()
+
         result = {}
         for p in percentiles:
-            target = p / 100.0
-            # Find index where cumsum first exceeds target
-            idx = np.searchsorted(cumsum_weights, target, side='left')
-            idx = min(idx, len(sorted_vals) - 1)
-            result[f'p{p}'] = sorted_vals[idx]
-        
+            idx = min(
+                np.searchsorted(cumsum_norm, p / 100.0, side="left"),
+                len(sorted_vals) - 1,
+            )
+            result[f"p{p}"] = sorted_vals[idx]
         return result
-        
-    except Exception as e:
-        logger.warning(f"Could not compute percentiles for {param_name}: {e}")
+
+    except Exception as exc:
+        logger.warning(
+            f"Could not compute percentiles for {param_name}: {exc}"
+        )
         return None
 
 
 def compute_all_percentiles(samples, param_names, percentiles=(16, 50, 84)):
     """
-    Compute percentiles for all parameters.
-    
-    Parameters
-    ----------
-    samples : MCSamples
-        GetDist samples object
-    param_names : list
-        List of parameter names
-    percentiles : tuple
-        Percentiles to compute
-    
+    Compute percentiles for a list of parameters.
+
     Returns
     -------
     dict
-        {param_name: {'p16': val, 'p50': val, 'p84': val}}
+        ``{param_name: {'p16': …, 'p50': …, 'p84': …}}``
     """
-    results = {}
-    
-    for param in param_names:
-        percentile_vals = compute_percentiles_getdist(samples, param, percentiles)
-        if percentile_vals:
-            results[param] = percentile_vals
-    
-    return results
+    return {
+        param: vals
+        for param in param_names
+        if (vals := compute_percentiles_getdist(samples, param, percentiles))
+    }
 
+
+# ---------------------------------------------------------------------------
+# p-value helpers  (no experimental errors)
+# ---------------------------------------------------------------------------
 
 def compute_pvalue_from_percentiles(observed_value, p16, p50, p84, values):
     """
-    Compute p-value from percentiles using unified method.
-    
-    Consistent with GetDist and all other modules.
-    
+    Compute a one-sided empirical p-value from the ensemble.
+
+    Experimental errors are not used.
+
     Parameters
     ----------
     observed_value : float
-        Experimental/simulation value
     p16, p50, p84 : float
-        16th, 50th, 84th percentiles
-    
+        16th, 50th, 84th percentiles of the ensemble.
+    values : array-like
+        Full ensemble array (required for empirical CDF).
+
     Returns
     -------
     dict
-        {'pvalue': p, 'n_sigma': n, 'interpretation': str, 'tension_level': str}
+        ``{'pvalue': p, 'n_sigma': n, 'interpretation': str,
+           'tension_level': str}``
     """
-    percentiles_dict = {'p16': p16, 'p50': p50, 'p84': p84}
+    percentiles_dict = {"p16": p16, "p50": p50, "p84": p84}
     return compute_pvalue_unified(observed_value, percentiles_dict, values)
+
 
 def compute_all_pvalues(samples, param_names, experimental_values):
     """
-    Compute p-values for all parameters comparing MCMC posterior to data.
-    
-    Uses GetDist's weighted percentile computation for accurate results.
-    
+    Compute p-values for all parameters.
+
+    Only the observed *value* from ``experimental_values`` is used;
+    the associated error is ignored.
+
     Parameters
     ----------
     samples : MCSamples
-        GetDist samples object
     param_names : list
-        List of parameter names
     experimental_values : dict
-        {param_name: (value, error)}
-    
+        ``{param: (value, error)}``  — only ``value`` is consumed.
+
     Returns
     -------
     dict
-        {param_name: {'pvalue': p, 'n_sigma': n, 'interpretation': str, ...}}
+        ``{param: {'pvalue': p, 'n_sigma': n, …}}``
     """
-    # Get percentiles for all parameters
     percentiles_dict = compute_all_percentiles(samples, param_names)
-    
     results = {}
-    
+
     for param in param_names:
         if param not in experimental_values or param not in percentiles_dict:
             continue
-        
-        exp_val, exp_err = experimental_values[param]
-        perc = percentiles_dict[param]
-        
-        if not all(k in perc for k in ['p16', 'p50', 'p84']):
+
+        # Unpack but discard the error
+        exp_val = experimental_values[param][0]
+        perc    = percentiles_dict[param]
+
+        if not all(k in perc for k in ("p16", "p50", "p84")):
             continue
-        
-        pval_info = compute_pvalue_from_percentiles(
+
+        values = getattr(samples.getParams(), param, None)
+        results[param] = compute_pvalue_from_percentiles(
             exp_val,
-            perc['p16'],
-            perc['p50'],
-            perc['p84'],
-            values=getattr(samples.getParams(), param, None)
+            perc["p16"],
+            perc["p50"],
+            perc["p84"],
+            values,
         )
-        
-        results[param] = {
-            'exp_value': exp_val,
-            'exp_error': exp_err,
-            'p16': perc['p16'],
-            'p50': perc['p50'],
-            'p84': perc['p84'],
-            **pval_info
-        }
-    
+
     return results
 
 
-def compute_multivariate_tension(samples, param_names, experimental_means, experimental_cov):
+# ---------------------------------------------------------------------------
+# Multivariate tension
+# ---------------------------------------------------------------------------
+
+def compute_multivariate_tension(samples, param_names,
+                                  experimental_means, experimental_cov):
     """
-    Compute multivariate chi-squared tension statistic.
-    
-    Takes into account correlations in both MCMC posterior and experimental data.
-    
+    Compute a multivariate chi-squared tension statistic.
+
     Parameters
     ----------
     samples : MCSamples
-        GetDist samples object
     param_names : list
-        List of parameter names
     experimental_means : np.ndarray
-        Experimental mean values
+        Observed values (no errors required here — covariance is optional
+        and can be set to zero).
     experimental_cov : np.ndarray
-        Experimental covariance matrix
-    
+        Experimental covariance matrix.  Pass ``np.zeros((n,n))`` if unknown.
+
     Returns
     -------
-    dict
-        {'chi2': val, 'dof': n, 'pvalue': p, 'n_sigma': n}
+    dict or None
+        ``{'chi2', 'dof', 'pvalue', 'n_sigma'}``
     """
     try:
-        # Get percentile-based values (more robust than means)
         percentiles_dict = compute_all_percentiles(samples, param_names)
-        
-        # Use p50 (median) as best estimate
-        mcmc_means = np.array([
-            percentiles_dict[p]['p50'] for p in param_names
-            if p in percentiles_dict
-        ])
-        
-        # Subset of params that we have percentiles for
-        available_params = [p for p in param_names if p in percentiles_dict]
-        
-        if len(available_params) == 0:
+        available = [p for p in param_names if p in percentiles_dict]
+
+        if not available:
             logger.warning("No parameters available for multivariate tension")
             return None
-        
-        # Get MCMC covariance from samples
-        # Use percentile-based method to compute covariance robustly
-        param_arrays = [getattr(samples.getParams(), p, None) for p in available_params]
-        param_matrix = np.column_stack(param_arrays)
-        
-        # Compute weighted covariance
-        mcmc_cov = np.cov(param_matrix.T, aweights=samples.weights)
-        
-        # Subset experimental covariance to available parameters
-        n_params = len(available_params)
-        exp_cov_subset = experimental_cov[:n_params, :n_params]
-        
-        # Combined covariance
-        cov_combined = exp_cov_subset + mcmc_cov
-        
-        # Difference (subset of experimental means)
-        exp_means_subset = experimental_means[:n_params]
-        delta = mcmc_means - exp_means_subset
-        
-        # Chi-squared
-        inv_cov = np.linalg.inv(cov_combined)
-        chi2 = delta.T @ inv_cov @ delta
-        
-        dof = len(available_params)
-        pvalue = stats.chi2.sf(chi2, dof)
-        
-        # Equivalent n-sigma
-        pvalue_safe = max(pvalue, 1e-16)
-        n_sigma = stats.norm.isf(pvalue_safe / 2)
-        
-        return {
-            'chi2': float(chi2),
-            'dof': dof,
-            'pvalue': float(pvalue),
-            'n_sigma': float(n_sigma)
-        }
-    
-    except Exception as e:
-        logger.exception(f"Error computing multivariate tension: {e}")
+
+        mcmc_means  = np.array([percentiles_dict[p]["p50"] for p in available])
+        param_arrs  = [getattr(samples.getParams(), p) for p in available]
+        param_mat   = np.column_stack(param_arrs)
+        mcmc_cov    = np.cov(param_mat.T, aweights=samples.weights)
+
+        n = len(available)
+        exp_cov_sub = experimental_cov[:n, :n]
+        cov_total   = exp_cov_sub + mcmc_cov
+        delta       = mcmc_means - experimental_means[:n]
+        chi2        = float(delta @ np.linalg.inv(cov_total) @ delta)
+        pvalue      = float(stats.chi2.sf(chi2, n))
+        n_sigma     = float(stats.norm.isf(max(pvalue, 1e-16) / 2))
+
+        return {"chi2": chi2, "dof": n, "pvalue": pvalue, "n_sigma": n_sigma}
+
+    except Exception as exc:
+        logger.exception(f"Error computing multivariate tension: {exc}")
         return None
 
 
-def generate_statistics_table(samples, param_names, experimental_values, 
-                            mode='mcmc', include_bestfit=False, ncol=1):
+# ---------------------------------------------------------------------------
+# LaTeX table generation
+# ---------------------------------------------------------------------------
+
+def generate_statistics_table(samples, param_names, experimental_values,
+                               mode="mcmc", include_bestfit=False, ncol=1):
     """
-    Generate LaTeX table for statistics using GetDist.
-    
-    Creates a professional LaTeX table with percentiles and p-values.
-    
+    Generate a LaTeX ``tabular`` string for the given statistics.
+
+    Changes from the previous version
+    ----------------------------------
+    - The experimental column shows only the observed *value* (no ± error).
+    - The p-value column uses sigma notation: ``p  (nσ)``.
+
     Parameters
     ----------
     samples : MCSamples
-        GetDist samples object
     param_names : list
-        Parameter names to include in table
     experimental_values : dict
-        {param: (value, error)}
+        ``{param: (value, error)}`` — only the value is displayed/used.
     mode : str
-        'mcmc' or 'bestfit' (for display only)
+        ``'mcmc'`` or ``'bestfit'`` (cosmetic only).
     include_bestfit : bool
-        Whether to include best-fit values
+        Unused; kept for API compatibility.
     ncol : int
-        Number of columns in table
-    
+        Unused; kept for API compatibility.
+
     Returns
     -------
-    str or ResultTable
-        LaTeX table code or ResultTable object
+    str or None
+        LaTeX tabular string.
     """
     if samples is None:
         return None
-    
+
     try:
-        # Compute all statistics
         percentiles_dict = compute_all_percentiles(samples, param_names)
-        pvalues_dict = compute_all_pvalues(samples, param_names, experimental_values)
-        
-        # Create custom table with statistics and p-values
-        # Using ResultTable would give basic limits, but we want to include p-values
-        # So we build custom LaTeX
-        
+        pvalues_dict     = compute_all_pvalues(samples, param_names,
+                                               experimental_values)
+
         rows = []
-        rows.append("\\begin{tabular}{lcccc}")
-        rows.append("\\toprule")
-        rows.append("Statistic & Experimental & MCMC Median & 68\\% CI  & $p$-value \\\\")
-        rows.append("\\midrule")
-        
+        rows.append(r"\begin{tabular}{lcccc}")
+        rows.append(r"\toprule")
+        rows.append(
+            r"Statistic & Experimental & Median & 68\% CI & $p$-value \\"
+        )
+        rows.append(r"\midrule")
+
         for param in param_names:
             if param not in percentiles_dict or param not in pvalues_dict:
                 continue
-            
-            # Format statistic name
+
             param_label = _format_label_for_getdist(param)
-            
-            # Experimental value
-            exp_val, exp_err = experimental_values[param]
-            exp_str = f"${exp_val:.4f} \\pm {exp_err:.4f}$"
-            
-            # MCMC percentiles
-            perc = percentiles_dict[param]
-            p16, p50, p84 = perc['p16'], perc['p50'], perc['p84']
-            
-            mcmc_str = f"${p50:.4f}$"
-            ci_str = f"$[{p16:.4f}, {p84:.4f}]$"
-            
-            # P-value and tension
-            pval_info = pvalues_dict[param]
-            pval = pval_info['pvalue']
-            #tension_level = pval_info['tension_level']
-            
-            if pval < 0.001:
-                pval_str = f"${pval:.3f}$"
-            else:
-                pval_str = f"${pval:.3f}$"
-            
-            # Add row
-            row = f"{param_label} & {exp_str} & {mcmc_str} & {ci_str}  & {pval_str} \\\\"
-            rows.append(row)
-        
-        rows.append("\\bottomrule")
-        rows.append("\\end{tabular}")
-        
+
+            # Observed value only — no error
+            exp_val = experimental_values[param][0]
+            exp_str = rf"${exp_val:.4f}$"
+
+            # Theoretical percentiles
+            perc   = percentiles_dict[param]
+            p16, p50, p84 = perc["p16"], perc["p50"], perc["p84"]
+            med_str = rf"${p50:.4f}$"
+            ci_str  = rf"$[{p16:.4f},\ {p84:.4f}]$"
+
+            # p-value with sigma notation
+            pval   = pvalues_dict[param]["pvalue"]
+            pv_str = sigma_label(pval)
+
+            rows.append(
+                rf"{param_label} & {exp_str} & {med_str} & {ci_str} & {pv_str} \\"
+            )
+
+        rows.append(r"\bottomrule")
+        rows.append(r"\end{tabular}")
         return "\n".join(rows)
-    
-    except Exception as e:
-        logger.exception(f"Error generating table: {e}")
+
+    except Exception as exc:
+        logger.exception(f"Error generating table: {exc}")
         return None
 
 
+# ---------------------------------------------------------------------------
+# Full GetDist ResultTable (unchanged functionality, kept for compatibility)
+# ---------------------------------------------------------------------------
+
 def generate_full_results_table(samples, param_names, titles=None, ncol=1):
     """
-    Generate full GetDist ResultTable with marginalized statistics.
-    
-    This uses GetDist's built-in table generation for professional output.
-    
-    Parameters
-    ----------
-    samples : MCSamples or list of MCSamples
-        GetDist samples object(s)
-    param_names : list
-        Parameter names to include
-    titles : list or None
-        Titles for each result column
-    ncol : int
-        Number of columns for multi-column layout
-    
+    Generate a GetDist ``ResultTable`` with marginalised statistics.
+
     Returns
     -------
-    ResultTable
-        GetDist ResultTable object
+    ResultTable or None
     """
     if not isinstance(samples, list):
         samples = [samples]
-    
     try:
-        # Create ResultTable
-        result_table = ResultTable(
+        return ResultTable(
             ncol=ncol,
             results=samples,
             titles=titles,
-            limit=1,  # 68% confidence limit (first limit)
+            limit=1,
             paramList=param_names,
-            formatter=NoLineTableFormatter()
+            formatter=NoLineTableFormatter(),
         )
-        
-        return result_table
-    
-    except Exception as e:
-        logger.exception(f"Error creating ResultTable: {e}")
+    except Exception as exc:
+        logger.exception(f"Error creating ResultTable: {exc}")
         return None
 
 
 def save_table_to_file(table_obj, output_path, document=True):
     """
-    Save LaTeX table to file.
-    
-    Parameters
-    ----------
-    table_obj : str or ResultTable
-        LaTeX string or ResultTable object
-    output_path : str
-        Path to save to
-    document : bool
-        If True and table_obj is ResultTable, create standalone LaTeX document
+    Save a LaTeX table (string or ResultTable) to *output_path*.
     """
-    os.makedirs(os.path.dirname(output_path) or '.', exist_ok=True)
-    
+    os.makedirs(os.path.dirname(output_path) or ".", exist_ok=True)
     if isinstance(table_obj, str):
-        # Plain string - write directly
-        with open(output_path, 'w') as f:
+        with open(output_path, "w") as f:
             f.write(table_obj)
     else:
-        # ResultTable object - use its write method
         table_obj.write(output_path, document=document)
-    
     logger.info(f"Table saved to: {output_path}")

@@ -3,221 +3,251 @@ Unified statistics module for percentile and p-value computation.
 
 Provides consistent percentile and p-value calculation across all modules,
 using GetDist methods when available, falling back to NumPy.
+
+Design principles
+-----------------
+- Experimental *errors* are never used in any computation. The observed value
+  is compared directly to the empirical distribution of the theoretical ensemble.
+- p-values are one-sided empirical CDFs (fraction of realisations <= observed).
+- Sigma notation is produced by the Gaussian probit: n_sigma = Phi^{-1}(1 - p).
+
+This module has no matplotlib dependency. All plotting style lives in
+``plot_style.py``.
 """
 
 import numpy as np
 import logging
+from scipy.stats import norm as _norm
 
 logger = logging.getLogger(__name__)
 
 try:
-    from getdist import mcsamples
+    from getdist import mcsamples as _gd_mcsamples
     HAS_GETDIST = True
 except ImportError:
     HAS_GETDIST = False
 
 
-def compute_percentiles_weighted(data, weights=None, percentiles=(16, 50, 84)):
+# ---------------------------------------------------------------------------
+# Sigma / p-value helpers
+# ---------------------------------------------------------------------------
+
+def pvalue_to_sigma(p: float) -> float:
     """
-    Compute weighted percentiles (GetDist-style when weights available).
-    
-    Falls back to unweighted NumPy method if weights are None or all equal.
-    
+    Convert a one-sided p-value to an equivalent number of Gaussian sigma.
+
+        n_sigma = Phi^{-1}(1 - p)
+
     Parameters
     ----------
-    data : np.ndarray
-        Data array
-    weights : np.ndarray, optional
-        Sample weights. If None, uses unweighted percentiles.
+    p : float
+        p-value in (0, 1).
+
+    Returns
+    -------
+    float
+    """
+    p = float(np.clip(p, 1e-16, 1.0 - 1e-16))
+    return float(_norm.isf(p))
+
+
+def sigma_label(p: float) -> str:
+    """
+    Return a compact LaTeX string such as ``$0.073\\ (1.47\\sigma)$``.
+
+    Intended for use in LaTeX table cells.
+
+    Parameters
+    ----------
+    p : float
+
+    Returns
+    -------
+    str
+    """
+    n = pvalue_to_sigma(p)
+    return rf"${p:.3f}\ ({n:.2f}\sigma)$"
+
+
+# ---------------------------------------------------------------------------
+# Percentile helpers
+# ---------------------------------------------------------------------------
+
+def compute_percentiles_weighted(data, weights=None, percentiles=(16, 50, 84)):
+    """
+    Compute weighted percentiles (GetDist-style when weights are available).
+
+    Falls back to unweighted NumPy percentiles if *weights* is None or all
+    weights are equal.
+
+    Parameters
+    ----------
+    data : array-like
+    weights : array-like, optional
     percentiles : tuple
-        Percentiles to compute (default: (16, 50, 84) for 68% CI)
-    
+        Default ``(16, 50, 84)`` for a 68 % credible interval.
+
     Returns
     -------
     dict
-        {'p16': val, 'p50': val, 'p84': val} (or custom percentiles)
+        ``{'p16': val, 'p50': val, 'p84': val}``
     """
-    data = np.asarray(data)
-    
+    data = np.asarray(data, dtype=float)
+
     if weights is None or len(np.unique(weights)) == 1:
-        # Use unweighted percentiles
-        return {
-            f'p{int(p)}': np.percentile(data, p)
-            for p in percentiles
-        }
-    
-    # Use weighted percentiles (GetDist-style)
-    weights = np.asarray(weights)
-    
-    # Sort by data values
-    sorted_idx = np.argsort(data)
-    sorted_data = data[sorted_idx]
+        return {f"p{int(p)}": np.percentile(data, p) for p in percentiles}
+
+    weights        = np.asarray(weights, dtype=float)
+    sorted_idx     = np.argsort(data)
+    sorted_data    = data[sorted_idx]
     sorted_weights = weights[sorted_idx]
-    
-    # Compute cumulative sum and normalize
-    cumsum = np.cumsum(sorted_weights)
-    cumsum_norm = cumsum / cumsum[-1]
-    
-    # Interpolate percentiles
+    cumsum_norm    = np.cumsum(sorted_weights) / sorted_weights.sum()
+
     result = {}
     for p in percentiles:
-        target = p / 100.0
-        # Find where cumsum first exceeds target
-        idx = np.searchsorted(cumsum_norm, target, side='left')
-        idx = min(idx, len(sorted_data) - 1)
-        result[f'p{int(p)}'] = sorted_data[idx]
-    
+        idx = min(
+            np.searchsorted(cumsum_norm, p / 100.0, side="left"),
+            len(sorted_data) - 1,
+        )
+        result[f"p{int(p)}"] = sorted_data[idx]
     return result
 
 
-def compute_percentiles_from_mcsamples(samples, param_name, percentiles=(16, 50, 84)):
+def compute_percentiles_from_mcsamples(samples, param_name,
+                                        percentiles=(16, 50, 84)):
     """
-    Compute percentiles using GetDist MCSamples object.
-    
-    Properly accounts for MCMC weights and burn-in.
-    
+    Compute percentiles using a GetDist ``MCSamples`` object.
+
+    Properly accounts for MCMC sample weights.
+
     Parameters
     ----------
     samples : getdist.mcsamples.MCSamples
-        GetDist samples object
     param_name : str
-        Parameter name in samples
     percentiles : tuple
-        Percentiles to compute
-    
+
     Returns
     -------
     dict or None
-        {'p16': val, 'p50': val, 'p84': val} or None if parameter not found
     """
     if not HAS_GETDIST or samples is None:
         return None
-    
     try:
-        # Get parameter values
         param_values = getattr(samples.getParams(), param_name, None)
         if param_values is None:
             return None
-        
-        weights = samples.weights
-        
-        # Use weighted percentile computation
-        return compute_percentiles_weighted(param_values, weights, percentiles)
-    
-    except Exception as e:
-        logger.debug(f"Could not use GetDist percentiles for {param_name}: {e}")
+        return compute_percentiles_weighted(
+            param_values, samples.weights, percentiles
+        )
+    except Exception as exc:
+        logger.debug(
+            f"Could not use GetDist percentiles for {param_name}: {exc}"
+        )
         return None
 
 
-def compute_percentiles_unified(data, samples=None, param_name=None, 
-                                percentiles=(16, 50, 84)):
+def compute_percentiles_unified(data, samples=None, param_name=None,
+                                 percentiles=(16, 50, 84)):
     """
     Unified percentile computation.
-    
-    Strategy:
-    1. If GetDist samples provided, use GetDist method (accounts for weights)
-    2. Otherwise use weighted percentiles if weights available
-    3. Fall back to standard NumPy percentiles
-    
+
+    Priority: GetDist (weighted) → weighted NumPy → plain NumPy.
+
     Parameters
     ----------
-    data : np.ndarray
-        Data array
-    samples : getdist.mcsamples.MCSamples, optional
-        GetDist samples object (if available)
+    data : array-like
+    samples : MCSamples, optional
     param_name : str, optional
-        Parameter name in samples (required if samples provided)
     percentiles : tuple
-        Percentiles to compute
-    
+
     Returns
     -------
     dict
-        {'p16': val, 'p50': val, 'p84': val}
     """
-    # Try GetDist method first
     if samples is not None and param_name is not None:
-        result = compute_percentiles_from_mcsamples(samples, param_name, percentiles)
+        result = compute_percentiles_from_mcsamples(
+            samples, param_name, percentiles
+        )
         if result is not None:
             return result
-    
-    # Fall back to weighted or unweighted NumPy percentiles
-    return compute_percentiles_weighted(data, weights=None, percentiles=percentiles)
+    return compute_percentiles_weighted(data, weights=None,
+                                        percentiles=percentiles)
 
+
+# ---------------------------------------------------------------------------
+# p-value computation  (no experimental errors involved)
+# ---------------------------------------------------------------------------
 
 def compute_pvalue_unified(observed_value, percentiles_dict, data=None):
     """
-    Compute p-value using percentile-based method (consistent across all modes).
-    
-    Assumes approximately Gaussian posterior and computes p-value
-    based on how many sigma away the observed value is from the median.
-    
-    This method is consistent with GetDist's approach.
-    
+    Compute a one-sided empirical p-value.
+
+    The p-value is the fraction of theoretical realisations less than or
+    equal to the observed value::
+
+        p = F(observed) = mean(data <= observed)
+
+    Experimental *errors* are deliberately not used.
+
     Parameters
     ----------
     observed_value : float
-        Experimental/observed value
     percentiles_dict : dict
-        {'p16': val, 'p50': val, 'p84': val} from compute_percentiles_unified()
-    data : np.ndarray, optional
-        Original data array (for robustness check)
-    
+        ``{'p16': val, 'p50': val, 'p84': val}`` — used only to guard
+        against degenerate (zero-variance) distributions.
+    data : array-like, optional
+        Full ensemble.  Required for a meaningful p-value; returns p = 1
+        with a warning if absent.
+
     Returns
     -------
     dict
-        {
-            'pvalue': p,
-            'n_sigma': n,
-            'interpretation': str,
-            'tension_level': str
-        }
+        ``{'pvalue': float, 'n_sigma': float,
+           'interpretation': str, 'tension_level': str}``
     """
     try:
-        p16 = percentiles_dict['p16']
-        p50 = percentiles_dict['p50']
-        p84 = percentiles_dict['p84']
+        p16 = percentiles_dict["p16"]
+        p84 = percentiles_dict["p84"]
     except KeyError:
-        logger.warning("Missing percentile keys")
-        return {
-            'pvalue': 1.0,
-        #    'n_sigma': 0.0,
-            'interpretation': 'No percentiles',
-            'tension_level': 'N/A'
-        }
-    
-    # Estimate sigma from percentiles (68% CI width)
-    # For Gaussian: p84 - p50 ≈ 1σ, p50 - p16 ≈ 1σ
-    
-    
-    if data is None or np.isclose(p84, p16):
-        return {
-            'pvalue': 1.0,
-            #'n_sigma': 0.0,
-            'interpretation': 'No variance',
-            'tension_level': 'N/A'
-        }
-    
-    F = np.mean(data <= observed_value)
-    #pvalue_two = 2.0 * min(F, 1.0 - F) if 2.0 * min(F, 1.0 - F) > 1/len(data) else 1/len(data)
-    pvalue =  F if F > 1/len(data) else 1/len(data)
-    # Interpretation levels
+        logger.warning("Missing percentile keys in percentiles_dict.")
+        return _tension_dict(1.0)
+
+    if data is None:
+        logger.warning(
+            "compute_pvalue_unified: no data array provided; returning p = 1."
+        )
+        return _tension_dict(1.0)
+
+    data = np.asarray(data, dtype=float)
+
+    if np.isclose(p84, p16):
+        logger.warning("Zero-variance distribution; returning p = 1.")
+        return _tension_dict(1.0)
+
+    n      = len(data)
+    floor  = 1.0 / n
+    F      = float(np.mean(data <= observed_value))
+    pvalue = max(F, floor)
+    return _tension_dict(pvalue)
+
+
+def _tension_dict(pvalue: float) -> dict:
+    """Build the standard return dict from a p-value."""
+    pvalue  = float(np.clip(pvalue, 1e-16, 1.0))
+    n_sigma = pvalue_to_sigma(pvalue)
+
     if pvalue > 0.05:
-        interpretation = 'Consistent'
-        tension_level = '< 2σ'
+        interpretation, tension_level = "Consistent",              "< 2σ"
     elif pvalue > 0.01:
-        interpretation = 'Marginally inconsistent'
-        tension_level = '2-3σ'
+        interpretation, tension_level = "Marginally inconsistent", "2–3σ"
     elif pvalue > 0.001:
-        interpretation = 'Inconsistent'
-        tension_level = '3-4σ'
+        interpretation, tension_level = "Inconsistent",            "3–4σ"
     else:
-        interpretation = 'Highly inconsistent'
-        tension_level = '> 4σ'
-    
+        interpretation, tension_level = "Highly inconsistent",     "> 4σ"
+
     return {
-        'pvalue': pvalue,
-        #'n_sigma': n_sigma,
-        'interpretation': interpretation,
-        'tension_level': tension_level
+        "pvalue":         pvalue,
+        "n_sigma":        n_sigma,
+        "interpretation": interpretation,
+        "tension_level":  tension_level,
     }
