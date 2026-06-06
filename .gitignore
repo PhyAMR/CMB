@@ -60,6 +60,7 @@ neorg/
 *.xml
 *blx.bib
 *spl
+*.bst
 
 # Jupyter notebooks
 *.ipynb
