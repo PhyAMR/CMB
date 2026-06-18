@@ -26,12 +26,12 @@ _STYLE = {
     "font.sans-serif":    ["DejaVu Sans", "Arial", "Helvetica",
                            "Liberation Sans"],
     "text.usetex":        False,
-    "font.size":          11,
-    "axes.labelsize":     12,
-    "axes.titlesize":     13,
-    "xtick.labelsize":    10,
-    "ytick.labelsize":    10,
-    "legend.fontsize":    9,
+    "font.size":          15,
+    "axes.labelsize":     15,
+    "axes.titlesize":     15,
+    "xtick.labelsize":    15,
+    "ytick.labelsize":    15,
+    "legend.fontsize":    15,
 
     # Figure / saving
     "figure.dpi":         150,
