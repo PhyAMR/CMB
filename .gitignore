@@ -1,3 +1,4 @@
+*.ipynb_checkpoints/
 Likelihood/
 __pycache__/
 .venv/
@@ -76,6 +77,7 @@ CleanPlanck.md
 !functions/
 !functions/*.py
 !functions/**/*.py
+!functions/*.ipynb
 
 *.pdf 
 *.tex 
