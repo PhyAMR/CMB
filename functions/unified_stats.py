@@ -147,11 +147,11 @@ def compute_percentiles_from_mcsamples(samples, param_name,
 
 
 def compute_percentiles_unified(data, samples=None, param_name=None,
-                                 percentiles=(16, 50, 84)):
+                                 percentiles=(16, 50, 84), weights=None):
     """
     Unified percentile computation.
 
-    Priority: GetDist (weighted) → weighted NumPy → plain NumPy.
+    Priority: GetDist (weighted) → explicit weights → plain NumPy.
 
     Parameters
     ----------
@@ -159,6 +159,12 @@ def compute_percentiles_unified(data, samples=None, param_name=None,
     samples : MCSamples, optional
     param_name : str, optional
     percentiles : tuple
+    weights : array-like, optional
+        Sample weights aligned with ``data`` (e.g. MCMC importance
+        weights read from a chain file). Used when *samples* is not
+        provided. This is what makes histogram/forest/diagnostic
+        percentiles reflect the likelihood weighting of the chain
+        instead of a plain (implicitly equal-weight) NumPy percentile.
 
     Returns
     -------
@@ -170,7 +176,7 @@ def compute_percentiles_unified(data, samples=None, param_name=None,
         )
         if result is not None:
             return result
-    return compute_percentiles_weighted(data, weights=None,
+    return compute_percentiles_weighted(data, weights=weights,
                                         percentiles=percentiles)
 
 
