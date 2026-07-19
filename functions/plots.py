@@ -1126,6 +1126,13 @@ class CorrelationPlots:
         theta = self.DL.theta
         exp_data, _, _, _, _ = self._prepare_comparison_data(comparison_data)
 
+        # Experimental (Planck) correlation function, evaluated over the
+        # same theta grid as the theory ensemble - used to draw the
+        # observed xi^2(theta) as a continuous curve in the bottom
+        # panel, not just at the per-interval S_{a}^{b} markers.
+        corr_exp, _ = self.DL.get_correlation_function()   # error discarded
+        corr_exp = np.asarray(corr_exp)
+
         corr_samples = np.asarray(corr_samples)
 
         def _percentiles_over_theta(matrix):
@@ -1206,6 +1213,9 @@ class CorrelationPlots:
         ax.set_yscale("log")
         ax.plot(theta, xi2_50, "k-")
         ax.fill_between(theta, xi2_16, xi2_84, color="k", alpha=.25)
+        # Observed (Planck) xi^2(theta) as a continuous curve across the
+        # full angular range, not just the per-interval S markers below.
+        ax.plot(theta, corr_exp ** 2, color='r', linestyle='-', linewidth=1.2)
         ax.grid(c="k", alpha=.1)
 
         for theta_bin, planck, model_16, model_50, model_84, ls in zip(
