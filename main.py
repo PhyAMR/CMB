@@ -471,32 +471,24 @@ def run_plotting(config, run_dir):
                 save_path=f"{safe_name}_power_corr.{plot_format}"
             )
             
-            # Plot 5: Correlation with xivar
-            logger.info("  - Generating correlation with xivar...")
+            # Plot 5/6: Combined xi(theta) / xi^2(theta) with xivar/S12
+            # bin overlays (replaces the old separate plot_corr_with_xivar
+            # / plot_corr_with_S12 calls).
+            logger.info("  - Generating xi(theta) / xi^2(theta) plot...")
             xivar_cols = [c for c in scalar_cols if c.startswith('xiv_')]
-            if xivar_cols:
-                xivar_df = scalars_df[xivar_cols]
-                CP.plot_corr_with_xivar(
-                    corr_theory=mean_Cor,
-                    xivar_df=xivar_df,
-                    intervals=intervals,
-                    name=model_name,
-                    comparison_data=run_data,
-                    save_path=f"{safe_name}_xivar.{plot_format}"
-                )
-            
-            # Plot 6: Correlation with S12
-            logger.info("  - Generating correlation with S12...")
             s12_cols = [c for c in scalar_cols if c.startswith('s12_')]
-            if s12_cols:
+            if xivar_cols and s12_cols:
+                xivar_df = scalars_df[xivar_cols]
                 s12_df = scalars_df[s12_cols]
-                CP.plot_corr_with_S12(
-                    corr_theory=mean_Cor,
+                CP.plot_xi_and_xi2(
+                    corr_samples=Corr_samples,
+                    xivar_df=xivar_df,
                     s12_df=s12_df,
                     intervals=intervals,
                     name=model_name,
                     comparison_data=run_data,
-                    save_path=f"{safe_name}_s12.{plot_format}"
+                    save_path=f"{safe_name}_xi_xi2.{plot_format}",
+                    theory_weights=model_data.get('weights')
                 )
             
             # Plot 7: Diagnostics panels (separate by type)

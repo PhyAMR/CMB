@@ -79,31 +79,34 @@ CleanPlanck.md
 !functions/**/*.py
 !functions/*.ipynb
 
-*.pdf 
+Paper/PaperNotes.bib
+#*.pdf 
+main.pdf
+informe_pracicas.pdf 
 *.tex 
 !Paper/Paper.pdf
 !Paper/Paper.tex
-# 1. Ignore all contents of the runs directory
-run*/**/*
-
-# 2. Allow the run folder structure itself (so Git can look inside)
-!runs/*/
-
-# 3. Specifically allow the files and directories you want to keep
-!runs/*/config.yml
-!runs/*/theory_bestfit/
-!runs/*/theory_mcmc/
-!runs/*/tables/
-
-# 4. Handle the nested pdf inside tables/ while ignoring other latex junk
-# Ignore everything in tables first...
-runs/*/tables/*
-# ...then allow only all_results.pdf
-!runs/*/tables/all_results.pdf
-
-# 5. Allow all contents inside the theory folders
-!runs/*/theory_bestfit/**
-!runs/*/theory_mcmc/**
+## 1. Ignore all contents of the runs directory
+#run*/**/*
+#
+## 2. Allow the run folder structure itself (so Git can look inside)
+#!runs/*/
+#
+## 3. Specifically allow the files and directories you want to keep
+#!runs/*/config.yml
+#!runs/*/theory_bestfit/
+#!runs/*/theory_mcmc/
+#!runs/*/tables/
+#
+## 4. Handle the nested pdf inside tables/ while ignoring other latex junk
+## Ignore everything in tables first...
+#runs/*/tables/*
+## ...then allow only all_results.pdf
+#!runs/*/tables/all_results.pdf
+#
+## 5. Allow all contents inside the theory folders
+#!runs/*/theory_bestfit/**
+#!runs/*/theory_mcmc/**
 
 # MAPS
 *.fits

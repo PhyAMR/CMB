@@ -12,7 +12,6 @@ Key improvements:
 
 import os
 import glob
-import itertools
 import logging
 import numpy as np
 import pandas as pd
@@ -25,7 +24,7 @@ from matplotlib.patches import Rectangle
 import re
 #from scipy import stats
 
-from .unified_stats import compute_percentiles_unified, compute_pvalue_unified, sigma_label
+from .unified_stats import compute_percentiles_unified, compute_pvalue_unified
 from .plot_style import apply_style, COLORS
 
 
