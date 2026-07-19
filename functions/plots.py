@@ -1196,6 +1196,7 @@ class CorrelationPlots:
         ax.set_ylabel(r"$\xi(\theta)$ [$\mu$K$^2$]")
         ax.plot(theta, xi_50, "k-")
         ax.fill_between(theta, xi_16, xi_84, color="k", alpha=.25)
+        ax.plot(theta, corr_exp, color='r', linestyle='-', linewidth=1.2)
         ax.grid(c="k", alpha=.1)
 
         for theta_bin, planck, model_16, model_50, model_84, ls in zip(
