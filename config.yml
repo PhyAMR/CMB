@@ -15,6 +15,7 @@ intervals:
   - [-0.9010561423012785, -0.03888637661577246]  # ~102-180 degrees
   - [-0.03888637661577246, 0.8654808226792662]   # ~30-92 degrees
   - [0.8654808226792662, 0.9999999999999999]     # ~0-30 degrees
+  - [-0.9999999999999999, 0.9999999999999999] # ~0-180 degrees
 
 # MCMC chain files
 # List of paths to Planck chain files (without extension)
@@ -28,9 +29,9 @@ roots:
 pipeline:
   nside_in: 2048         # HEALPix nside (resolution)
   fwhm_in_arcmin: 40.0   # Beam FWHM in arcminutes
-  noise_Cl: null         # Noise power spectrum (null = no noise)
+  noise_Cl: 4.5e-5         # Noise power spectrum (null = no noise)
   mask: null #maps/COM_Mask_CMB-common-Mask-Int_2048_R3.00.fits             # path to mask file (HEALPix format) null if no mask
-  num_workers: null      # Number of parallel workers (null = auto-detect)
+  num_workers: 8      # Number of parallel workers (null = auto-detect)
 
 # Statistics computation from MCMC chains
 statistics:
