@@ -173,8 +173,11 @@ class Data_loader:
                 tuple: A tuple containing the S12 value (float) and its error (float).
             """
             M = self._load_matrix(a, b)
-            val = S12(self.D_ell, M)
-            err = S12_err2(self.D_ell, self.error, M)
+            # Same normalisation as the simulated ensembles (cosmo.py / simulation.py):
+            # S12 = [1/(b-a)] * integral C(x)^2 dx, so the observed value and its
+            # error must be divided by (b - a) as well.
+            val = S12(self.D_ell, M, a, b)
+            err = S12_err2(self.D_ell, self.error, M) / (b - a)
             return val, err
     
     @time_execution
