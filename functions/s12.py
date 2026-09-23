@@ -44,16 +44,19 @@ def Tmn(l, l1, l2, a=-1, b=1/2):
             
     np.save(f"files/matrix/Tmn__{l1}__{l2}.npy", matrix)
 
-def S12(D_ell, M):
+def S12(D_ell, M, a=None, b=None):
     """
     Calculates the S12 statistic using the pre-computed Tmn matrix.
 
     Args:
         D_ell (np.ndarray): The angular power spectrum, D_ell, starting from l=2.
         M (np.ndarray): The pre-computed Tmn matrix.
+        a (float): The lower bound of the integral in cos(theta). If both a and b
+                   are provided, the result is divided by (b - a).
+        b (float): The upper bound of the integral in cos(theta).
 
     Returns:
-        float: The value of the S12 statistic.
+        float: The value of the S12 statistic, divided by (b - a) if a and b are given.
     """
     getcontext().prec = 1000
     s = Decimal(0)
@@ -65,10 +68,14 @@ def S12(D_ell, M):
             fac2 = (((2 * m + 1) * xm) / (2 * m * (m + 1)))
             integral = M[i, j]
             s += Decimal(fac1) * Decimal(fac2) * Decimal(float(integral))
-    return float(s)
+    result = float(s)
+    if a is not None and b is not None:
+        result /= (b - a)
+    return result
     
+"""    
 def S12_vec(D_ell, M):
-    """
+    
     Calculates the S12 statistic using a vectorized approach for efficiency.
 
     Args:
@@ -77,7 +84,7 @@ def S12_vec(D_ell, M):
 
     Returns:
         float: The value of the S12 statistic.
-    """
+    
     getcontext().prec = 1000
     D_ell = np.array(D_ell, dtype=float)
     M = np.array(M, dtype=float)
@@ -85,8 +92,9 @@ def S12_vec(D_ell, M):
     f = ((2 * n + 1) * D_ell) / (2 * n * (n + 1))
     return float(f @ M @ f)
 
+
 def S12_err(D_ell, D_ell_err, M):
-    """
+    
     Calculates the error in the S12 statistic by propagating the errors from D_ell.
 
     Args:
@@ -96,7 +104,7 @@ def S12_err(D_ell, D_ell_err, M):
 
     Returns:
         float: The propagated error in the S12 statistic.
-    """
+    
     getcontext().prec = 1000
     s = Decimal(0)
     for i, xn_err in enumerate(D_ell_err):
@@ -108,9 +116,14 @@ def S12_err(D_ell, D_ell_err, M):
             Amn = fac1 * fac2
             integral = M[i, j]
             # Error propagation assuming uncorrelated errors.
-            s += (Amn**2) * (Decimal(float(integral))**2) * (Decimal(D_ell[i]**2 * xm**2) + Decimal(D_ell[j]**2 * xn_err**2))
-    return float(s)**0.5
+            s += (
+                (Amn**2)
+                * (Decimal(float(integral)) ** 2)
+                * (Decimal(D_ell[i] ** 2 * xm**2) + Decimal(D_ell[j] ** 2 * xn_err**2))
+            )
+    return float(s) ** 0.5
 
+"""
 def S12_err2(D_ell, D_ell_err, M):
     """
     An alternative method for calculating the error in the S12 statistic.
@@ -136,7 +149,9 @@ def S12_err2(D_ell, D_ell_err, M):
             integral = M[i, j]
             s1 += Amn * Decimal(float(integral)) * Decimal(D_ell[i] * xm)
             s2 += Amn * Decimal(float(integral)) * Decimal(D_ell[j] * xn_err)
-    return float(s1**2 + s2**2)**0.5
+    return float(s1**2 + s2**2) ** 0.5
+
+
 
 def s12_numerical(D_ell, a, b, n_points=2000):
     """
@@ -157,6 +172,7 @@ def s12_numerical(D_ell, a, b, n_points=2000):
     cor_sq = cor**2
     integral = simpson(cor_sq, x)
     return integral
+
 
 if __name__ == '__main__':
     import time
