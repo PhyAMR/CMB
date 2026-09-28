@@ -25,9 +25,11 @@ from .getdist_stats import (
     add_derived_parameters,
     compute_multivariate_tension,
     generate_statistics_table,
+    compute_all_percentiles,
+    compute_all_pvalues,
     _format_label_for_getdist,
 )
-from .unified_stats import pvalue_to_sigma, sigma_label
+from .unified_stats import pvalue_to_sigma, sigma_label, is_degenerate_stat
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
@@ -215,6 +217,246 @@ def generate_statistics_table_bestfit(run_dir, model_name, experimental_values,
     )
 
 
+def _format_ensemble_value_cell(perc_dict, param):
+    """
+    Format one ensemble's median with its 68% CI attached as
+    subscript/superscript (``median_{p16}^{p84}``, matching the
+    paper's :math:`\\langle\\xi\\rangle_{\\theta_a}^{\\theta_b}`
+    interval-bound notation).
+
+    Parameters
+    ----------
+    perc_dict : dict
+        ``{param: {'p16':…, 'p50':…, 'p84':…}}`` for one ensemble.
+    param : str
+
+    Returns
+    -------
+    str
+        LaTeX math string, or a placeholder dash if the ensemble has no
+        data for this statistic (missing model).
+    """
+    if param not in perc_dict:
+        return "---"
+
+    perc = perc_dict[param]
+    p16, p50, p84 = perc["p16"], perc["p50"], perc["p84"]
+    return rf"${p50:.4f}_{{{p16:.4f}}}^{{{p84:.4f}}}$"
+
+
+def _format_ensemble_pvalue_cell(pval_dict, param):
+    """
+    Format one ensemble's empirical p-value with sigma notation.
+
+    Parameters
+    ----------
+    pval_dict : dict
+        ``{param: {'pvalue':…, 'floored':…}}`` for one ensemble.
+    param : str
+
+    Returns
+    -------
+    str
+        LaTeX math string, or a placeholder dash if there is no
+        meaningful p-value (missing model, or an analytically
+        degenerate statistic such as ``xiv_180_0``).
+    """
+    if param not in pval_dict:
+        return "---"
+
+    return sigma_label(
+        pval_dict[param]["pvalue"],
+        bound=pval_dict[param].get("floored", False),
+    )
+
+
+def generate_combined_statistics_table(run_dir, model_name, experimental_values,
+                                        derived_df=None):
+    """
+    Generate a single LaTeX tabular string per model, with the MCMC and
+    best-fit ensembles side by side as separate columns instead of two
+    separate per-ensemble tables.
+
+    Columns: Statistic | Experimental | MCMC{Value, $p$-value} |
+    Best-fit{Value, $p$-value} — each ensemble spans two sub-columns
+    (grouped under its own header cell) so the p-value/sigma sits to
+    the right of the numerical value instead of stacked below it. The
+    ensemble's global ACAT Cauchy statistic is shown right in the group
+    header, next to the ensemble's name. Each "Value" cell is the
+    median with its 68% credible interval attached as
+    subscript/superscript (``median_{p16}^{p84}``). A row above the
+    header reports the combined global p-value for each ensemble.
+
+    Parameters
+    ----------
+    run_dir : str
+    model_name : str
+    experimental_values : dict
+        ``{param: (value, error)}`` — only the value is used; error is
+        ignored.
+    derived_df : pd.DataFrame, optional
+
+    Returns
+    -------
+    tuple(str or None, dict or None, dict or None)
+        ``(table_tex, mcmc_global, bestfit_global)``. ``table_tex`` is
+        None if neither ensemble could be loaded for this model.
+        ``mcmc_global``/``bestfit_global`` are the dicts returned by
+        ``_compute_global_statistics`` (or None if that ensemble is
+        unavailable) — callers can reuse them (e.g. for a summary text
+        file) without reloading the chain.
+    """
+    mcmc_samples = load_chain_with_derived_params(
+        run_dir, model_name, mode='mcmc', derived_df=derived_df
+    )
+    bestfit_samples = load_chain_with_derived_params(
+        run_dir, model_name, mode='bestfit', derived_df=derived_df
+    )
+
+    if mcmc_samples is None and bestfit_samples is None:
+        logger.warning(
+            f"Could not load MCMC or best-fit samples for {model_name}"
+        )
+        return None, None, None
+
+    param_names = list(experimental_values.keys())
+
+    mcmc_perc = (compute_all_percentiles(mcmc_samples, param_names)
+                 if mcmc_samples is not None else {})
+    mcmc_pval = (compute_all_pvalues(mcmc_samples, param_names, experimental_values)
+                 if mcmc_samples is not None else {})
+    bestfit_perc = (compute_all_percentiles(bestfit_samples, param_names)
+                    if bestfit_samples is not None else {})
+    bestfit_pval = (compute_all_pvalues(bestfit_samples, param_names, experimental_values)
+                    if bestfit_samples is not None else {})
+
+    mcmc_global = (
+        _compute_global_statistics(mcmc_samples, experimental_values, weighted=True)
+        if mcmc_samples is not None else None
+    )
+    bestfit_global = (
+        _compute_global_statistics(bestfit_samples, experimental_values, weighted=False)
+        if bestfit_samples is not None else None
+    )
+
+    try:
+        # Ensemble names carry their own global Cauchy statistic T right
+        # in the group header, spanning the ensemble's Value/p-value
+        # sub-columns.
+        mcmc_header = "MCMC"
+        if mcmc_global is not None:
+            mcmc_header += rf" ($T={mcmc_global['cauchy_T']:.3f}$)"
+        bestfit_header = "Best-fit"
+        if bestfit_global is not None:
+            bestfit_header += rf" ($T={bestfit_global['cauchy_T']:.3f}$)"
+
+        rows = []
+        rows.append(r"\begin{tabular}{lccccc}")
+        rows.append(r"\toprule")
+
+        tension_parts = []
+        if mcmc_global is not None:
+            tension_parts.append(rf"MCMC: p = {sigma_label(mcmc_global['pvalue'])}")
+        if bestfit_global is not None:
+            tension_parts.append(rf"Best-fit: p = {sigma_label(bestfit_global['pvalue'])}")
+        if tension_parts:
+            tension_cell = (r"\textbf{Global tension (ACAT).} "
+                             + r"\quad ".join(tension_parts))
+            rows.append(rf"\multicolumn{{6}}{{l}}{{{tension_cell}}} \\")
+            rows.append(r"\midrule")
+
+        rows.append(
+            rf" & & \multicolumn{{2}}{{c}}{{{mcmc_header}}} & "
+            rf"\multicolumn{{2}}{{c}}{{{bestfit_header}}} \\"
+        )
+        rows.append(r"\cmidrule(lr){3-4} \cmidrule(lr){5-6}")
+        rows.append(
+            r"Statistic & Experimental & Value & $p$-value & Value & $p$-value \\"
+        )
+        rows.append(r"\midrule")
+
+        for param in param_names:
+            if param not in mcmc_perc and param not in bestfit_perc:
+                continue
+            if param not in experimental_values:
+                continue
+
+            param_label = _format_label_for_getdist(param)
+
+            # Observed value only — no error
+            exp_val = experimental_values[param][0]
+            exp_str = rf"${exp_val:.4f}$"
+
+            mcmc_val    = _format_ensemble_value_cell(mcmc_perc, param)
+            mcmc_pv     = _format_ensemble_pvalue_cell(mcmc_pval, param)
+            bestfit_val = _format_ensemble_value_cell(bestfit_perc, param)
+            bestfit_pv  = _format_ensemble_pvalue_cell(bestfit_pval, param)
+
+            rows.append(
+                rf"{param_label} & {exp_str} & {mcmc_val} & {mcmc_pv} & "
+                rf"{bestfit_val} & {bestfit_pv} \\"
+            )
+
+        rows.append(r"\bottomrule")
+        rows.append(r"\end{tabular}")
+        return "\n".join(rows), mcmc_global, bestfit_global
+
+    except Exception as exc:
+        logger.exception(f"Error generating combined table for {model_name}: {exc}")
+        return None, mcmc_global, bestfit_global
+
+
+def _inject_combined_global_tension_row(table_tex, mcmc_global, bestfit_global,
+                                         ncols=4):
+    """
+    Insert a full-width row (immediately after ``\\toprule``) reporting
+    the global ACAT tension for both ensembles.
+
+    Parameters
+    ----------
+    table_tex : str
+        LaTeX tabular produced by ``generate_combined_statistics_table``.
+    mcmc_global : dict or None
+        Returned by ``generate_global_statistics_mcmc``.
+    bestfit_global : dict or None
+        Returned by ``generate_global_statistics_bestfit``.
+    ncols : int
+        Number of columns in the table (for the ``\\multicolumn`` span).
+
+    Returns
+    -------
+    str
+    """
+    parts = []
+    if mcmc_global is not None:
+        pv = sigma_label(mcmc_global['pvalue'])
+        parts.append(rf"MCMC: $T = {mcmc_global['cauchy_T']:.3f}$, p = {pv}")
+    if bestfit_global is not None:
+        pv = sigma_label(bestfit_global['pvalue'])
+        parts.append(rf"Best-fit: $T = {bestfit_global['cauchy_T']:.3f}$, p = {pv}")
+
+    if not parts:
+        return table_tex
+
+    tension_cell = r"\textbf{Global tension (ACAT).} " + r"\quad ".join(parts)
+    tension_row = (
+        rf"\multicolumn{{{ncols}}}{{l}}{{{tension_cell}}} \\"
+        + "\n"
+        + r"\midrule"
+    )
+
+    marker = r"\toprule"
+    if marker in table_tex:
+        return table_tex.replace(marker, marker + "\n" + tension_row, 1)
+
+    return re.sub(
+        r"(\\begin\{tabular\}\{[^}]*\})",
+        r"\1\n" + tension_row,
+        table_tex,
+        count=1,
+    )
+
+
 # ---------------------------------------------------------------------------
 # ACAT implementation
 # ---------------------------------------------------------------------------
@@ -282,7 +524,9 @@ def _compute_global_statistics(samples, experimental_values, weighted: bool):
     -------
     dict or None
     """
-    param_names = list(experimental_values.keys())
+    # Identically-zero statistics (e.g. xi_{180,0}) carry no information and
+    # would inject an arbitrary p-value into the Cauchy combination.
+    param_names = [p for p in experimental_values if not is_degenerate_stat(p)]
     obs_values  = np.array([experimental_values[p][0] for p in param_names])
 
     param_arrays = []
@@ -318,8 +562,16 @@ def _compute_global_statistics(samples, experimental_values, weighted: bool):
             p84 = float(np.percentile(arr, 84))
             F   = float(np.mean(arr <= obs))
 
-        floor = 1e-16
-        p_i   = max(F, floor)
+        # Resolution limit of the ensemble: p cannot be resolved below 1/n
+        # (n = effective number of samples). Same convention as
+        # unified_stats.compute_pvalue_unified. Clip both tails so ACAT's
+        # tan() stays finite.
+        if weights is not None:
+            n_eff = 1.0 / float(np.sum(weights ** 2))
+        else:
+            n_eff = float(len(arr))
+        floor = 1.0 / n_eff
+        p_i   = min(max(F, floor), 1.0 - floor)
         individual_pvalues.append(p_i)
         theory_medians.append(p50)
         theory_ci_lo.append(p16)
@@ -477,10 +729,14 @@ def generate_all_tables(run_dir, roots, experimental_values,
     """
     Generate all LaTeX tables for a run.
 
+    One combined table is produced per model (not per ensemble): each
+    table has columns Statistic | Experimental | MCMC | Best-fit, with
+    the MCMC and best-fit median/68% CI/p-value packed into their own
+    column instead of being split across two separate tables.
+
     Creates
     -------
-    ``run_dir/tables/mcmc/<model>.tex``
-    ``run_dir/tables/bestfit/<model>.tex``
+    ``run_dir/tables/<model>.tex``
     ``run_dir/tables/all_results.tex``
     ``run_dir/tables/statistics_summary.txt``
 
@@ -492,12 +748,8 @@ def generate_all_tables(run_dir, roots, experimental_values,
         ``{param: (value, error)}`` — only value consumed.
     derived_params : pd.DataFrame, optional
     """
-    tables_dir  = os.path.join(run_dir, 'tables')
-    mcmc_dir    = os.path.join(tables_dir, 'mcmc')
-    bestfit_dir = os.path.join(tables_dir, 'bestfit')
-
-    os.makedirs(mcmc_dir,    exist_ok=True)
-    os.makedirs(bestfit_dir, exist_ok=True)
+    tables_dir = os.path.join(run_dir, 'tables')
+    os.makedirs(tables_dir, exist_ok=True)
 
     # ------------------------------------------------------------------
     # Master LaTeX document header
@@ -565,88 +817,57 @@ def generate_all_tables(run_dir, roots, experimental_values,
     master_tex.append(r"\clearpage")
 
     for root in roots:
-        model_name       = root.strip().split('/')[-1]
-        mcmc_dir_check   = os.path.join(run_dir, 'theory_mcmc',    model_name)
+        model_name        = root.strip().split('/')[-1]
+        mcmc_dir_check    = os.path.join(run_dir, 'theory_mcmc',    model_name)
         bestfit_dir_check = os.path.join(run_dir, 'theory_bestfit', model_name)
-        has_mcmc         = os.path.exists(mcmc_dir_check)
-        has_bestfit      = os.path.exists(bestfit_dir_check)
+        has_mcmc          = os.path.exists(mcmc_dir_check)
+        has_bestfit       = os.path.exists(bestfit_dir_check)
 
-        logger.info(f"Generating tables for {model_name}")
+        logger.info(f"Generating combined table for {model_name}")
         master_tex.append(
             rf"\section{{{model_name.replace('_', ' ')}}}"
         )
         summary_lines.append(f"\n{model_name}")
         summary_lines.append("-" * 80)
 
-        # MCMC
-        if has_mcmc:
-            logger.info("  Generating MCMC table…")
-            table_tex = generate_statistics_table_mcmc(
-                run_dir, model_name, experimental_values,
-                derived_df=derived_params,
-            )
-            if table_tex:
-                global_stats = generate_global_statistics_mcmc(
-                    run_dir, model_name, experimental_values,
-                    derived_df=derived_params,
-                )
-                table_tex = _inject_global_tension_row(table_tex, global_stats)
+        if not (has_mcmc or has_bestfit):
+            logger.warning(f"  No MCMC or best-fit data found for {model_name}")
+            master_tex.append(r"\clearpage")
+            continue
 
-                with open(os.path.join(mcmc_dir, f'{model_name}.tex'), 'w') as f:
-                    f.write(table_tex)
+        table_tex, mcmc_global, bestfit_global = generate_combined_statistics_table(
+            run_dir, model_name, experimental_values,
+            derived_df=derived_params,
+        )
 
-                master_tex += [
-                    r"\subsection{MCMC Analysis}",
-                    r"\begin{table}[h]\centering",
-                    rf"\input{{mcmc/{model_name}.tex}}",
-                    rf"\caption{{MCMC results for {model_name.replace('_', chr(92)+'_')}}}",
-                    r"\end{table}",
+        if table_tex:
+            with open(os.path.join(tables_dir, f'{model_name}.tex'), 'w') as f:
+                f.write(table_tex)
+
+            master_tex += [
+                r"\begin{table}[h]\centering",
+                rf"\input{{{model_name}.tex}}",
+                rf"\caption{{Statistical summary for {model_name.replace('_', chr(92)+'_')}: "
+                r"experimental value, MCMC, and best-fit ensembles.}}",
+                r"\end{table}",
+            ]
+
+            if mcmc_global:
+                p, ns, T = (mcmc_global['pvalue'], mcmc_global['n_sigma'],
+                            mcmc_global['cauchy_T'])
+                summary_lines += [
+                    "MCMC Global Tension (ACAT):",
+                    f"  Cauchy T = {T:.3f}  (dof={mcmc_global['dof']})",
+                    f"  p = {p:.2e}  ({ns:.2f}σ)",
                 ]
-
-                if global_stats:
-                    p   = global_stats['pvalue']
-                    ns  = global_stats['n_sigma']
-                    T   = global_stats['cauchy_T']
-                    summary_lines += [
-                        "MCMC Global Tension (ACAT):",
-                        f"  Cauchy T = {T:.3f}  (dof={global_stats['dof']})",
-                        f"  p = {p:.2e}  ({ns:.2f}σ)",
-                    ]
-
-        # Best-fit
-        if has_bestfit:
-            logger.info("  Generating best-fit table…")
-            table_tex = generate_statistics_table_bestfit(
-                run_dir, model_name, experimental_values,
-                derived_df=derived_params,
-            )
-            if table_tex:
-                global_stats = generate_global_statistics_bestfit(
-                    run_dir, model_name, experimental_values,
-                    derived_df=derived_params,
-                )
-                table_tex = _inject_global_tension_row(table_tex, global_stats)
-
-                with open(os.path.join(bestfit_dir, f'{model_name}.tex'), 'w') as f:
-                    f.write(table_tex)
-
-                master_tex += [
-                    r"\subsection{Best-Fit Analysis}",
-                    r"\begin{table}[h]\centering",
-                    rf"\input{{bestfit/{model_name}.tex}}",
-                    rf"\caption{{Best-fit results for {model_name.replace('_', chr(92)+'_')}}}",
-                    r"\end{table}",
+            if bestfit_global:
+                p, ns, T = (bestfit_global['pvalue'], bestfit_global['n_sigma'],
+                            bestfit_global['cauchy_T'])
+                summary_lines += [
+                    "Best-fit Global Tension (ACAT):",
+                    f"  Cauchy T = {T:.3f}  (dof={bestfit_global['dof']})",
+                    f"  p = {p:.2e}  ({ns:.2f}σ)",
                 ]
-
-                if global_stats:
-                    p   = global_stats['pvalue']
-                    ns  = global_stats['n_sigma']
-                    T   = global_stats['cauchy_T']
-                    summary_lines += [
-                        "Best-fit Global Tension (ACAT):",
-                        f"  Cauchy T = {T:.3f}  (dof={global_stats['dof']})",
-                        f"  p = {p:.2e}  ({ns:.2f}σ)",
-                    ]
 
         master_tex.append(r"\clearpage")
 

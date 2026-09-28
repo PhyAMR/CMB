@@ -45,35 +45,47 @@ except ImportError:
 def format_label_latex(label):
     """
     Convert raw label to properly formatted LaTeX label.
-    
+
+    Matches the paper's notation: the correlation function is
+    :math:`\\xi(\\theta)` (not :math:`C(\\theta)`), the antipodal
+    correlation is :math:`\\xi_{180}` (not :math:`C_{180}`), the
+    interval-averaged correlation is
+    :math:`\\langle\\xi\\rangle_{\\theta_a}^{\\theta_b}`, and the mean
+    squared correlation (previously labelled :math:`S`) is
+    :math:`\\langle\\xi^2\\rangle_{\\theta_a}^{\\theta_b}`, with
+    :math:`\\theta_a < \\theta_b` as subscript/superscript
+    respectively.
+
     Examples:
-        'C180' -> '$C_{180}$'
-        'xiv_60_30' -> '$\\xi_{60,30}$'  
-        's12_60_30' -> '$S_{60,30}$'
-        's12_180_150' -> '$S_{180,150}$'
-    
+        'C180' -> '$\\xi_{180}$'
+        'xiv_180_60' -> '$\\langle\\xi\\rangle_{60}^{180}$'
+        's12_180_60' -> '$\\langle\\xi^2\\rangle_{60}^{180}$'
+        's12_180_150' -> '$\\langle\\xi^2\\rangle_{150}^{180}$'
+
     Args:
         label (str): Raw label string
-    
+
     Returns:
         str: LaTeX-formatted label
     """
-    # Handle C180
+    # Handle C180 (antipodal correlation)
     if label == 'C180':
-        return r'$C_{180}$'
-    
-    # Handle xivar: xiv_60_30 -> $\xi_{60,30}$
+        return r'$\xi_{180}$'
+
+    # Handle xivar: xiv_180_60 -> $\langle\xi\rangle_{60}^{180}$
+    # (column names store theta_upper before theta_lower; the paper
+    # convention puts the lower bound as subscript, upper as superscript)
     xiv_match = re.match(r'xiv_(\d+)_(\d+)', label)
     if xiv_match:
         upper, lower = xiv_match.groups()
-        return rf'$\xi_{{{upper},{lower}}}$'
-    
-    # Handle S12: s12_60_30 -> $S_{60,30}$
+        return rf'$\langle\xi\rangle_{{{lower}}}^{{{upper}}}$'
+
+    # Handle S12: s12_180_60 -> $\langle\xi^2\rangle_{60}^{180}$
     s12_match = re.match(r's12_(\d+)_(\d+)', label)
     if s12_match:
         upper, lower = s12_match.groups()
-        return rf'$S_{{{upper},{lower}}}$'
-    
+        return rf'$\langle\xi^2\rangle_{{{lower}}}^{{{upper}}}$'
+
     # Fallback: return as-is
     return label
 
@@ -616,7 +628,8 @@ class CorrelationPlots:
     # ========================================================================
     
     def create_individual_histograms(self, df, labels, comparison_data=None,
-                                     bins=25, base_name='stat', file_format='pdf'):
+                                     bins=25, base_name='stat', file_format='pdf',
+                                     compact=False):
         """
         Create individual histogram for each statistic with unified p-values.
 
@@ -630,6 +643,16 @@ class CorrelationPlots:
             bins (int): Number of histogram bins
             base_name (str): Base name for output files
             file_format (str): File format ('pdf' or 'png')
+            compact (bool): If True, render a small "grid-ready" panel
+                instead of the full standalone figure: smaller physical
+                size (so text stays legible once the PDF is shrunk to
+                fit a multi-panel LaTeX grid), no title, and no legend
+                (the panel already carries its statistic in the caption,
+                and the line styles are the same across every panel, so
+                a single shared legend/caption elsewhere covers all of
+                them). Saved to a separate ``histograms_compact/``
+                output folder so the full-size standalone histograms
+                are untouched.
         """
         from .plot_style import COLORS as _C
         exp_data, sim_data, theory_data, _, theory_weights = \
@@ -645,12 +668,18 @@ class CorrelationPlots:
                 continue
             weights_matched = _aligned_weights(mask, theory_weights)
 
-            fig, ax = plt.subplots(figsize=(9.5, 6.5))
+            # Compact panels are rendered near their final on-page size
+            # (rather than a full-page figure that gets shrunk 3-4x by
+            # LaTeX), so the embedded font stays close to its natural
+            # point size instead of shrinking along with the panel.
+            figsize = (4.2, 2.3) if compact else (9.5, 6.5)
+            fig, ax = plt.subplots(figsize=figsize)
 
             # Histogram bars
-            ax.hist(values, bins=bins,
+            ax.hist(values, bins=(min(bins, 40) if compact else bins),
                     color=_C['theory_fill'], alpha=0.85,
-                    edgecolor='#1A252F', linewidth=0.8, rwidth=0.95,
+                    edgecolor='#1A252F', linewidth=0.6 if compact else 0.8,
+                    rwidth=0.95,
                     label='Theory Distribution', zorder=2)
 
             # Percentiles — weighted by the chain's likelihood/importance
@@ -659,13 +688,16 @@ class CorrelationPlots:
             perc = compute_percentiles(values, weights=weights_matched)
             p16, p50, p84 = perc['p16'], perc['p50'], perc['p84']
 
+            line_w = 1.2 if compact else 1.8
+            median_w = 1.6 if compact else 2.2
+
             # 68% CI shown as dotted low/high lines rather than a shaded
             # band.
-            ax.axvline(p16, color=_C['ci_band'], linestyle=':', linewidth=1.8,
+            ax.axvline(p16, color=_C['ci_band'], linestyle=':', linewidth=line_w,
                        zorder=3, label='68% CI')
-            ax.axvline(p84, color=_C['ci_band'], linestyle=':', linewidth=1.8,
+            ax.axvline(p84, color=_C['ci_band'], linestyle=':', linewidth=line_w,
                        zorder=3)
-            ax.axvline(p50, color=_C['theory'], linestyle='-', linewidth=2.2,
+            ax.axvline(p50, color=_C['theory'], linestyle='-', linewidth=median_w,
                        zorder=4, label='Median')
 
             # Observed value — no error, and no p-value is computed or
@@ -674,7 +706,7 @@ class CorrelationPlots:
             if exp_data and isinstance(exp_data, dict) and label in exp_data:
                 exp_val = exp_data[label][0]   # discard error
                 ax.axvline(exp_val, color=_C['experimental'],
-                           linestyle='--', linewidth=2.2, zorder=5,
+                           linestyle='--', linewidth=median_w, zorder=5,
                            label='Experimental')
 
             # Simulation median overlay
@@ -683,15 +715,28 @@ class CorrelationPlots:
                 if len(sim_vals) > 0:
                     sim_p50 = compute_percentiles(sim_vals)['p50']
                     ax.axvline(sim_p50, color=_C['theory_fill'],
-                               linestyle=':', linewidth=2.0, zorder=3,
+                               linestyle=':', linewidth=line_w, zorder=3,
                                label='Simulation median')
 
             formatted_label = format_label_latex(label)
 
-            ax.set_xlabel(formatted_label)
-            ax.set_ylabel('Frequency')
-            ax.set_title(f'Distribution: {formatted_label}')
-            ax.legend(loc='best')
+            if compact:
+                # No title/legend/axis labels: the statistic is already
+                # named in the LaTeX subcaption, and the line styles are
+                # identical across every panel in the grid, so a single
+                # shared legend in the outer figure caption covers all
+                # of them. Only the tick numbers remain, kept few and
+                # small so they don't crowd the small panel.
+                ax.set_xlabel('')
+                ax.set_ylabel('')
+                ax.xaxis.set_major_locator(plt.MaxNLocator(4))
+                ax.yaxis.set_major_locator(plt.MaxNLocator(4))
+                ax.tick_params(labelsize=8)
+            else:
+                ax.set_xlabel(formatted_label)
+                ax.set_ylabel('Frequency')
+                ax.set_title(f'Distribution: {formatted_label}')
+                ax.legend(loc='best')
             plt.tight_layout()
 
             safe_label = label.replace('_', '-')
@@ -699,7 +744,9 @@ class CorrelationPlots:
 
             if self.output_dir:
                 save_path = _build_output_path(
-                    self.output_dir, 'histograms', filename, self.mode
+                    self.output_dir,
+                    'histograms_compact' if compact else 'histograms',
+                    filename, self.mode
                 )
             else:
                 save_path = filename
@@ -735,19 +782,19 @@ class CorrelationPlots:
             if stat_type == 'C180':
                 self._create_single_forest_plot(
                     df, type_labels, comparison_data,
-                    title=r'$C_{180}$ Statistic',
+                    title=r'$\xi_{180}$ Statistic',
                     save_name=f'{base_name}_forest_C180.{file_format}'
                 )
             elif stat_type == 'xivar':
                 self._create_single_forest_plot(
                     df, type_labels, comparison_data,
-                    title=r'$\xi$ Statistics',
+                    title=r'$\langle\xi\rangle$ Statistics',
                     save_name=f'{base_name}_forest_xivar.{file_format}'
                 )
             elif stat_type == 's12':
                 self._create_single_forest_plot(
                     df, type_labels, comparison_data,
-                    title=r'$S$ Statistics',
+                    title=r'$\langle\xi^2\rangle$ Statistics',
                     save_name=f'{base_name}_forest_s12.{file_format}'
                 )
         
@@ -862,19 +909,19 @@ class CorrelationPlots:
             if stat_type == 'C180':
                 self._create_single_diagnostic(
                     df, type_labels, comparison_data,
-                    title=r'$C_{180}$ Diagnostics',
+                    title=r'$\xi_{180}$ Diagnostics',
                     save_name=f'{base_name}_diagnostics_C180.{file_format}'
                 )
             elif stat_type == 'xivar':
                 self._create_single_diagnostic(
                     df, type_labels, comparison_data,
-                    title=r'$\xi$ Diagnostics',
+                    title=r'$\langle\xi\rangle$ Diagnostics',
                     save_name=f'{base_name}_diagnostics_xivar.{file_format}'
                 )
             elif stat_type == 's12':
                 self._create_single_diagnostic(
                     df, type_labels, comparison_data,
-                    title=r'$S$ Diagnostics',
+                    title=r'$\langle\xi^2\rangle$ Diagnostics',
                     save_name=f'{base_name}_diagnostics_s12.{file_format}'
                 )
         
@@ -1400,7 +1447,7 @@ class CorrelationPlots:
                         label=r'Theory $\pm 1\sigma$', zorder=1)
         
         ax2.set_xlabel(r'$\theta$ [degrees]', fontsize=14)
-        ax2.set_ylabel(r'$C(\theta)$ [$\mu K^2$]', fontsize=14)
+        ax2.set_ylabel(r'$\xi(\theta)$ [$\mu K^2$]', fontsize=14)
         ax2.set_title('Correlation Function', fontsize=14)
         ax2.legend(fontsize=10)
         ax2.grid(True, alpha=0.3)

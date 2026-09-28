@@ -74,7 +74,7 @@ def MC_calculations(D_ell, data_loader, intervals):
         s12_key = f's12_{theta_upper}_{theta_lower}'
         xiv_key = f'xiv_{theta_upper}_{theta_lower}'
         
-        results[s12_key] = S12(D_ell, M)
+        results[s12_key] = S12(D_ell, M, a, b)
         results[xiv_key] = xivar(D_ell, a, b)
     
     return results

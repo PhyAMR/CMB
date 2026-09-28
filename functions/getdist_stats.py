@@ -23,6 +23,7 @@ from scipy import stats
 from .unified_stats import (
     compute_percentiles_unified,
     compute_pvalue_unified,
+    is_degenerate_stat,
     sigma_label,
 )
 
@@ -37,24 +38,33 @@ def _format_label_for_getdist(param_name: str) -> str:
     """
     Format a parameter name as a LaTeX label for GetDist / table display.
 
+    Matches the paper's notation: the antipodal correlation is
+    :math:`\\xi_{180}` (not :math:`C_{180}`), the interval-averaged
+    correlation is :math:`\\langle\\xi\\rangle_{\\theta_a}^{\\theta_b}`,
+    and the mean squared correlation (previously labelled :math:`S`) is
+    :math:`\\langle\\xi^2\\rangle_{\\theta_a}^{\\theta_b}`, with the
+    lower bound as subscript and the upper bound as superscript.
+
     Examples
     --------
-    ``'xiv_180_60'``  →  ``r'$\\xi_{180,60}$'``
-    ``'s12_180_60'``  →  ``r'$S_{180,60}$'``
-    ``'C180'``        →  ``r'$C_{180}$'``
+    ``'xiv_180_60'``  →  ``r'$\\langle\\xi\\rangle_{60}^{180}$'``
+    ``'s12_180_60'``  →  ``r'$\\langle\\xi^2\\rangle_{60}^{180}$'``
+    ``'C180'``        →  ``r'$\\xi_{180}$'``
     """
     if param_name == "C180":
-        return r"$C_{180}$"
+        return r"$\xi_{180}$"
 
     if param_name.startswith("xiv_"):
         parts = param_name.split("_")
         if len(parts) == 3:
-            return rf"$\xi_{{{parts[1]},{parts[2]}}}$"
+            upper, lower = parts[1], parts[2]
+            return rf"$\langle\xi\rangle_{{{lower}}}^{{{upper}}}$"
 
     if param_name.startswith("s12_"):
         parts = param_name.split("_")
         if len(parts) == 3:
-            return rf"$S_{{{parts[1]},{parts[2]}}}$"
+            upper, lower = parts[1], parts[2]
+            return rf"$\langle\xi^2\rangle_{{{lower}}}^{{{upper}}}$"
 
     return param_name
 
@@ -334,6 +344,8 @@ def compute_all_pvalues(samples, param_names, experimental_values):
     for param in param_names:
         if param not in experimental_values or param not in percentiles_dict:
             continue
+        if is_degenerate_stat(param):
+            continue  # identically zero: nothing to compare
 
         # Unpack but discard the error
         exp_val = experimental_values[param][0]
@@ -472,7 +484,7 @@ def generate_statistics_table(samples, param_names, experimental_values,
 
             # p-value with sigma notation
             pval   = pvalues_dict[param]["pvalue"]
-            pv_str = sigma_label(pval)
+            pv_str = sigma_label(pval, bound=pvalues_dict[param].get("floored", False))
 
             rows.append(
                 rf"{param_label} & {exp_str} & {med_str} & {ci_str} & {pv_str} \\"

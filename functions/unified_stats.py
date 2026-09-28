@@ -32,6 +32,17 @@ except ImportError:
 # Sigma / p-value helpers
 # ---------------------------------------------------------------------------
 
+# Statistics that are analytically zero for every spectrum, so observed and
+# simulated values are both pure round-off and cannot be compared.
+# xi_{180,0} = 1/2 * sum_{l>=2} D_l/(2l(l+1)) * int_{-1}^{1} P_l(x) dx = 0.
+DEGENERATE_STATS = frozenset({"xiv_180_0"})
+
+
+def is_degenerate_stat(name: str) -> bool:
+    """True if *name* is a statistic that is identically zero (see above)."""
+    return name in DEGENERATE_STATS
+
+
 def pvalue_to_sigma(p: float) -> float:
     """
     Convert a one-sided p-value to an equivalent number of Gaussian sigma.
@@ -41,17 +52,19 @@ def pvalue_to_sigma(p: float) -> float:
     Parameters
     ----------
     p : float
-        p-value in (0, 1).
+        p-value in (0, 1). NaN is returned as NaN.
 
     Returns
     -------
     float
     """
+    if np.isnan(p):
+        return float("nan")
     p = float(np.clip(p, 1e-16, 1.0 - 1e-16))
     return float(_norm.isf(p))
 
 
-def sigma_label(p: float) -> str:
+def sigma_label(p: float, bound: bool = False) -> str:
     """
     Return a compact LaTeX string such as ``$0.073\\ (1.47\\sigma)$``.
 
@@ -60,12 +73,20 @@ def sigma_label(p: float) -> str:
     Parameters
     ----------
     p : float
+    bound : bool
+        If True, *p* is only an upper bound (no simulation was as extreme as
+        the observed value, so p was floored at 1/n_sims) and the label is
+        rendered as ``$<0.001\\ (>3.09\\sigma)$``.
 
     Returns
     -------
     str
     """
+    if np.isnan(p):
+        return r"$\mathrm{n/a}$"
     n = pvalue_to_sigma(p)
+    if bound:
+        return rf"$<{p:.3f}\ (>{n:.2f}\sigma)$"
     return rf"${p:.3f}\ ({n:.2f}\sigma)$"
 
 
@@ -202,39 +223,57 @@ def compute_pvalue_unified(observed_value, percentiles_dict, data=None):
         ``{'p16': val, 'p50': val, 'p84': val}`` — used only to guard
         against degenerate (zero-variance) distributions.
     data : array-like, optional
-        Full ensemble.  Required for a meaningful p-value; returns p = 1
-        with a warning if absent.
+        Full ensemble.  Required for a meaningful p-value; the p-value is
+        NaN (undefined) with a warning if absent or if the ensemble has zero
+        spread.
 
     Returns
     -------
     dict
         ``{'pvalue': float, 'n_sigma': float,
-           'interpretation': str, 'tension_level': str}``
+           'interpretation': str, 'tension_level': str, 'floored': bool}``
+        ``floored`` is True when no realisation was <= the observation, i.e.
+        p is only an upper bound of 1/n.
     """
     try:
         p16 = percentiles_dict["p16"]
         p84 = percentiles_dict["p84"]
     except KeyError:
         logger.warning("Missing percentile keys in percentiles_dict.")
-        return _tension_dict(1.0)
+        return _undefined_dict()
 
     if data is None:
         logger.warning(
-            "compute_pvalue_unified: no data array provided; returning p = 1."
+            "compute_pvalue_unified: no data array provided; p-value undefined."
         )
-        return _tension_dict(1.0)
+        return _undefined_dict()
 
     data = np.asarray(data, dtype=float)
 
     if np.isclose(p84, p16):
-        logger.warning("Zero-variance distribution; returning p = 1.")
-        return _tension_dict(1.0)
+        logger.warning("Zero-variance distribution; p-value undefined.")
+        return _undefined_dict()
 
     n      = len(data)
     floor  = 1.0 / n
     F      = float(np.mean(data <= observed_value))
     pvalue = max(F, floor)
-    return _tension_dict(pvalue)
+    out    = _tension_dict(pvalue)
+    # F == 0: no realisation was as low as the observation, so p is only
+    # bounded from above by 1/n (resolution limit of the ensemble).
+    out["floored"] = F < floor
+    return out
+
+
+def _undefined_dict() -> dict:
+    """Return dict for statistics whose p-value cannot be defined."""
+    return {
+        "pvalue":         float("nan"),
+        "n_sigma":        float("nan"),
+        "interpretation": "Undefined",
+        "tension_level":  "n/a",
+        "floored":        False,
+    }
 
 
 def _tension_dict(pvalue: float) -> dict:
@@ -256,4 +295,5 @@ def _tension_dict(pvalue: float) -> dict:
         "n_sigma":        n_sigma,
         "interpretation": interpretation,
         "tension_level":  tension_level,
+        "floored":        False,
     }

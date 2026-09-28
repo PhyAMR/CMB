@@ -1,0 +1,39 @@
+================================================================================
+STATISTICS SUMMARY WITH P-VALUES (THEORY-BASED)
+================================================================================
+
+base_omegak_CamSpecHM_TT_lowl_lowE
+--------------------------------------------------------------------------------
+MCMC Global Tension (ACAT):
+  Cauchy T = 3.160  (dof=12)
+  p = 9.76e-02  (1.30σ)
+Best-fit Global Tension (ACAT):
+  Cauchy T = 3.922  (dof=12)
+  p = 7.95e-02  (1.41σ)
+
+base_omegak_plikHM_TTTEEE_lowl_lowE
+--------------------------------------------------------------------------------
+MCMC Global Tension (ACAT):
+  Cauchy T = 2.056  (dof=12)
+  p = 1.44e-01  (1.06σ)
+Best-fit Global Tension (ACAT):
+  Cauchy T = 2.572  (dof=12)
+  p = 1.18e-01  (1.18σ)
+
+base_CamSpecHM_TT_lowl_lowE
+--------------------------------------------------------------------------------
+MCMC Global Tension (ACAT):
+  Cauchy T = 1.813  (dof=12)
+  p = 1.60e-01  (0.99σ)
+Best-fit Global Tension (ACAT):
+  Cauchy T = 2.104  (dof=12)
+  p = 1.41e-01  (1.07σ)
+
+base_plikHM_TT_lowl_lowE
+--------------------------------------------------------------------------------
+MCMC Global Tension (ACAT):
+  Cauchy T = 2.623  (dof=12)
+  p = 1.16e-01  (1.20σ)
+Best-fit Global Tension (ACAT):
+  Cauchy T = 2.057  (dof=12)
+  p = 1.44e-01  (1.06σ)

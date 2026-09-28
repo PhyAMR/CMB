@@ -168,7 +168,7 @@ def planck_style_pipeline_parallel(
     # Pre-multiply C_ell by b_ell^2 only. synfast will apply p_ell^2
     # internally via pixwin=True.  We pass b_ell_sq and p_ell_sq to
     # the worker so it can deconvolve both after anafast.
-    C_ell_beam_conv = C_ell * b_ell_sq   # shape (n_sims, len(ell))
+    C_ell_beam_conv = C_ell * b_ell_sq #* p_ell_sq  # shape (n_sims, len(ell))
 
     if num_workers is None:
         num_workers = max(1, cpu_count() - 1)
@@ -320,7 +320,7 @@ def compute_correlation_and_statistics(D_ell, xvals, intervals):
         s12_key = f's12_{theta_upper}_{theta_lower}'
         xiv_key = f'xiv_{theta_upper}_{theta_lower}'
         
-        results[s12_key] = S12(D_ell, M)
+        results[s12_key] = S12(D_ell, M, a, b)
         results[xiv_key] = xivar(D_ell, a, b)
     
     return results
