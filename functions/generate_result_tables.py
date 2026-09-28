@@ -351,6 +351,7 @@ def generate_combined_statistics_table(run_dir, model_name, experimental_values,
             bestfit_header += rf" ($T={bestfit_global['cauchy_T']:.3f}$)"
 
         rows = []
+        rows.append(r"{\renewcommand{\arraystretch}{2.0}")
         rows.append(r"\begin{tabular}{lccccc}")
         rows.append(r"\toprule")
 
@@ -398,7 +399,7 @@ def generate_combined_statistics_table(run_dir, model_name, experimental_values,
             )
 
         rows.append(r"\bottomrule")
-        rows.append(r"\end{tabular}")
+        rows.append(r"\end{tabular}}")
         return "\n".join(rows), mcmc_global, bestfit_global
 
     except Exception as exc:
