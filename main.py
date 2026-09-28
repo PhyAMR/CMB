@@ -521,9 +521,10 @@ def run_table_generation(config, run_dir):
        - {model_name}_chain.txt (GetDist format)
        - {model_name}_chain.paramnames
        - {model_name}_chain.ranges
-    2. Generate LaTeX tables:
+    2. Generate LaTeX tables (one combined table per model, with
+       Experimental/MCMC/Best-fit columns side by side):
        - tables/all_results.tex
-       - tables/mcmc/*.tex
+       - tables/<model_name>.tex
        - tables/statistics_summary.txt
     
     Args:
