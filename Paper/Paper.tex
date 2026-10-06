@@ -50,7 +50,7 @@
 % "Command \longtable* already defined." This document never uses
 % longtable/longtable*, so it is safe to clear ltcaption's definition
 % here (immediately, in the preamble) so revtex4-1's own patch can
-% define it cleanly instead of crashing.
+% define it cleanly instead of crashing. 
 \makeatletter
 \expandafter\let\csname longtable*\endcsname\relax
 \expandafter\let\csname endlongtable*\endcsname\relax
@@ -239,7 +239,11 @@ It cannot be cancelled by sign changes of $\xi(\theta)$, and it is thus ideally 
 
 The experimental values of each statistic are computed from the power spectrum\footnote{
 %\url{https://wiki.cosmos.esa.int/planck-legacy-archive/index.php/CMB_spectrum_\%26_Likelihood_Code}
+<<<<<<< Updated upstream
 \url{https://irsa.ipac.caltech.edu/data/Planck/release_3/ancillary-data/cosmoparams/COM_PowerSpect_CMB-TT-full_R3.01.txt} ... CHECK
+=======
+\url{https://irsa.ipac.caltech.edu/data/Planck/release\_3/ancillary-data/cosmoparams/COM\_PowerSpect\_CMB-TT-full\_R3.01.txt} ... CHECK
+>>>>>>> Stashed changes
 } $C_\ell$ derived by the Commander component separation algorithm in the multipole range $2 \le \ell < 30$ from the Planck 2018 temperature data \citep{cosmoplanck_2020}.
 We have verified that including the higher order terms $\ell \ge 30$ derived from different implementations of the likelihood \citep{cosmoplanck_2020} has minimal effect on our results.
 
@@ -260,7 +264,11 @@ I_\ell(\mu) \equiv P_{\ell+1}(\mu) - P_{\ell-1}(\mu).
 
 The mean squared correlation can be expressed a double sum
  \begin{equation}\label{eq-sum-xi2}
+<<<<<<< Updated upstream
 %\langle\xi^2\rangle_{\theta_a}^{\theta_b}
+=======
+%S_{\theta_a}^{\theta_b}
+>>>>>>> Stashed changes
 \langle\xi^2\rangle_{\theta_a}^{\theta_b}
 =
 \frac{ 1 }{ \mu_a - \mu_b }
@@ -294,7 +302,11 @@ are given by the overlap integrals of the Legendre polynomials over the interval
 The classic $S_{1/2}$ statistic defined by \citet{Spergel_2003} is equivalent to
 $S_{1/2} = \frac{3}{2} \langle\xi^2\rangle_{60}^{180}$, and $S_1$ corresponds to $S_1 = 2 \langle\xi^2\rangle_{0}^{180}$.
 
+<<<<<<< Updated upstream
 The values of all our statistical descriptors, derived from the observed $C_\ell$, are quoted on the second column of Table~\ref{tbl-camspec}.
+=======
+The values of all our statistical descriptors, derived from the observed $C_\ell$, are quoted on the second column of Table~\ref{tbl-bestfit-camspec}.
+>>>>>>> Stashed changes
 
 
 \subsection{Prediction of the $\Lambda$CDM model}
@@ -335,7 +347,11 @@ The pseudo-$C_\ell$ are recovered with \texttt{hp.anafast}, and the resulting sp
 
 
 The predicted correlation function $\xi(\theta)^{(i)}$ and the derived statistics are evaluated analytically using Equations~\eqref{eq-corr}, \eqref{eq-sum-xiv}, and \eqref{eq-sum-xi2}.
+<<<<<<< Updated upstream
 Median values over the $N$ random realisations, as well as $16-84$ percentile intervals, are listed in Table~\ref{tbl-camspec}.
+=======
+Median values over the $N$ random realisations, as well as $16-84$ percentile intervals, are listed in Table~\ref{tbl-bestfit-camspec}.
+>>>>>>> Stashed changes
 
 \subsection{Statistical analysis}
 % ------------------------------------------------------------------------------
@@ -343,7 +359,11 @@ Median values over the $N$ random realisations, as well as $16-84$ percentile in
 For each statistic $k$, we compute the individual p-value $p_k$ as the one-sided empirical quantile of the observed value within the simulated ensemble: $p_k = F_k$, where $F_k$ is the
 fraction of realisations where the prediction is less than or equal to the observed value.
 The consistency between theory and data can be expressed in terms of Gaussian-like standard deviations as $n_\sigma = \Phi^{-1}(1 - p_\mathrm{global}/2)$, where $\Phi^{-1}$ is the probit function.
+<<<<<<< Updated upstream
 Individual p-values and $n_\sigma$ are reported for all our test statistics in the last column of Table~\ref{tbl-camspec}.
+=======
+Individual p-values and $n_\sigma$ are reported for all our test statistics in the last column of Table~\ref{tbl-bestfit-camspec}.
+>>>>>>> Stashed changes
 
 To obtain a calibrated global significance, the values of $\xi_{180}$, as well as $\langle\xi\rangle_{\theta_a}^{\theta_b}$ and $\langle\xi^2\rangle_{\theta_a}^{\theta_b}$ over the different intervals, must be combined together in a way that takes into account their correlation structure and the look-elsewhere effect.
 Since they are all derived from the same realisation of $D_\ell$, their p-values are correlated by construction.
@@ -373,7 +393,11 @@ The Cauchy combination is exact under arbitrary dependence of the individual $p_
 		\texttt{base\_CamSpecHM\_TT\_lowl\_lowE}, showing the median and 68\%
 		band of the theoretical ensemble (black line and grey band) together
 		with the per-interval $\langle\xi\rangle_{\theta_a}^{\theta_b}$ (top)
+<<<<<<< Updated upstream
 		and $\langle\xi^2\rangle_{\theta_a}^{\theta_b}$ (bottom) diagnostics across the
+=======
+		and $S_{\theta_a}^{\theta_b}$ (bottom) diagnostics across the
+>>>>>>> Stashed changes
 		partitioned angular intervals of Table~\ref{tbl-intervals}. Red
 		segments mark the observed Planck value and black segments the model
 		median in each interval, with vertical error bars showing the model's
@@ -446,35 +470,55 @@ distribution for $\xi_{180}$.
 \centering
 \begin{subfigure}[b]{\textwidth}
   \includegraphics[width=\textwidth]{../runs/run_30_1000_all_ffc43e78/images_bestfit/histograms_compact/base_CamSpecHM_TT_lowl_lowE_hist_s12-180-60.pdf}
+<<<<<<< Updated upstream
   \caption{$\langle\xi^2\rangle_{60}^{180}$ (classic $S_{1/2}$)}
+=======
+  \caption{${S}_{60}^{180}$ (classic $S_{1/2}$)}
+>>>>>>> Stashed changes
 \end{subfigure}
 
 \vspace{0.5em}
 
 \begin{subfigure}[b]{\textwidth}
   \includegraphics[width=\textwidth]{../runs/run_30_1000_all_ffc43e78/images_bestfit/histograms_compact/base_CamSpecHM_TT_lowl_lowE_hist_s12-180-154.pdf}
+<<<<<<< Updated upstream
   \caption{$\langle\xi^2\rangle_{154}^{180}$}
+=======
+  \caption{${S}_{154}^{180}$}
+>>>>>>> Stashed changes
 \end{subfigure}
 
 \vspace{0.5em}
 
 \begin{subfigure}[b]{\textwidth}
   \includegraphics[width=\textwidth]{../runs/run_30_1000_all_ffc43e78/images_bestfit/histograms_compact/base_CamSpecHM_TT_lowl_lowE_hist_s12-154-92.pdf}
+<<<<<<< Updated upstream
   \caption{$\langle\xi^2\rangle_{92}^{154}$}
+=======
+  \caption{${S}_{92}^{154}$}
+>>>>>>> Stashed changes
 \end{subfigure}
 
 \vspace{0.5em}
 
 \begin{subfigure}[b]{\textwidth}
   \includegraphics[width=\textwidth]{../runs/run_30_1000_all_ffc43e78/images_bestfit/histograms_compact/base_CamSpecHM_TT_lowl_lowE_hist_s12-92-30.pdf}
+<<<<<<< Updated upstream
   \caption{$\langle\xi^2\rangle_{30}^{92}$}
+=======
+  \caption{${S}_{30}^{92}$}
+>>>>>>> Stashed changes
 \end{subfigure}
 
 \vspace{0.5em}
 
 \begin{subfigure}[b]{\textwidth}
   \includegraphics[width=\textwidth]{../runs/run_30_1000_all_ffc43e78/images_bestfit/histograms_compact/base_CamSpecHM_TT_lowl_lowE_hist_s12-30-0.pdf}
+<<<<<<< Updated upstream
   \caption{$\langle\xi^2\rangle_{0}^{30}$}
+=======
+  \caption{${S}_{0}^{30}$}
+>>>>>>> Stashed changes
 \end{subfigure}
 \end{minipage}
 
@@ -482,7 +526,11 @@ distribution for $\xi_{180}$.
 \texttt{base\_CamSpecHM\_TT\_lowl\_lowE} ($\ell_{\max} = 30$): the
 interval-averaged correlation $\langle\xi\rangle_{\theta_a}^{\theta_b}$
 (left column) and the integrated squared correlation
+<<<<<<< Updated upstream
 $\langle\xi^2\rangle_{\theta_a}^{\theta_b}$ (right column) for each of the five angular
+=======
+$S_{\theta_a}^{\theta_b}$ (right column) for each of the five angular
+>>>>>>> Stashed changes
 intervals of Table~\ref{tbl-intervals}, each panel showing the
 distribution over 1000 realisations. In every panel: grey histogram,
 theoretical distribution; black solid line, median; black dotted
@@ -522,6 +570,7 @@ Table~\ref{tbl-camspec}.
 
 \begin{table*}[h!]
 \centering
+<<<<<<< Updated upstream
 \caption{Statistical summary for model
 \texttt{base\_CamSpecHM\_TT\_lowl\_lowE}: experimental value, and the
 MCMC and best-fit ensembles' median with 68\% credible interval
@@ -531,6 +580,13 @@ $T$; the combined global p-value for each ensemble is given above the
 column headers.}
 \label{tbl-camspec}
 \input{../runs/run_30_1000_all_ffc43e78/tables/base_CamSpecHM_TT_lowl_lowE.tex}
+=======
+\caption{Statistical summary for the best-fit analysis of model
+\texttt{base\_CamSpecHM\_TT\_lowl\_lowE}. Columns give the experimental value,
+best-fit median, 68\% interval, and empirical one sided p-value.}
+\label{tbl-bestfit-camspec}
+\input{../runs/run_30_1000_all_ffc43e78/tables/bestfit/base_CamSpecHM_TT_lowl_lowE.tex}
+>>>>>>> Stashed changes
 \end{table*}
 
 \subsection{MCMC Analysis}\label{sec-mcmc}
@@ -592,42 +648,66 @@ parameter uncertainty.
 \centering
 \begin{subfigure}[b]{\textwidth}
   \includegraphics[width=\textwidth]{../runs/run_30_1000_all_ffc43e78/images_mcmc/histograms_compact/base_CamSpecHM_TT_lowl_lowE_hist_s12-180-60.pdf}
+<<<<<<< Updated upstream
   \caption{$\langle\xi^2\rangle_{60}^{180}$ (classic $S_{1/2}$)}
+=======
+  \caption{${S}_{60}^{180}$ (classic $S_{1/2}$)}
+>>>>>>> Stashed changes
 \end{subfigure}
 
 \vspace{0.5em}
 
 \begin{subfigure}[b]{\textwidth}
   \includegraphics[width=\textwidth]{../runs/run_30_1000_all_ffc43e78/images_mcmc/histograms_compact/base_CamSpecHM_TT_lowl_lowE_hist_s12-180-154.pdf}
+<<<<<<< Updated upstream
   \caption{$\langle\xi^2\rangle_{154}^{180}$}
+=======
+  \caption{${S}_{154}^{180}$}
+>>>>>>> Stashed changes
 \end{subfigure}
 
 \vspace{0.5em}
 
 \begin{subfigure}[b]{\textwidth}
   \includegraphics[width=\textwidth]{../runs/run_30_1000_all_ffc43e78/images_mcmc/histograms_compact/base_CamSpecHM_TT_lowl_lowE_hist_s12-154-92.pdf}
+<<<<<<< Updated upstream
   \caption{$\langle\xi^2\rangle_{92}^{154}$}
+=======
+  \caption{${S}_{92}^{154}$}
+>>>>>>> Stashed changes
 \end{subfigure}
 
 \vspace{0.5em}
 
 \begin{subfigure}[b]{\textwidth}
   \includegraphics[width=\textwidth]{../runs/run_30_1000_all_ffc43e78/images_mcmc/histograms_compact/base_CamSpecHM_TT_lowl_lowE_hist_s12-92-30.pdf}
+<<<<<<< Updated upstream
   \caption{$\langle\xi^2\rangle_{30}^{92}$}
+=======
+  \caption{${S}_{30}^{92}$}
+>>>>>>> Stashed changes
 \end{subfigure}
 
 \vspace{0.5em}
 
 \begin{subfigure}[b]{\textwidth}
   \includegraphics[width=\textwidth]{../runs/run_30_1000_all_ffc43e78/images_mcmc/histograms_compact/base_CamSpecHM_TT_lowl_lowE_hist_s12-30-0.pdf}
+<<<<<<< Updated upstream
   \caption{$\langle\xi^2\rangle_{0}^{30}$}
+=======
+  \caption{${S}_{0}^{30}$}
+>>>>>>> Stashed changes
 \end{subfigure}
 \end{minipage}
 
 \caption{MCMC posterior distributions for model
 \texttt{base\_CamSpecHM\_TT\_lowl\_lowE}: the interval-averaged
 correlation $\langle\xi\rangle_{\theta_a}^{\theta_b}$ (left column) and
+<<<<<<< Updated upstream
 the integrated squared correlation $\langle\xi^2\rangle_{\theta_a}^{\theta_b}$ (right
+=======
+the integrated squared correlation $S_{\theta_a}^{\theta_b}$ (right
+>>>>>>> Stashed changes
 column), for each of the five angular intervals of
 Table~\ref{tbl-intervals}, each panel showing the distribution over
 1000 posterior samples from the Planck CamSpec chain. Line styles are
@@ -654,7 +734,20 @@ distribution and shifts the median slightly.
 
 The statistical summary, including the median, 68\% credible interval,
 observed value, and empirical p-value for each statistic, is reported in
+<<<<<<< Updated upstream
 Table~\ref{tbl-camspec}.
+=======
+Table~\ref{tbl-mcmc-camspec}.
+
+\begin{table*}[h!]
+\centering
+\caption{Statistical summary for the MCMC analysis of model
+\texttt{base\_CamSpecHM\_TT\_lowl\_lowE}. Columns give the experimental value,
+MCMC median, 68\% credible interval, and empirical one sided p-value.}
+\label{tbl-mcmc-camspec}
+\input{../runs/run_30_1000_all_ffc43e78/tables/mcmc/base_CamSpecHM_TT_lowl_lowE.tex}
+\end{table*}
+>>>>>>> Stashed changes
 
 \section{Discussion}\label{sec-discussion}
 
@@ -692,16 +785,28 @@ test is itself a form of a posteriori choice, of the kind discussed by
 
 Rather than partitioning $[0^\circ,180^\circ]$ into fixed, evenly spaced angular bins, the boundaries were placed at the zeros of the correlation function measured from the observed Planck multipoles.
 A fixed, arbitrary binning would not be representative of the measured $\xi(\theta)$: it could mix angular ranges in which the data is predominantly positive with ranges in which it is predominantly negative, and the resulting cancellation within $\langle\xi\rangle_{\theta_a}^{\theta_b}$ would dilute any genuine mismatch between the observed and predicted correlation function.
+<<<<<<< Updated upstream
 Partitioning at the observed zero-crossings instead guarantees that each interval corresponds to a single coherent sign region of the measured signal, so that $\langle\xi\rangle_{\theta_a}^{\theta_b}$ directly compares the predicted and observed mean level lobe by lobe, and $\langle\xi^2\rangle_{\theta_a}^{\theta_b}$ probes the predicted and observed power within the same regions.
+=======
+Partitioning at the observed zero-crossings instead guarantees that each interval corresponds to a single coherent sign region of the measured signal, so that $\langle\xi\rangle_{\theta_a}^{\theta_b}$ directly compares the predicted and observed mean level lobe by lobe, and $S_{\theta_a}^{\theta_b}$ probes the predicted and observed power within the same regions.
+>>>>>>> Stashed changes
 
 ...
 
 This
 affects only the two interval-based statistics,
+<<<<<<< Updated upstream
 $\langle\xi^2\rangle_{\theta_a}^{\theta_b}$ and
 $\langle\xi\rangle_{\theta_a}^{\theta_b}$; the antipodal statistic
 $\xi_{180}$, which yields the strongest individual tension found in this
 work (Table~\ref{tbl-camspec}), does not depend on this
+=======
+$S_{\theta_a}^{\theta_b}$ and
+$\langle\xi\rangle_{\theta_a}^{\theta_b}$; the antipodal statistic
+$\xi_{180}$, which yields the strongest individual tension found in this
+work (Tables~\ref{tbl-bestfit-camspec}
+and~\ref{tbl-mcmc-camspec}), does not depend on this
+>>>>>>> Stashed changes
 choice at all. The theoretical sampling distributions of
 Section~\ref{sec-ensemble} are evaluated on exactly the
 same intervals, so the reported p-values remain valid tests of whether
@@ -811,23 +916,60 @@ curvature; \texttt{plikHM} denotes the Plik high-multipole likelihood;
 
 \begin{table*}[h!]
 \centering
+<<<<<<< Updated upstream
 \caption{Statistical summary for \texttt{base\_plikHM\_TT\_lowl\_lowE}.}
 \label{tbl-plikHM}
 \input{../runs/run_30_1000_all_ffc43e78/tables/base_plikHM_TT_lowl_lowE.tex}
+=======
+\caption{MCMC results for \texttt{base\_plikHM\_TT\_lowl\_lowE}.}
+\input{../runs/run_30_1000_all_ffc43e78/tables/mcmc/base_plikHM_TT_lowl_lowE.tex}
+>>>>>>> Stashed changes
 \end{table*}
 
 \begin{table*}[h!]
 \centering
+<<<<<<< Updated upstream
 \caption{Statistical summary for \texttt{base\_omegak\_CamSpecHM\_TT\_lowl\_lowE}.}
 \label{tbl-omegak-camspec}
 \input{../runs/run_30_1000_all_ffc43e78/tables/base_omegak_CamSpecHM_TT_lowl_lowE.tex}
+=======
+\caption{MCMC results for \texttt{base\_omegak\_CamSpecHM\_TT\_lowl\_lowE}.}
+\input{../runs/run_30_1000_all_ffc43e78/tables/mcmc/base_omegak_CamSpecHM_TT_lowl_lowE.tex}
+>>>>>>> Stashed changes
 \end{table*}
 
 \begin{table*}[h!]
 \centering
+<<<<<<< Updated upstream
 \caption{Statistical summary for \texttt{base\_omegak\_plikHM\_TTTEEE\_lowl\_lowE}.}
 \label{tbl-omegak-plikHM}
 \input{../runs/run_30_1000_all_ffc43e78/tables/base_omegak_plikHM_TTTEEE_lowl_lowE.tex}
+=======
+\caption{MCMC results for \texttt{base\_omegak\_plikHM\_TTTEEE\_lowl\_lowE}.}
+\input{../runs/run_30_1000_all_ffc43e78/tables/mcmc/base_omegak_plikHM_TTTEEE_lowl_lowE.tex}
+\end{table*}
+
+\FloatBarrier
+
+\subsection{Best-Fit Results}\label{sec-app-bestfit}
+
+\begin{table*}[h!]
+\centering
+\caption{Best-fit results for \texttt{base\_plikHM\_TT\_lowl\_lowE}.}
+\input{../runs/run_30_1000_all_ffc43e78/tables/bestfit/base_plikHM_TT_lowl_lowE.tex}
+\end{table*}
+
+\begin{table*}[h!]
+\centering
+\caption{Best-fit results for \texttt{base\_omegak\_CamSpecHM\_TT\_lowl\_lowE}.}
+\input{../runs/run_30_1000_all_ffc43e78/tables/bestfit/base_omegak_CamSpecHM_TT_lowl_lowE.tex}
+\end{table*}
+
+\begin{table*}[h!]
+\centering
+\caption{Best-fit results for \texttt{base\_omegak\_plikHM\_TTTEEE\_lowl\_lowE}.}
+\input{../runs/run_30_1000_all_ffc43e78/tables/bestfit/base_omegak_plikHM_TTTEEE_lowl_lowE.tex}
+>>>>>>> Stashed changes
 \end{table*}
 
 \end{appendix}

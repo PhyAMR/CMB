@@ -111,3 +111,6 @@ informe_pracicas.pdf
 # MAPS
 *.fits
 
+
+# Claude Code local state
+.claude/
